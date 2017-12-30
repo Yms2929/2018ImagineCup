@@ -17,10 +17,19 @@ public class MainActivity extends AppCompatActivity {
 
                                    @Override
                                    public void onClick(View view) {
-                                       Intent intent = new Intent(getApplicationContext(), StreamingActivity.class);
+                                       Intent intent = new Intent(getApplicationContext(), StreamingTest.class);
                                        startActivity(intent);
                                    }
                                }
         );
+        Button webViewStreamBtn = (Button) findViewById(R.id.btn2);
+        webViewStreamBtn.setOnClickListener(new Button.OnClickListener(){
+                                                @Override
+                                                public void onClick(View view){
+                                                    Intent intent = new Intent(getApplicationContext(), WebViewStreaming.class);
+                                                    startActivity(intent);
+                                                }
+        });
     }
+
 }
