@@ -1,0 +1,39 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:1:1-11:12
+	package
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:2:5-36
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:1:1-11:12
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:3:5-63
+application
+ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:5:5-9:19
+	android:supportsRtl
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:8:9-35
+	android:label
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:7:9-41
+	android:allowBackup
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml:6:9-35
+uses-sdk
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+		ADDED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
+		INJECTED from C:\Android\ImagineCup\ImagineCup\mjpegView\src\main\AndroidManifest.xml
