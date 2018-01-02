@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
@@ -18,8 +17,10 @@ import java.net.UnknownHostException;
 public class SocketClient extends AppCompatActivity {
     Socket socket = null;
     TextView receiveText;
-    EditText editTextAddress, editTextPort, messageText;
-    Button connectBtn, clearBtn;
+    Button connectBtn;
+    String ip = "192.168.0.175";
+    int port = 8888;
+    String message = "send";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,25 +30,13 @@ public class SocketClient extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
 
         connectBtn = (Button) findViewById(R.id.buttonConnect);
-        clearBtn = (Button) findViewById(R.id.buttonClear);
-        editTextAddress = (EditText) findViewById(R.id.addressText);
-        editTextPort = (EditText) findViewById(R.id.portText);
-        messageText = (EditText) findViewById(R.id.messageText);
         receiveText = (TextView) findViewById(R.id.textViewReceive);
 
         connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyClientTask myClientTask = new MyClientTask(editTextAddress.getText().toString(), Integer.parseInt(editTextPort.getText().toString()), messageText.getText().toString());
+                MyClientTask myClientTask = new MyClientTask(ip, port, message);
                 myClientTask.execute();
-            }
-        });
-
-        clearBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                receiveText.setText("");
-                messageText.setText("");
             }
         });
     }
