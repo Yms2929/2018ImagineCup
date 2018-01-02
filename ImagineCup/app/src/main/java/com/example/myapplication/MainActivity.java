@@ -13,15 +13,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button btn = (Button) findViewById(R.id.btn);
-        btn.setOnClickListener(new Button.OnClickListener(){
-
-                                   @Override
-                                   public void onClick(View view) {
-                                       Intent intent = new Intent(getApplicationContext(), StreamingTest.class);
-                                       startActivity(intent);
-                                   }
-                               }
-        );
+//        btn.setOnClickListener(new Button.OnClickListener(){
+//
+//                                   @Override
+//                                   public void onClick(View view) {
+//                                       Intent intent = new Intent(getApplicationContext(), StreamingTest.class);
+//                                       startActivity(intent);
+//                                   }
+//                               }
+//        );
         Button webViewStreamBtn = (Button) findViewById(R.id.btn2);
         webViewStreamBtn.setOnClickListener(new Button.OnClickListener(){
                                                 @Override
