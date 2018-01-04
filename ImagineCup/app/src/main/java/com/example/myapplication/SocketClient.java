@@ -18,9 +18,10 @@ public class SocketClient extends AppCompatActivity {
     Socket socket = null;
     TextView receiveText;
     Button connectBtn;
-    String ip = "192.168.0.175";
-    int port = 8888;
-    String message = "send";
+    String ip = "192.168.0.92";
+    String port = "8888";
+    MyClientTask myClientTask;
+    boolean stream = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,14 @@ public class SocketClient extends AppCompatActivity {
         connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyClientTask myClientTask = new MyClientTask(ip, port, message);
+                if (!stream) {
+                    myClientTask = new MyClientTask(ip, Integer.parseInt(port), "send");
+                    stream = true;
+                } else if (stream) {
+                    myClientTask = new MyClientTask(ip, Integer.parseInt(port), "exit");
+                    stream = false;
+                }
+
                 myClientTask.execute();
             }
         });
@@ -44,11 +52,11 @@ public class SocketClient extends AppCompatActivity {
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
         String destAddress;
         int destPort;
-        String response = "";
         String myMessage = "";
+        String response = "";
 
-        MyClientTask(String addr, int port, String message) {
-            destAddress = addr;
+        MyClientTask(String address, int port, String message) {
+            destAddress = address;
             destPort = port;
             myMessage = message;
         }
@@ -68,12 +76,13 @@ public class SocketClient extends AppCompatActivity {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
                 InputStream inputStream = socket.getInputStream();
-
+                // 수신
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
                     response += byteArrayOutputStream.toString("UTF-8");
                 }
-                response = "서버의 응답: " + response;
+
+                response = "서버의 응답: " + response; // 서버로부터 응답을 받아서 웹뷰를 띄워줘야 한다
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 response = "UnKnownHostException: " + e.toString();
@@ -94,7 +103,7 @@ public class SocketClient extends AppCompatActivity {
         }
 
         @Override
-        protected  void onPostExecute(Void result) {
+        protected void onPostExecute(Void result) {
             receiveText.setText(response);
             super.onPostExecute(result);
         }

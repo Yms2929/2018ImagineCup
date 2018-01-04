@@ -15,7 +15,7 @@ public class WebViewStreaming extends Activity {
 
     int width;
     int height;
-    String url ="http://192.168.0.175:8083/javascript_simple.html";
+    String url = "http://192.168.0.175:8083/javascript_simple.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class WebViewStreaming extends Activity {
         width = dm.widthPixels;
         height = dm.heightPixels;
 
-        WebView webView = (WebView)findViewById(R.id.webview);
+        WebView webView = (WebView) findViewById(R.id.webview);
 
 //        WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
 //        Log.e("width", String.valueOf(width));
@@ -71,7 +71,7 @@ public class WebViewStreaming extends Activity {
         webSettings.setJavaScriptEnabled(true);
 
         //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
-        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='"+url+"/></div></body></html>" ,"text/html",  "UTF-8");
+        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='" + url + "/></div></body></html>", "text/html", "UTF-8");
 
 //        WebSettings webSettings = webView.getSettings();
 //        webSettings.setUseWideViewPort(true);

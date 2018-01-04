@@ -12,14 +12,14 @@ import com.roughike.bottombar.OnTabReselectListener;
  */
 
 public class MenuActivity extends FragmentActivity {
-
     private HomeFragment homeFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        homeFragment= new HomeFragment();
+        homeFragment = new HomeFragment();
         initFragment();
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
@@ -27,18 +27,17 @@ public class MenuActivity extends FragmentActivity {
             @Override
             public void onTabReSelected(int tabId) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                if(tabId == R.id.tab_call_log){
+                if (tabId == R.id.tab_call_log) {
                     transaction.replace(R.id.contentTab, homeFragment).commit();
                 }
             }
         });
     }
 
-    public void initFragment(){
+    public void initFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.contentTab, homeFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
-    }
+}

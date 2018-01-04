@@ -14,55 +14,13 @@
         android:text="Hello World!"
         android:id="@+id/textViewReceive" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="server-ip"
-        android:ems="10"
-        android:layout_below="@+id/textViewReceive"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
-        android:id="@+id/addressText" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="port"
-        android:ems="10"
-        android:id="@+id/portText"
-        android:layout_below="@+id/addressText"
-        android:layout_alignStart="@+id/addressText" />
-
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Send message"
-        android:ems="10"
-        android:layout_marginTop="10dp"
-        android:id="@+id/messageText"
-        android:layout_below="@+id/portText"
-        android:layout_alignStart="@+id/portText" />
-
     <Button
-        android:text="Send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/buttonConnect"
-        android:layout_below="@+id/messageText"
-        android:layout_alignStart="@+id/messageText"
-        android:layout_marginTop="13dp" />
-
-    <Button
-        android:text="clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonClear"
-        android:layout_alignBaseline="@+id/buttonConnect"
-        android:layout_alignBottom="@+id/buttonConnect"
-        android:layout_alignEnd="@+id/messageText" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewReceive"
+        android:layout_marginTop="24dp"
+        android:text="Send" />
 
 </RelativeLayout>

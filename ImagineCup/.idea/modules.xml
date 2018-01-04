@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/ImagineCup.iml" filepath="$PROJECT_DIR$/ImagineCup.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mjpegView/mjpegView.iml" filepath="$PROJECT_DIR$/mjpegView/mjpegView.iml" />
-      <module fileurl="file://C:\Android\ImagineCup\ImagineCup\mjpegView\mjpegView.iml" filepath="C:\Android\ImagineCup\ImagineCup\mjpegView\mjpegView.iml" />
     </modules>
   </component>
 </project>
