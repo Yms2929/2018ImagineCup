@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +14,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SocketClient extends AppCompatActivity {
-    Socket socket = null;
     TextView receiveText;
-    Button connectBtn;
-    String ip = "192.168.0.92";
+    Button btnConnect;
+    Button btnStreaming;
+    String ip = "192.168.0.175";
     String port = "8888";
     MyClientTask myClientTask;
     boolean stream = false;
@@ -30,21 +33,34 @@ public class SocketClient extends AppCompatActivity {
 
         getSupportActionBar().setElevation(0);
 
-        connectBtn = (Button) findViewById(R.id.buttonConnect);
+        btnConnect = (Button) findViewById(R.id.btnConnect);
+        btnStreaming = (Button) findViewById(R.id.btnStreaming);
         receiveText = (TextView) findViewById(R.id.textViewReceive);
 
-        connectBtn.setOnClickListener(new View.OnClickListener() {
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!stream) {
+                    Timer timer = new Timer();
+                    TimerTask timerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            myClientTask = new MyClientTask(ip, Integer.parseInt(port), "connect");
+                            myClientTask.execute();
+                        }
+                    };
+
+                    timer.schedule(timerTask, 1000, 5000);
+                }
+            }
+        });
+
+        btnStreaming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!stream) {
-                    myClientTask = new MyClientTask(ip, Integer.parseInt(port), "send");
-                    stream = true;
-                } else if (stream) {
-                    myClientTask = new MyClientTask(ip, Integer.parseInt(port), "exit");
-                    stream = false;
-                }
-
+                myClientTask = new MyClientTask(ip, Integer.parseInt(port), "send");
                 myClientTask.execute();
+                stream = true;
             }
         });
     }
@@ -83,6 +99,7 @@ public class SocketClient extends AppCompatActivity {
                 }
 
                 response = "서버의 응답: " + response; // 서버로부터 응답을 받아서 웹뷰를 띄워줘야 한다
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
                 response = "UnKnownHostException: " + e.toString();
@@ -105,7 +122,28 @@ public class SocketClient extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             receiveText.setText(response);
+            if (myMessage.equals("send")) {
+                startActivity(new Intent(getApplicationContext(), WebViewStreaming.class));
+            }
             super.onPostExecute(result);
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (stream) {
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    myClientTask = new MyClientTask(ip, Integer.parseInt(port), "exit");
+                    myClientTask.execute();
+                }
+            };
+
+            timer.schedule(timerTask, 1000, 5000);
         }
     }
 }

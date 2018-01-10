@@ -7,7 +7,7 @@
     tools:context="com.example.myapplication.SocketClient">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:textColor="@color/colorAccent"
@@ -15,12 +15,23 @@
         android:id="@+id/textViewReceive" />
 
     <Button
-        android:id="@+id/buttonConnect"
+        android:id="@+id/btnConnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/textViewReceive"
-        android:layout_marginTop="24dp"
-        android:text="Send" />
+        android:layout_marginEnd="26dp"
+        android:layout_marginTop="134dp"
+        android:layout_toStartOf="@+id/btnStreaming"
+        android:text="서버연결" />
+
+    <Button
+        android:id="@+id/btnStreaming"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnConnect"
+        android:layout_alignBottom="@+id/btnConnect"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="94dp"
+        android:text="스트리밍" />
 
 </RelativeLayout>
