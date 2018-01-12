@@ -39,6 +39,7 @@ public class SocketClient extends AppCompatActivity {
     int soundId;
     int streamId;
     boolean play = false;
+    AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,8 @@ public class SocketClient extends AppCompatActivity {
         else {
             soundPool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 0);
         }
-        
+
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         soundId = soundPool.load(this, R.raw.alarm, 1);
 
         btnConnect = (Button) findViewById(R.id.btnConnect);
@@ -100,6 +102,7 @@ public class SocketClient extends AppCompatActivity {
                 showNotification();
 
                 if (!play) {
+                    checkSoundMode();
                     streamId = soundPool.play(soundId, 1.0F, 1.0F, 1, -1, 1.0F);
                     play = true;
                 }
@@ -109,6 +112,21 @@ public class SocketClient extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void checkSoundMode() {
+        switch (audioManager.getRingerMode()) {
+            case AudioManager.RINGER_MODE_NORMAL: // 소리모드
+                break;
+            case AudioManager.RINGER_MODE_SILENT: // 무음모드
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL); // 소리모드로 변경
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE: // 진동모드
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                break;
+            default:
+                break;
+        }
     }
 
     public void showNotification() { // 팝업 알림
