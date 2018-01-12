@@ -2,17 +2,15 @@ package com.example.myapplication;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,6 +35,10 @@ public class SocketClient extends AppCompatActivity {
     boolean stream = false;
     Timer timer;
     TimerTask timerTask;
+    SoundPool soundPool;
+    int soundId;
+    int streamId;
+    boolean play = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,22 @@ public class SocketClient extends AppCompatActivity {
 
         getSupportActionBar().setElevation(0);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 롤리팝 이전은 단순히 생성자로 생성 롤리팝 이후에는 Builder()로 생성
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+            soundPool = new SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(1).build(); // 동시에 재생할 수 있는 갯수
+        }
+        else {
+            soundPool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 0);
+        }
+        
+        soundId = soundPool.load(this, R.raw.alarm, 1);
+
         btnConnect = (Button) findViewById(R.id.btnConnect);
         btnStreaming = (Button) findViewById(R.id.btnStreaming);
+        btnAlarm = (Button) findViewById(R.id.btnAlarm);
         receiveText = (TextView) findViewById(R.id.textViewReceive);
 
         btnConnect.setOnClickListener(new View.OnClickListener() {
@@ -82,44 +98,66 @@ public class SocketClient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showNotification();
+
+                if (!play) {
+                    streamId = soundPool.play(soundId, 1.0F, 1.0F, 1, -1, 1.0F);
+                    play = true;
+                }
+                else if (play) {
+                    soundPool.stop(streamId);
+                    play = false;
+                }
             }
         });
     }
 
-    public void showNotification() {
-        NotificationCompat.Builder builder = createNotification();
-        builder.setContentIntent(createPendingIntent());
+    public void showNotification() { // 팝업 알림
+        android.support.v4.app.NotificationCompat.Builder mBuilder =
+                new android.support.v4.app.NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("아기 알람")
+                        .setContentText("아기의 수면자세를 확인 해주세요")
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_HIGH);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(0, mBuilder.build());
     }
 
-    private NotificationCompat.Builder createNotification() {
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(icon)
-                .setContentTitle("상태바 타이틀")
-                .setContentText("상태바 서브타이틀")
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setDefaults(Notification.DEFAULT_ALL);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setCategory(String.valueOf(Notification.PRIORITY_HIGH))
-                    .setVisibility(Notification.VISIBILITY_PUBLIC);
-        }
+//    public void showNotification() {
+//        NotificationCompat.Builder builder = createNotification();
+//        builder.setContentIntent(createPendingIntent());
+//
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(1, builder.build());
+//    }
+//
+//    private NotificationCompat.Builder createNotification() {
+//        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setLargeIcon(icon)
+//                .setContentTitle("상태바 타이틀")
+//                .setContentText("상태바 서브타이틀")
+//                .setAutoCancel(true)
+//                .setWhen(System.currentTimeMillis())
+//                .setDefaults(Notification.DEFAULT_ALL);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            builder.setCategory(String.valueOf(Notification.PRIORITY_HIGH))
+//                    .setVisibility(Notification.VISIBILITY_PUBLIC);
+//        }
+//
+//        return builder;
+//    }
 
-        return builder;
-    }
-
-    private PendingIntent createPendingIntent() {
-        Intent intent = new Intent(this, SocketClient.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(SocketClient.class);
-        stackBuilder.addNextIntent(intent);
-
-        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
+//    private PendingIntent createPendingIntent() {
+//        Intent intent = new Intent(this, SocketClient.class);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        stackBuilder.addParentStack(SocketClient.class);
+//        stackBuilder.addNextIntent(intent);
+//
+//        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//    }
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
         String destAddress;
