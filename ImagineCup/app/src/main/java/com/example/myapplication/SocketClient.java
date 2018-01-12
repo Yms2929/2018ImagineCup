@@ -1,9 +1,18 @@
 package com.example.myapplication;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,10 +30,13 @@ public class SocketClient extends AppCompatActivity {
     TextView receiveText;
     Button btnConnect;
     Button btnStreaming;
+    Button btnAlarm;
     String ip = "192.168.0.175";
     String port = "8888";
     MyClientTask myClientTask;
     boolean stream = false;
+    Timer timer;
+    TimerTask timerTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +53,8 @@ public class SocketClient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!stream) {
-                    Timer timer = new Timer();
-                    TimerTask timerTask = new TimerTask() {
+                    timer = new Timer();
+                    timerTask = new TimerTask() {
                         @Override
                         public void run() {
                             myClientTask = new MyClientTask(ip, Integer.parseInt(port), "connect");
@@ -58,11 +70,55 @@ public class SocketClient extends AppCompatActivity {
         btnStreaming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                timer.cancel();
+                timerTask.cancel();
                 myClientTask = new MyClientTask(ip, Integer.parseInt(port), "send");
                 myClientTask.execute();
                 stream = true;
             }
         });
+
+        btnAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNotification();
+            }
+        });
+    }
+
+    public void showNotification() {
+        NotificationCompat.Builder builder = createNotification();
+        builder.setContentIntent(createPendingIntent());
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
+    }
+
+    private NotificationCompat.Builder createNotification() {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(icon)
+                .setContentTitle("상태바 타이틀")
+                .setContentText("상태바 서브타이틀")
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setDefaults(Notification.DEFAULT_ALL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setCategory(String.valueOf(Notification.PRIORITY_HIGH))
+                    .setVisibility(Notification.VISIBILITY_PUBLIC);
+        }
+
+        return builder;
+    }
+
+    private PendingIntent createPendingIntent() {
+        Intent intent = new Intent(this, SocketClient.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(SocketClient.class);
+        stackBuilder.addNextIntent(intent);
+
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public class MyClientTask extends AsyncTask<Void, Void, Void> {
@@ -134,8 +190,8 @@ public class SocketClient extends AppCompatActivity {
         super.onRestart();
 
         if (stream) {
-            Timer timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
+            timer = new Timer();
+            timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     myClientTask = new MyClientTask(ip, Integer.parseInt(port), "exit");

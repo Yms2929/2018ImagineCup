@@ -5,14 +5,16 @@
     android:layout_height="match_parent">
 
     <WebView
-    android:layout_width="match_parent"
-    android:layout_height="260dp"
-    android:id="@+id/webview"
-    android:layout_gravity="center_horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:id="@+id/webview"
+        android:layout_gravity="center_horizontal">
     </WebView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="400dp"
         android:text="응제발"/>
+
 </RelativeLayout>
