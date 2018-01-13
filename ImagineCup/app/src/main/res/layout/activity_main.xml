@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.myapplication.MainActivity">
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="20dp"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--android:text="Hello World!"-->
+        <!--android:id="@+id/textViewReceive" />-->
 
     <Button
-        android:id="@+id/btnClient"
+        android:id="@+id/btnSleepRecord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="클라이언트" />
+        android:text="수면기록" />
 
-        <!--android:layout_marginLeft="110dp"-->
-        <!--android:layout_marginTop="100dp"-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:id="@+id/btn"-->
-        <!--android:text="스트리밍 시작"-->
-        <!--/>-->
+    <Button
+        android:id="@+id/btnStreaming"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="스트리밍" />
 
-    <!--<Button-->
-        <!--android:layout_marginTop="135dp"-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:id="@+id/btn2"-->
-        <!--android:text="웹뷰 스트리밍 시작"-->
-        <!--android:layout_below="@+id/btnClient"-->
-        <!--android:layout_centerHorizontal="true" />-->
+    <Button
+        android:id="@+id/btnHeatCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="온도체크"/>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btnAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알림받기" />
+
+    <Button
+        android:id="@+id/btnLullaby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="자장가" />
+
+</LinearLayout>

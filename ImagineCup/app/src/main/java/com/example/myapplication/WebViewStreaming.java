@@ -15,8 +15,6 @@ public class WebViewStreaming extends Activity {
     int width;
     int height;
     String url = "http://192.168.0.175:8083/javascript_simple.html";
-    String ip = "192.168.0.175";
-    String port = "8888";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +87,7 @@ public class WebViewStreaming extends Activity {
 //        //webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 //        webView.setInitialScale(getScale());
 //
-//
-         webView.loadUrl(url);
+        webView.loadUrl(url);
         //String imgSrcHtml = "<html><img src='" + url + "' /></html>";
         // String imgSrcHtml = url;
         //webView.loadData(imgSrcHtml, "text/html", "UTF-8");

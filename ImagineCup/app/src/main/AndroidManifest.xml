@@ -26,12 +26,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MenuActivity">
-
-        </activity>
-
-        <activity android:name=".SocketClient"></activity>
-
         <!--<activity android:name=".StreamingTest"/>-->
         <activity android:name=".WebViewStreaming"/>
 
