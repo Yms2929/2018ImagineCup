@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,11 +34,14 @@ public class MainActivity extends AppCompatActivity {
     Button btnHeatCheck;
     Button btnAlarm;
     Button btnLullaby;
+    GridView gridView;
+    FunctionAdapter adapter;
     MyClientTask myClientTask;
     Timer timer;
     TimerTask timerTask;
     SoundPool soundPool;
     AudioManager audioManager;
+    int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
     int soundId;
     int streamId;
     boolean stream = false;
@@ -47,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setElevation(0);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.);
+
+        gridView = (GridView) findViewById(R.id.gridView);
+        adapter = new FunctionAdapter(getApplicationContext(), functionImage);
+        gridView.setAdapter(adapter);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 롤리팝 이전은 단순히 생성자로 생성 롤리팝 이후에는 Builder()로 생성
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -68,19 +77,19 @@ public class MainActivity extends AppCompatActivity {
         btnAlarm = (Button) findViewById(R.id.btnAlarm);
         btnLullaby = (Button) findViewById(R.id.btnLullaby);
 
-        socketMessage("connect");
+//        socketMessage("connect");
 
         btnSleepRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             }
         });
 
         btnHeatCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), HeatCheckActivity.class));
             }
         });
 
@@ -266,6 +275,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
 
-        socketMessage("exit");
+//        socketMessage("exit");
     }
 }

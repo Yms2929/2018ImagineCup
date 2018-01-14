@@ -7,13 +7,16 @@
     android:orientation="vertical"
     tools:context="com.example.myapplication.MainActivity">
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="20dp"-->
-        <!--android:textColor="@color/colorAccent"-->
-        <!--android:text="Hello World!"-->
-        <!--android:id="@+id/textViewReceive" />-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mainToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        app:titleTextColor="@color/md_black_1000"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
 
     <Button
         android:id="@+id/btnSleepRecord"
@@ -44,5 +47,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="자장가" />
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:gravity="center">
+
+    </GridView>
 
 </LinearLayout>
