@@ -26,22 +26,10 @@
         </android.support.v7.widget.Toolbar>
 
         <Button
-            android:id="@+id/btnSleepRecord"
+            android:id="@+id/btnConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="수면기록" />
-
-        <Button
-            android:id="@+id/btnStreaming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="스트리밍" />
-
-        <Button
-            android:id="@+id/btnHeatCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="온도체크"/>
+            android:text="소켓통신"/>
 
         <Button
             android:id="@+id/btnAlarm"
@@ -49,17 +37,11 @@
             android:layout_height="wrap_content"
             android:text="알림받기" />
 
-        <Button
-            android:id="@+id/btnLullaby"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="자장가" />
-
         <GridView
             android:id="@+id/gridView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="150dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:horizontalSpacing="10dp"
@@ -67,232 +49,18 @@
             android:numColumns="2"
             android:stretchMode="columnWidth"
             android:gravity="center">
-
         </GridView>
 
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="210dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="false"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
         app:itemTextColor="@color/md_black_1000">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/main_streaming"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/main_sleep_check"/>
-
-                    <Button
-                        android:id="@+id/btnyyd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00ff0000"
-                        android:textColor="@color/md_white_1000"
-                        android:text="여의도"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ddp_nav"/>
-
-                    <Button
-                        android:id="@+id/btnddp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00ff0000"
-                        android:textColor="@color/md_white_1000"
-                        android:text="DDP"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/bp_nav"/>
-
-                    <Button
-                        android:id="@+id/btnbp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00ff0000"
-                        android:textColor="@color/md_white_1000"
-                        android:text="반포"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/cgc_nav"/>
-
-                    <Button
-                        android:id="@+id/btncgc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00ff0000"
-                        android:textColor="@color/md_white_1000"
-                        android:text="청계천"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/cggj_nav"/>
-
-                    <Button
-                        android:id="@+id/btncggj"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00ff0000"
-                        android:textColor="@color/md_white_1000"
-                        android:text="청계광장"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/myreserve"/>
-
-                    <Button
-                        android:id="@+id/btnMyReserve"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00ff0000"
-                        android:textColor="@color/md_white_1000"
-                        android:text="내 번호표 현황"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#6d93cf">
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
 
     </android.support.design.widget.NavigationView>
 

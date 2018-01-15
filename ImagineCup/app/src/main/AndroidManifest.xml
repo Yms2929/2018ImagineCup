@@ -26,11 +26,10 @@
             </intent-filter>
         </activity>
 
-        <!-- <activity android:name=".StreamingTest"/> -->
         <activity android:name=".WebViewStreaming" />
         <activity android:name=".RecordActivity" />
         <activity android:name=".HeatCheckActivity" />
-        <activity android:name=".LullabyActivity"></activity>
+        <activity android:name=".LullabyActivity" />
     </application>
 
 </manifest>

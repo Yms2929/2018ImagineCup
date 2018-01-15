@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -19,39 +18,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     String ip = "192.168.0.175";
     String port = "8888";
-    Button btnSleepRecord;
-    Button btnStreaming;
-    Button btnHeatCheck;
+    Button btnConnect;
     Button btnAlarm;
-    Button btnLullaby;
+    ClientSocket clientSocket;
     DrawerLayout drawerLayout;
     GridView gridView;
     FunctionAdapter adapter;
-    MyClientTask myClientTask;
-    Timer timer;
-    TimerTask timerTask;
     SoundPool soundPool;
     AudioManager audioManager;
     int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
     int soundId;
     int streamId;
-    boolean stream = false;
     boolean play = false;
 
     @Override
@@ -61,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar); // 툴바
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 액션바 홈버튼 설정
+        getSupportActionBar().setDisplayShowTitleEnabled(false); // 액션바 타이틀 설정
 
         ActionBar actionBar = getSupportActionBar(); // 액션바
         if (actionBar != null) {
@@ -74,8 +60,30 @@ public class MainActivity extends AppCompatActivity {
         adapter = new FunctionAdapter(getApplicationContext(), functionImage);
         gridView.setAdapter(adapter);
 
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        soundId = soundPool.load(this, R.raw.alarm, 1);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // 그리드뷰 클릭 이벤트
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        stopService(new Intent(getApplicationContext(), BackgroundService.class)); // 스트리밍
+                        clientSocket = new ClientSocket(ip, Integer.parseInt(port), "send");
+                        clientSocket.execute();
+                        startActivity(new Intent(getApplicationContext(), WebViewStreaming.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(getApplicationContext(), RecordActivity.class)); // 수면기록 화면
+                        break;
+                    case 2:
+                        startActivity(new Intent(getApplicationContext(), HeatCheckActivity.class)); // 온도체크 화면
+                        break;
+                    case 3:
+                        startActivity(new Intent(getApplicationContext(), LullabyActivity.class)); // 자장가 화면
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 롤리팝 이전은 단순히 생성자로 생성 롤리팝 이후에는 Builder()로 생성
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -87,36 +95,23 @@ public class MainActivity extends AppCompatActivity {
             soundPool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 0);
         }
 
-        btnSleepRecord = (Button) findViewById(R.id.btnSleepRecord);
-        btnStreaming = (Button) findViewById(R.id.btnStreaming);
-        btnHeatCheck = (Button) findViewById(R.id.btnHeatCheck);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        soundId = soundPool.load(this, R.raw.alarm, 1);
+
+        btnConnect = (Button) findViewById(R.id.btnConnect);
         btnAlarm = (Button) findViewById(R.id.btnAlarm);
-        btnLullaby = (Button) findViewById(R.id.btnLullaby);
 
-//        socketMessage("connect");
-
-        btnSleepRecord.setOnClickListener(new View.OnClickListener() {
+        btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
-            }
-        });
-
-        btnHeatCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), HeatCheckActivity.class));
-            }
-        });
-
-        btnStreaming.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timer.cancel();
-                timerTask.cancel();
-                myClientTask = new MyClientTask(ip, Integer.parseInt(port), "send");
-                myClientTask.execute();
-                stream = true;
+                if (!Singleton.getInstance().getConnect()) {
+                    startService(new Intent(getApplicationContext(), BackgroundService.class));
+                    Singleton.getInstance().setConnect(true);
+                }
+                else if (Singleton.getInstance().getConnect()) {
+                    stopService(new Intent(getApplicationContext(), BackgroundService.class));
+                    Singleton.getInstance().setConnect(false);
+                }
             }
         });
 
@@ -135,17 +130,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        btnLullaby.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) { // 툴바 이벤트
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
@@ -155,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkSoundMode() {
+    public void checkSoundMode() { // 현재 기기 모드
         switch (audioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_NORMAL: // 소리모드
                 break;
@@ -218,90 +206,10 @@ public class MainActivity extends AppCompatActivity {
 //        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 //    }
 
-    public class MyClientTask extends AsyncTask<Void, Void, Void> {
-        String destAddress;
-        int destPort;
-        String myMessage = "";
-        String response = "";
-
-        MyClientTask(String address, int port, String message) {
-            destAddress = address;
-            destPort = port;
-            myMessage = message;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Socket socket = null;
-            myMessage = myMessage.toString();
-
-            try {
-                socket = new Socket(destAddress, destPort);
-                // 송신
-                OutputStream outputStream = socket.getOutputStream();
-                outputStream.write(myMessage.getBytes());
-
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                InputStream inputStream = socket.getInputStream();
-                // 수신
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, bytesRead);
-                    response += byteArrayOutputStream.toString("UTF-8");
-                }
-
-                response = "서버의 응답: " + response; // 서버로부터 응답을 받아서 웹뷰를 띄워줘야 한다
-
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-                response = "UnKnownHostException: " + e.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-                response = "IOException: " + e.toString();
-            } finally {
-                if (socket != null) {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-
-            if (myMessage.equals("send")) {
-                startActivity(new Intent(getApplicationContext(), WebViewStreaming.class));
-            }
-            super.onPostExecute(result);
-        }
-    }
-
-    public void socketMessage(final String message) {
-        if (!stream) {
-            timer = new Timer();
-            timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    myClientTask = new MyClientTask(ip, Integer.parseInt(port), message);
-                    myClientTask.execute();
-                }
-            };
-
-            timer.schedule(timerTask, 1000, 5000);
-        }
-    }
-
     @Override
-    protected void onRestart() {
+    protected void onRestart() { // 화면 재시작
         super.onRestart();
 
-//        socketMessage("exit");
+        startService(new Intent(getApplicationContext(), BackgroundService.class));
     }
 }
