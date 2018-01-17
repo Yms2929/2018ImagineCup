@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.function;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.util.DisplayMetrics;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.example.myapplication.R;
 
 /**
  * Created by woga1 on 2017-12-30.

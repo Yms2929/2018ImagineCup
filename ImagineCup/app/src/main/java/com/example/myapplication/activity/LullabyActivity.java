@@ -1,13 +1,15 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class HeatCheckActivity extends AppCompatActivity {
+import com.example.myapplication.R;
+
+public class LullabyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_heat_check);
+        setContentView(R.layout.activity_lullaby);
     }
 }

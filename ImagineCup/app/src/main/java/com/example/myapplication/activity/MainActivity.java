@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -21,6 +21,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+
+import com.example.myapplication.R;
+import com.example.myapplication.adapter.FunctionAdapter;
+import com.example.myapplication.function.BackgroundService;
 
 public class MainActivity extends AppCompatActivity {
     Button btnConnect;
@@ -67,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
                         startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "send"));
                         break;
                     case 1:
-                        startActivity(new Intent(getApplicationContext(), RecordActivity.class)); // 수면기록 화면
+                        startActivity(new Intent(getApplicationContext(), SleepRecordActivity.class)); // 수면기록 화면
                         break;
                     case 2:
-                        startActivity(new Intent(getApplicationContext(), HeatCheckActivity.class)); // 온도체크 화면
+                        startActivity(new Intent(getApplicationContext(), GraphActivity.class)); // 그래프 화면
                         break;
                     case 3:
                         startActivity(new Intent(getApplicationContext(), LullabyActivity.class)); // 자장가 화면

@@ -3,7 +3,6 @@
     package="com.example.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -18,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,11 +25,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name="BackgroundService" />
-        <activity android:name=".WebViewStreaming" />
-        <activity android:name=".RecordActivity" />
-        <activity android:name=".HeatCheckActivity" />
-        <activity android:name=".LullabyActivity" />
+        <service android:name=".function.BackgroundService" />
+
+        <activity android:name=".function.WebViewStreaming" />
+        <activity android:name=".activity.LullabyActivity" />
+        <activity android:name=".activity.SleepRecordActivity" />
+        <activity android:name=".activity.GraphActivity"></activity>
     </application>
 
 </manifest>
