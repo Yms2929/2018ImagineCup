@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
 
+        <service android:name="BackgroundService" />
         <activity android:name=".WebViewStreaming" />
         <activity android:name=".RecordActivity" />
         <activity android:name=".HeatCheckActivity" />

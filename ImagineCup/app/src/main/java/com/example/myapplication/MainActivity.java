@@ -23,11 +23,8 @@ import android.widget.Button;
 import android.widget.GridView;
 
 public class MainActivity extends AppCompatActivity {
-    String ip = "192.168.0.175";
-    String port = "8888";
     Button btnConnect;
     Button btnAlarm;
-    ClientSocket clientSocket;
     DrawerLayout drawerLayout;
     GridView gridView;
     FunctionAdapter adapter;
@@ -37,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     int soundId;
     int streamId;
     boolean play = false;
+    boolean background = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar); // 툴바
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 액션바 홈버튼 설정
-        getSupportActionBar().setDisplayShowTitleEnabled(false); // 액션바 타이틀 설정
+        getSupportActionBar().setDisplayShowTitleEnabled(true); // 액션바 타이틀 설정
 
         ActionBar actionBar = getSupportActionBar(); // 액션바
         if (actionBar != null) {
@@ -65,10 +63,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        stopService(new Intent(getApplicationContext(), BackgroundService.class)); // 스트리밍
-                        clientSocket = new ClientSocket(ip, Integer.parseInt(port), "send");
-                        clientSocket.execute();
-                        startActivity(new Intent(getApplicationContext(), WebViewStreaming.class));
+                        stopService(new Intent(getApplicationContext(), BackgroundService.class));
+                        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "send"));
                         break;
                     case 1:
                         startActivity(new Intent(getApplicationContext(), RecordActivity.class)); // 수면기록 화면
@@ -104,13 +100,12 @@ public class MainActivity extends AppCompatActivity {
         btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Singleton.getInstance().getConnect()) {
-                    startService(new Intent(getApplicationContext(), BackgroundService.class));
-                    Singleton.getInstance().setConnect(true);
-                }
-                else if (Singleton.getInstance().getConnect()) {
+                if (!background) {
+                    startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
+                    background = true;
+                } else if (background) {
                     stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                    Singleton.getInstance().setConnect(false);
+                    background = false;
                 }
             }
         });
@@ -171,7 +166,15 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(0, mBuilder.build());
     }
 
-//    public void showNotification() {
+    @Override
+    protected void onRestart() { // 화면 재시작
+        super.onRestart();
+
+        stopService(new Intent(getApplicationContext(), BackgroundService.class));
+        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
+    }
+
+    //    public void showNotification() {
 //        NotificationCompat.Builder builder = createNotification();
 //        builder.setContentIntent(createPendingIntent());
 //
@@ -205,11 +208,4 @@ public class MainActivity extends AppCompatActivity {
 //
 //        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 //    }
-
-    @Override
-    protected void onRestart() { // 화면 재시작
-        super.onRestart();
-
-        startService(new Intent(getApplicationContext(), BackgroundService.class));
-    }
 }

@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,11 +21,13 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
     int destPort;
     String myMessage = "";
     String response = "";
+    Context context;
 
-    ClientSocket(String address, int port, String message) {
-        destAddress = address;
-        destPort = port;
-        myMessage = message;
+    ClientSocket(String address, int port, String message, Context context) {
+        this.destAddress = address;
+        this.destPort = port;
+        this.myMessage = message;
+        this.context = context;
     }
 
     @Override
@@ -46,8 +51,6 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
                 response += byteArrayOutputStream.toString("UTF-8");
             }
 
-            response = "서버의 응답: " + response; // 서버로부터 응답을 받아서 웹뷰를 띄워줘야 한다
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
             response = "UnKnownHostException: " + e.toString();
@@ -69,12 +72,13 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) { // 클라이언트 실행
-        if (myMessage.equals("send")) {
-//            timer.cancel();
-//            timerTask.cancel();
-//            stream = true;
-//            startActivity(new Intent(getApplicationContext(), WebViewStreaming.class));
+        if (response.equals("send")) {
+            Log.e("Background", response);
+            Intent intent = new Intent(context, WebViewStreaming.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
+
         super.onPostExecute(result);
     }
 }
