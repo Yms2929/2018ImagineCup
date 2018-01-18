@@ -1,1 +1,1 @@
-include ':app', ':mjpegView'
+include ':app', ':jtds-1.3.1'

@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() { // 화면 재시작
         super.onRestart();
 
-        stopService(new Intent(getApplicationContext(), BackgroundService.class));
-        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
+//        stopService(new Intent(getApplicationContext(), BackgroundService.class));
+//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
     }
 
     //    public void showNotification() {
