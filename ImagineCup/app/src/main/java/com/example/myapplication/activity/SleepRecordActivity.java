@@ -2,7 +2,6 @@ package com.example.myapplication.activity;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,17 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.SleepRecordAdapter;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,8 +41,6 @@ public class SleepRecordActivity extends AppCompatActivity {
         btnSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckLogin checkLogin = new CheckLogin();
-                checkLogin.execute("");
                 if (!sleep) {
                     sleepDialog();
                 } else if (sleep) {
@@ -60,7 +51,6 @@ public class SleepRecordActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listview);
         sleepRecordAdapter = new SleepRecordAdapter();
-
         sleepRecordAdapter.addItem("17/01/17", "00:52:30"); // 데이터베이스에 저장된 날짜와 시간 데이터 불러와야함
         listView.setAdapter(sleepRecordAdapter);
     }
@@ -179,93 +169,5 @@ public class SleepRecordActivity extends AppCompatActivity {
         params.height = totalItemsHeight + totalDividersHeight;
         listView.setLayoutParams(params);
         listView.requestLayout();
-    }
-
-    public class CheckLogin extends AsyncTask<String, String, String> {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        String url = String.format("jdbc:jtds:sqlserver://yookserver.database.windows.net:1433;database=myDatabase;user=yookmoonsu@yookserver;password=!dbr9389818;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;");
-        String message = "";
-        String date = "";
-        Boolean isSuccess = false;
-
-        public CheckLogin() {
-
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                Class.forName("net.sourceforge.jtds.jdbc.Driver");
-//                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                connection = DriverManager.getConnection(url); // 데이터베이스 연결
-
-                if (connection == null) {
-                    message = "Check your internet access";
-                } else {
-//                    String query = "select * from SalesLT.ProductCategory";
-                    String query = "CREATE TABLE Course2\n" +
-                            "(\n" +
-                            "CourseId  INT IDENTITY PRIMARY KEY,\n" +
-                            "Name   NVARCHAR(50) NOT NULL,\n" +
-                            "Teacher   NVARCHAR(256) NOT NULL\n" +
-                            ")";
-                    statement = connection.createStatement();
-                    resultSet = statement.executeQuery(query);
-
-                    while (resultSet.next()) {
-                        System.out.println(resultSet.getString(1) + " " + resultSet.getString(2));
-                        Log.e("sqlerror", resultSet.getString(1) + " " + resultSet.getString(2));
-                    }
-//                    if (resultSet.next()) {
-//                        date = resultSet.getString("Date");
-//                        message = "query successful";
-//                        isSuccess = true;
-//                    } else {
-//                        message = "Invalid Query";
-//                        isSuccess = false;
-//                    }
-                }
-            } catch (SQLException e) {
-                isSuccess = false;
-                message = e.getMessage();
-                Log.e("sqlerror0", message);
-            } catch (Exception e) {
-                isSuccess = false;
-                message = e.getMessage();
-                Log.e("sqlerror1", message);
-            } finally {
-                if (resultSet != null) {
-                    try {
-                        resultSet.close();
-                    } catch (Exception e) {
-                    }
-                }
-                if (statement != null) {
-                    try {
-                        statement.close();
-                    } catch (Exception e) {
-                    }
-                }
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            return message;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (isSuccess) {
-                TextView textView = (TextView) findViewById(R.id.txtSql);
-                textView.setText(date);
-            }
-        }
     }
 }
