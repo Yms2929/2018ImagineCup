@@ -11,7 +11,7 @@
         android:layout_width="150dp"
         android:layout_height="100dp"
         android:id="@+id/btn"
-        android:text="스트리밍 시작"
+        android:text="통신 시작"
         />
     <Button
         android:layout_below="@+id/btn"
