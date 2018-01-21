@@ -2,6 +2,7 @@ package com.example.myapplication.activity;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +17,18 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.SleepRecordAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class SleepRecordActivity extends AppCompatActivity {
     Button btnSleep;
@@ -31,6 +41,12 @@ public class SleepRecordActivity extends AppCompatActivity {
     long endTime;
     ArrayList<String> dateList = new ArrayList<>();
     ArrayList<String> timeList = new ArrayList<>();
+    String myJSON;
+    private static final String TAG_RESULT = "result";
+    private static final String TAG_DATE = "Date";
+    private static final String TAG_TIME = "Time";
+    JSONArray info = null;
+    ArrayList<HashMap<String, String>> infoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +66,66 @@ public class SleepRecordActivity extends AppCompatActivity {
         });
 
         listView = (ListView) findViewById(R.id.listview);
-        sleepRecordAdapter = new SleepRecordAdapter();
-        sleepRecordAdapter.addItem("17/01/17", "00:52:30"); // 데이터베이스에 저장된 날짜와 시간 데이터 불러와야함
-        listView.setAdapter(sleepRecordAdapter);
+        infoList = new ArrayList<HashMap<String, String>>();
+        getData("http://192.168.0.85/PHP_connection.php"); // php서버 웹주소
+    }
+
+    public void showList() {
+        try {
+            JSONObject jsonObject = new JSONObject(myJSON); // json형식 객체
+            info = jsonObject.getJSONArray(TAG_RESULT);
+            sleepRecordAdapter = new SleepRecordAdapter();
+
+            for (int i = 0; i < info.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
+                JSONObject object = info.getJSONObject(i);
+                String date = object.getString(TAG_DATE);
+                String time = object.getString(TAG_TIME);
+                sleepRecordAdapter.addItem(date, time); // 어댑터에 데이터 추가
+            }
+
+            listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("php error3", e.getMessage());
+        }
+    }
+
+    public void getData(String url) {
+        class GetDataJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) { // 웹서버에 요청
+
+                String uri = params[0];
+                BufferedReader bufferedReader = null;
+
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    String json;
+                    while ((json = bufferedReader.readLine()) != null) { // json형식으로 값을 모두 가져옴
+                        stringBuilder.append(json + "\n");
+                    }
+                    return stringBuilder.toString().trim();
+
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result) { // 웹서버에서 post 받으면 실행
+                myJSON = result;
+                showList();
+            }
+        }
+        GetDataJSON getDataJSON = new GetDataJSON();
+        getDataJSON.execute(url);
     }
 
     public void sleepDialog() {
