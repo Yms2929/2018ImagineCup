@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -16,17 +17,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.FunctionAdapter;
 import com.example.myapplication.function.BackgroundService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import pyxis.uzuki.live.rollingbanner.RollingBanner;
+import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
+
 public class MainActivity extends AppCompatActivity {
+    private RollingBanner rollingBanner;
     Button btnConnect;
     Button btnAlarm;
     DrawerLayout drawerLayout;
@@ -40,10 +51,18 @@ public class MainActivity extends AppCompatActivity {
     boolean play = false;
     boolean background = false;
 
+    private String[] txtRes = new String[]{"Purple", "Light Blue", "Cyan", "Teal","Green",};
+    private int[] colorRes = new int[]{0xff9C27B0, 0xff03A9F4, 0xff00BCD4, 0xff009688, 0xff4CAF50};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        rollingBanner = findViewById(R.id.banner);
+
+        SampleAdapter adapterTrue = new SampleAdapter(new ArrayList<>(Arrays.asList(txtRes)));
+        rollingBanner.setAdapter(adapterTrue);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar); // 툴바
         setSupportActionBar(toolbar);
@@ -98,37 +117,37 @@ public class MainActivity extends AppCompatActivity {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         soundId = soundPool.load(this, R.raw.alarm, 1);
 
-        btnConnect = (Button) findViewById(R.id.btnConnect);
-        btnAlarm = (Button) findViewById(R.id.btnAlarm);
+        //btnConnect = (Button) findViewById(R.id.btnConnect);
+        //btnAlarm = (Button) findViewById(R.id.btnAlarm);
 
-        btnConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!background) {
-                    startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
-                    background = true;
-                } else if (background) {
-                    stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                    background = false;
-                }
-            }
-        });
+//        btnConnect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!background) {
+//                    startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
+//                    background = true;
+//                } else if (background) {
+//                    stopService(new Intent(getApplicationContext(), BackgroundService.class));
+//                    background = false;
+//                }
+//            }
+//        });
 
-        btnAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNotification();
-
-                if (!play) {
-                    checkSoundMode();
-                    streamId = soundPool.play(soundId, 1.0F, 1.0F, 1, -1, 1.0F);
-                    play = true;
-                } else if (play) {
-                    soundPool.stop(streamId);
-                    play = false;
-                }
-            }
-        });
+//        btnAlarm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showNotification();
+//
+//                if (!play) {
+//                    checkSoundMode();
+//                    streamId = soundPool.play(soundId, 1.0F, 1.0F, 1, -1, 1.0F);
+//                    play = true;
+//                } else if (play) {
+//                    soundPool.stop(streamId);
+//                    play = false;
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -168,6 +187,26 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, mBuilder.build());
+    }
+
+    public class SampleAdapter extends RollingViewPagerAdapter<String> {
+
+        public SampleAdapter(ArrayList<String> itemList) {
+            super(itemList);
+        }
+
+        @Override
+        public View getView(int position) {
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_main_pager, null, false);
+            FrameLayout container = view.findViewById(R.id.container);
+            TextView txtText = view.findViewById(R.id.txtText);
+
+            String txt = getItem(position);
+            int index = getItemList().indexOf(txt);
+            txtText.setText(txt);
+            container.setBackgroundColor(colorRes[index]);
+            return view;
+        }
     }
 
     @Override
