@@ -6,23 +6,25 @@
 
     <TextView
         android:id="@+id/textDate"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/md_pink_100"
         android:text="날짜"
         android:textSize="20dp"
         android:textAlignment="center"
-        android:textColor="@color/md_white_1000"/>
+        android:textColor="@color/md_black_1000"/>
 
     <TextView
         android:id="@+id/textTime"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/md_pink_100"
         android:text="시간"
         android:textSize="20dp"
         android:textAlignment="center"
-        android:textColor="@color/md_white_1000"/>
+        android:textColor="@color/md_black_1000"/>
 </LinearLayout>

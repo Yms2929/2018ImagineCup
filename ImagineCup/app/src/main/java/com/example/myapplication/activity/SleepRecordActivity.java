@@ -1,21 +1,26 @@
 package com.example.myapplication.activity;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.SleepRecordAdapter;
+import com.example.myapplication.etc.Singleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +33,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class SleepRecordActivity extends AppCompatActivity {
-    Button btnSleep;
+    DrawerLayout drawerLayout;
+    ImageButton btnSleep;
     ListView listView;
     SleepRecordAdapter sleepRecordAdapter;
     boolean sleep = false;
@@ -46,14 +50,37 @@ public class SleepRecordActivity extends AppCompatActivity {
     private static final String TAG_DATE = "Date";
     private static final String TAG_TIME = "Time";
     JSONArray info = null;
-    ArrayList<HashMap<String, String>> infoList;
+    long now;
+    Date date;
+    SimpleDateFormat format;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep_record);
 
-        btnSleep = (Button) findViewById(R.id.btnSleep);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.sleeprecordToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            VectorDrawableCompat compat = VectorDrawableCompat.create(getResources(), R.drawable.ic_dehaze_black_24dp, getTheme()); // 이미지 벡터
+            compat.setTint(ResourcesCompat.getColor(getResources(), R.color.md_white_1000, getTheme())); // 벡터 색깔
+            actionBar.setHomeAsUpIndicator(compat);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.sleeprecordDrawer);
+        btnSleep = (ImageButton) findViewById(R.id.btnSleep);
+
+        sleep = Singleton.getInstance().getSleep();
+        if (sleep) {
+            btnSleep.setImageResource(R.drawable.sleep);
+        } else if (!sleep) {
+            btnSleep.setImageResource(R.drawable.awake);
+        }
+
         btnSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +93,6 @@ public class SleepRecordActivity extends AppCompatActivity {
         });
 
         listView = (ListView) findViewById(R.id.listview);
-        infoList = new ArrayList<HashMap<String, String>>();
         getData("http://192.168.0.85/PHP_connection.php"); // php서버 웹주소
     }
 
@@ -110,19 +136,22 @@ public class SleepRecordActivity extends AppCompatActivity {
     public void showList() { // 리스트뷰에 나타내기
         try {
             JSONObject jsonObject = new JSONObject(myJSON); // json형식 객체
-            info = jsonObject.getJSONArray(TAG_RESULT);
+            info = jsonObject.getJSONArray(TAG_RESULT); // json배열
             sleepRecordAdapter = new SleepRecordAdapter();
+            knowToday();
 
             for (int i = 0; i < info.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
                 JSONObject object = info.getJSONObject(i);
                 String date = object.getString(TAG_DATE);
                 String time = object.getString(TAG_TIME);
-                sleepRecordAdapter.addItem(date, time); // 어댑터에 데이터 추가
+
+                if (date.equals(currentDate)) { // 오늘 날짜만 보여줌
+                    sleepRecordAdapter.addItem(date, time); // 어댑터에 데이터 추가
+                }
             }
 
             listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
             sleepRecordAdapter.notifyDataSetChanged();
-            setListViewHeightBasedOnItems(listView);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -130,7 +159,14 @@ public class SleepRecordActivity extends AppCompatActivity {
         }
     }
 
-    public void sleepDialog() {
+    public void knowToday() { // 오늘 날짜
+        now = System.currentTimeMillis();
+        date = new Date(now);
+        format = new SimpleDateFormat("yyyy/MM/dd");
+        currentDate = format.format(date);
+    }
+
+    public void sleepDialog() { // 수면할때 다이얼로그
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Baby Sleeping Record");
         builder.setMessage("Is the baby asleep now?");
@@ -138,7 +174,8 @@ public class SleepRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) { // 수면시간 시작
                 sleep = true;
-                btnSleep.setTextColor(Color.BLUE);
+                Singleton.getInstance().setSleep(sleep);
+                btnSleep.setImageResource(R.drawable.sleep);
                 getNowTime("sleep");
             }
         });
@@ -153,7 +190,7 @@ public class SleepRecordActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void awakeDialog() {
+    public void awakeDialog() { // 잠에서 깰때 다이얼로그
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Baby Sleeping Record");
         builder.setMessage("Is the baby awake now?");
@@ -161,13 +198,14 @@ public class SleepRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) { // 수면시간 종료
                 sleep = false;
-                btnSleep.setTextColor(Color.RED);
+                Singleton.getInstance().setSleep(sleep);
+                btnSleep.setImageResource(R.drawable.awake);
                 getNowTime("awake");
 
-                InsertData task = new InsertData();
+                InsertData task = new InsertData(); // insert쿼리 php실행
                 task.execute(currentDate, sleepTime);
 
-                getData("http://192.168.0.85/PHP_connection.php");
+                getData("http://192.168.0.85/PHP_connection.php"); // 업데이트
             }
         });
 
@@ -181,25 +219,27 @@ public class SleepRecordActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void getNowTime(String state) {
+    public void getNowTime(String state) { // 수면시간 계산하기
         if (state.equals("sleep")) {
-            long now = System.currentTimeMillis();
-            Date date = new Date(now);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            knowToday();
 
-            currentDate = format.format(date);
             startTime = System.currentTimeMillis();
-        } else if (state.equals("awake")) {
-            long now = System.currentTimeMillis();
-            Date date = new Date(now);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            String awakeDate = format.format(date);
 
+            Singleton.getInstance().setDate(currentDate);
+            Singleton.getInstance().setNow(startTime);
+        }
+        else if (state.equals("awake")) {
+            knowToday();
+
+            currentDate = Singleton.getInstance().getDate();
+            startTime = Singleton.getInstance().getNow();
             endTime = System.currentTimeMillis();
+
             long resultTime = endTime - startTime;
             long hour = resultTime / (1000 * 60 * 60);
             long minute = resultTime / (1000 * 60);
             long second = resultTime / 1000;
+
             String strHour = String.valueOf(hour);
             String strMinute = String.valueOf(minute - (hour * 60));
             String strSecond = String.valueOf(second - (minute * 60));
@@ -280,28 +320,14 @@ public class SleepRecordActivity extends AppCompatActivity {
         }
     }
 
-    public void setListViewHeightBasedOnItems(ListView listView) { // 리스트뷰 높이 계산
-        // Get list adpter of listview;
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) return;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { // 툴바 드로어 이벤트
+        int id = item.getItemId();
 
-        int numberOfItems = listAdapter.getCount();
-
-        // Get total height of all items.
-        int totalItemsHeight = 0;
-        for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
-            View item = listAdapter.getView(itemPos, null, listView);
-            item.measure(0, 0);
-            totalItemsHeight += item.getMeasuredHeight();
+        if (id == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
         }
 
-        // Get total height of all item dividers.
-        int totalDividersHeight = listView.getDividerHeight() * (numberOfItems - 1);
-
-        // Set list height.
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalItemsHeight + totalDividersHeight;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
+        return super.onOptionsItemSelected(item);
     }
 }

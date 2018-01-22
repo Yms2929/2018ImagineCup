@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
     }
 
-    //    public void showNotification() {
+    //    public void showNotification() { // 커스텀 알림창
 //        NotificationCompat.Builder builder = createNotification();
 //        builder.setContentIntent(createPendingIntent());
 //
