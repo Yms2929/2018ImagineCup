@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="enum" name="type">
+        <enum name="stream_default" value="0"/>
+        <enum name="stream_native" value="1"/>
+    </attr>
+    <declare-styleable name="MjpegSurfaceView"><attr name="type"/><attr format="boolean" name="transparentBackground"/><attr format="color" name="backgroundColor"/></declare-styleable>
+    <string name="app_name">MjpegView</string>
+</resources>

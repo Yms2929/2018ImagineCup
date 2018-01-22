@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,10 +27,13 @@
         <activity android:name=".function.WebViewStreaming" />
         <activity android:name=".activity.LullabyActivity" />
         <activity android:name=".activity.SleepRecordActivity" />
-        <activity android:name=".activity.GraphActivity"></activity>
-        <activity android:name=".DataResultActivity">
+        <activity android:name=".activity.GraphActivity">
 
         </activity>
+        <activity android:name=".activity.DataResultActivity">
+
+        </activity>
+        <activity android:name=".activity.SettingActivity"/>
         <!--<activity android:name=".StreamingTest"/>-->
     </application>
 

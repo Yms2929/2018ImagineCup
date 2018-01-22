@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.etc;
 
 import android.util.Log;
 
@@ -18,7 +18,7 @@ public class LoadManager {
 
     URL url;				//접속대상 서버주소를 가진 객체
 
-    static String testurl = "http://52.170.90.244/api";
+    static String testurl = "http://52.170.90.244/data";
     HttpURLConnection conn;	//통신을 담당하는 객체
 
     BufferedReader buffer=null;

@@ -16,6 +16,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -132,11 +134,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) { // 툴바 이벤트
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
+        }
+        else if(id == R.id.action_settings){
+            startActivity(new Intent(getApplicationContext(), SettingActivity.class)); // 자장가 화면
         }
 
         return super.onOptionsItemSelected(item);
