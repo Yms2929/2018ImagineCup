@@ -22,7 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -39,8 +41,6 @@ public class SleepRecordActivity extends AppCompatActivity {
     String sleepTime;
     long startTime;
     long endTime;
-    ArrayList<String> dateList = new ArrayList<>();
-    ArrayList<String> timeList = new ArrayList<>();
     String myJSON;
     private static final String TAG_RESULT = "result";
     private static final String TAG_DATE = "Date";
@@ -70,27 +70,6 @@ public class SleepRecordActivity extends AppCompatActivity {
         getData("http://192.168.0.85/PHP_connection.php"); // php서버 웹주소
     }
 
-    public void showList() {
-        try {
-            JSONObject jsonObject = new JSONObject(myJSON); // json형식 객체
-            info = jsonObject.getJSONArray(TAG_RESULT);
-            sleepRecordAdapter = new SleepRecordAdapter();
-
-            for (int i = 0; i < info.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
-                JSONObject object = info.getJSONObject(i);
-                String date = object.getString(TAG_DATE);
-                String time = object.getString(TAG_TIME);
-                sleepRecordAdapter.addItem(date, time); // 어댑터에 데이터 추가
-            }
-
-            listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("php error3", e.getMessage());
-        }
-    }
-
     public void getData(String url) {
         class GetDataJSON extends AsyncTask<String, Void, String> {
 
@@ -108,7 +87,7 @@ public class SleepRecordActivity extends AppCompatActivity {
                     bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                     String json;
-                    while ((json = bufferedReader.readLine()) != null) { // json형식으로 값을 모두 가져옴
+                    while ((json = bufferedReader.readLine()) != null) { // json 값을 모두 가져옴
                         stringBuilder.append(json + "\n");
                     }
                     return stringBuilder.toString().trim();
@@ -126,6 +105,29 @@ public class SleepRecordActivity extends AppCompatActivity {
         }
         GetDataJSON getDataJSON = new GetDataJSON();
         getDataJSON.execute(url);
+    }
+
+    public void showList() { // 리스트뷰에 나타내기
+        try {
+            JSONObject jsonObject = new JSONObject(myJSON); // json형식 객체
+            info = jsonObject.getJSONArray(TAG_RESULT);
+            sleepRecordAdapter = new SleepRecordAdapter();
+
+            for (int i = 0; i < info.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
+                JSONObject object = info.getJSONObject(i);
+                String date = object.getString(TAG_DATE);
+                String time = object.getString(TAG_TIME);
+                sleepRecordAdapter.addItem(date, time); // 어댑터에 데이터 추가
+            }
+
+            listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
+            sleepRecordAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnItems(listView);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("php error", e.getMessage());
+        }
     }
 
     public void sleepDialog() {
@@ -162,10 +164,10 @@ public class SleepRecordActivity extends AppCompatActivity {
                 btnSleep.setTextColor(Color.RED);
                 getNowTime("awake");
 
-                sleepRecordAdapter = new SleepRecordAdapter();
+                InsertData task = new InsertData();
+                task.execute(currentDate, sleepTime);
 
-                sleepRecordAdapter.addItem(currentDate, sleepTime); // 데이터베이스에 날짜와 시간 데이터 넣어야함
-                listView.setAdapter(sleepRecordAdapter); // 리스트뷰 갱신
+                getData("http://192.168.0.85/PHP_connection.php");
             }
         });
 
@@ -184,9 +186,8 @@ public class SleepRecordActivity extends AppCompatActivity {
             long now = System.currentTimeMillis();
             Date date = new Date(now);
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            currentDate = format.format(date);
 
-            Log.e("time", currentDate);
+            currentDate = format.format(date);
             startTime = System.currentTimeMillis();
         } else if (state.equals("awake")) {
             long now = System.currentTimeMillis();
@@ -214,8 +215,68 @@ public class SleepRecordActivity extends AppCompatActivity {
             }
 
             sleepTime = strHour + ":" + strMinute + ":" + strSecond;
-            Log.e("time", awakeDate);
-            Log.e("time", sleepTime);
+        }
+    }
+
+    public class InsertData extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String date = (String) params[0]; // (String) 해줘야함
+            String time = (String) params[1];
+
+            String serverURL = "http://192.168.0.85/PHP_insert.php"; // 서버를 돌리는 pc의 ip주소
+            String postParameters = "date=" + date + "&time=" + time; // date와 time 2개를 보내야 되서 구분하는 문자 &삽입
+
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST"); // 보안상 POST 방식 사용
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.e("php", "POST response code " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                bufferedReader.close();
+
+                return sb.toString();
+
+            } catch (Exception e) {
+                Log.e("php error4", String.valueOf(e));
+                return new String("Error: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.e("php", "POST response " + result);
         }
     }
 
