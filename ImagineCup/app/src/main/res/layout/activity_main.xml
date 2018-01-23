@@ -25,18 +25,6 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         </android.support.v7.widget.Toolbar>
 
-        <Button
-            android:id="@+id/btnConnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="소켓통신"/>
-
-        <Button
-            android:id="@+id/btnAlarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="json" />
-
         <GridView
             android:id="@+id/gridView"
             android:layout_width="wrap_content"
@@ -65,5 +53,3 @@
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
-
-

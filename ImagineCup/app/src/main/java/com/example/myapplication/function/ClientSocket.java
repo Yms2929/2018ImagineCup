@@ -71,7 +71,7 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void result) { // 클라이언트 실행
+    protected void onPostExecute(Void result) { // 응답 받은 후 실행
         if (response.equals("send")) {
             Log.e("Background", response);
             Intent intent = new Intent(context, WebViewStreaming.class);

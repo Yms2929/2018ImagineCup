@@ -74,21 +74,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        startService(new Intent(getApplicationContext(), DataResultActivity.class));
+        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 
-        btnConnect = (Button) findViewById(R.id.btnConnect);
-        btnConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!background) {
-                    startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
-                    background = true;
-                } else if (background) {
-                    stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                    background = false;
-                }
-            }
-        });
+//        startService(new Intent(getApplicationContext(), DataResultActivity.class));
     }
 
     @Override
@@ -116,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() { // 화면 재시작
         super.onRestart();
 
-//        stopService(new Intent(getApplicationContext(), BackgroundService.class));
-//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
+        stopService(new Intent(getApplicationContext(), BackgroundService.class));
+        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
     }
 }

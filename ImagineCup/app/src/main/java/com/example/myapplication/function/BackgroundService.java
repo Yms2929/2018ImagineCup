@@ -60,7 +60,6 @@ public class BackgroundService extends Service {
                     ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), message, getApplicationContext());
                     clientSocket.execute();
                     Log.e("Background", message);
-
                 }
             };
 

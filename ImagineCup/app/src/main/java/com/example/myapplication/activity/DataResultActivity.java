@@ -82,26 +82,28 @@ public class DataResultActivity extends Service {
         Button btnConfirm = (Button) mView.findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) { // 뷰의 확인 버튼 눌러야 알림 중지
                 soundPool.stop(streamId);
                 mView.setVisibility(View.INVISIBLE);
                 play = false;
             }
         });
 
-        mView.setVisibility(View.INVISIBLE);
+        mView.setVisibility(View.INVISIBLE); // 뷰 안보이게 함
 
         final Context context = this;
         timer = new Timer();
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                babyWarningResult = new NotifyBabyWarningResult(context);
-                babyWarningResult.execute("");
+                if (!play) {
+                    babyWarningResult = new NotifyBabyWarningResult(context);
+                    babyWarningResult.execute("");
+                }
             }
         };
 
-        timer.schedule(timerTask, 1000, 7000);
+        timer.schedule(timerTask, 1000, 8000); // 8초마다 반복 실행
     }
 
     //웹에서 데이터를 가져오기 전에 먼저 네트워크 상태부터 확인
