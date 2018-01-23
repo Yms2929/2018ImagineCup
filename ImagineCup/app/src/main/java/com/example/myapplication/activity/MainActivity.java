@@ -1,11 +1,10 @@
 package com.example.myapplication.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.FunctionAdapter;
@@ -35,23 +35,22 @@ import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private RollingBanner rollingBanner;
-
     DrawerLayout drawerLayout;
     GridView gridView;
     FunctionAdapter adapter;
     int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
-    boolean background = false;
     Intent i;
-
     private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
+    public static int REQ_CODE_OVERLAY_PERMISSION = 5469;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rollingBanner = findViewById(R.id.banner);
+        startOverlayWindowService();
 
+        rollingBanner = findViewById(R.id.banner);
         bannerAdapter adapterTrue = new bannerAdapter(new ArrayList<>(Arrays.asList(txtRes)));
         rollingBanner.setAdapter(adapterTrue);
 
@@ -97,8 +96,33 @@ public class MainActivity extends AppCompatActivity {
 
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 
-        startService(new Intent(getApplicationContext(), DataResultActivity.class));
+//        startService(new Intent(getApplicationContext(), DataResultActivity.class));
+    }
 
+    public void startOverlayWindowService() { // API 23 이상은 Overlay 사용 가능한지 체크
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            onObtainingPermissionOverlayWindow();
+        } else {
+            System.out.print("버전이 낮거나 오버레이 설정창이 없습니다.");
+        }
+    }
+
+    public void onObtainingPermissionOverlayWindow() { // 현재 패키지 명을 넘겨 설정화면을 노출
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+        startActivityForResult(intent, REQ_CODE_OVERLAY_PERMISSION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CODE_OVERLAY_PERMISSION) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                if (Settings.canDrawOverlays(this)) {
+                    Toast.makeText(this, "오버레이 권한 확인 완료", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "오버레이 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     @Override
@@ -120,19 +144,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void showNotification() { // 팝업 알림
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new android.support.v4.app.NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("아기 알람")
-                        .setContentText("아기의 수면자세를 확인 해주세요")
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(Notification.PRIORITY_HIGH);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, mBuilder.build());
     }
 
     public class bannerAdapter extends RollingViewPagerAdapter<String> {
@@ -171,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() { // 화면 재시작
         super.onRestart();
 
-        stopService(new Intent(getApplicationContext(), BackgroundService.class));
-        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
+//        stopService(new Intent(getApplicationContext(), BackgroundService.class));
+//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
     }
 }
