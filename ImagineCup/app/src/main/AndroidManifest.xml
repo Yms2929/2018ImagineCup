@@ -27,7 +27,11 @@
         <activity android:name=".function.WebViewStreaming" />
         <activity android:name=".activity.LullabyActivity" />
         <activity android:name=".activity.SleepRecordActivity" />
-        <activity android:name=".activity.GraphActivity" />
+        <activity android:name=".activity.GraphActivity">
+        </activity>
+        <activity android:name=".activity.DataResultActivity">
+        </activity>
+        <activity android:name=".activity.SettingActivity"/>
     </application>
 
 </manifest>
