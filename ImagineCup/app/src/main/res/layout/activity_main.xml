@@ -35,7 +35,7 @@
             android:id="@+id/btnAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알림받기" />
+            android:text="json" />
 
         <GridView
             android:id="@+id/gridView"

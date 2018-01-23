@@ -65,13 +65,13 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="2018"/>
+                android:text="2018/01/23"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="center"
+                android:textAlignment="textEnd"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
                 android:text="Today Total"/>
