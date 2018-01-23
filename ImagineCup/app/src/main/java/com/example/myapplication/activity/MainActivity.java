@@ -36,7 +36,7 @@ import java.util.Arrays;
 import pyxis.uzuki.live.rollingbanner.RollingBanner;
 import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     private RollingBanner rollingBanner;
 
     DrawerLayout drawerLayout;
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             int index = getItemList().indexOf(txt);
 
 
-            int[] images = {R.drawable.baby, R.drawable.baby_a};
+            int[] images = {R.drawable.baby, R.drawable.baby_a, R.drawable.baby}; // 배너수정
             container.setBackgroundResource(images[index]);
 
             view.setOnClickListener(new View.OnClickListener() {
