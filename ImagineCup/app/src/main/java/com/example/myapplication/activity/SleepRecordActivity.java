@@ -34,6 +34,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SleepRecordActivity extends AppCompatActivity {
@@ -60,6 +61,7 @@ public class SleepRecordActivity extends AppCompatActivity {
     long now;
     Date date;
     SimpleDateFormat format;
+    ArrayList<String> sleepList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +150,8 @@ public class SleepRecordActivity extends AppCompatActivity {
             info = jsonObject.getJSONArray(TAG_RESULT); // json배열
             sleepRecordAdapter = new SleepRecordAdapter();
             knowToday("yyyy/MM/dd");
+            currentDate = format.format(date);
+            sleepList.clear();
 
             for (int i = 0; i < info.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
                 JSONObject object = info.getJSONObject(i);
@@ -156,12 +160,14 @@ public class SleepRecordActivity extends AppCompatActivity {
                 String endTime = object.getString(TAG_ENDTIME);
                 String sleepTime = object.getString(TAG_SLEEPTIME);
 
-//                if (date.equals(currentDate)) { // 오늘 날짜만 보여줌
+                if (date.equals(currentDate)) { // 오늘 날짜만 보여줌
                     sleepRecordAdapter.addItem(startTime, endTime, sleepTime); // 어댑터에 데이터 추가
-//                }
+                    sleepList.add(sleepTime); // 오늘 수면시간 추가
+                }
             }
 
             textToday.setText(currentDate);
+            textAllTime.setText(allSleepTime(sleepList));
             listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
             sleepRecordAdapter.notifyDataSetChanged();
 
@@ -169,6 +175,53 @@ public class SleepRecordActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("php error", e.getMessage());
         }
+    }
+
+    public String allSleepTime(ArrayList<String> sleepList) { // 수면 총시간 구하기
+        int totalHour = 0;
+        int totalMinute = 0;
+        int totalSecond = 0;
+
+        for (int i = 0; i < sleepList.size(); i ++) {
+            String sleepTime = sleepList.get(i);
+            String sleepTimeArray[] = sleepTime.split(":");
+
+            int hour = Integer.parseInt(sleepTimeArray[0]);
+            int minute = Integer.parseInt(sleepTimeArray[1]);
+            int second = Integer.parseInt(sleepTimeArray[2]);
+
+            totalHour = totalHour + hour;
+            totalMinute = totalMinute + minute;
+            totalSecond = totalSecond + second;
+        }
+
+        while (totalSecond >= 60 || totalMinute >= 60) {
+            if (totalSecond >= 60) {
+                totalMinute = totalMinute + 1;
+                totalSecond = totalSecond - 60;
+            }
+            else if (totalMinute >= 60) {
+                totalHour = totalHour + 1;
+                totalMinute = totalMinute - 60;
+                break;
+            }
+        }
+
+        String strHour = String.valueOf(totalHour);
+        String strMinute = String.valueOf(totalMinute);
+        String strSecond = String.valueOf(totalSecond);
+
+        if (strHour.length() == 1) {
+            strHour = "0" + strHour;
+        }
+        if (strMinute.length() == 1) {
+            strMinute = "0" + strMinute;
+        }
+        if (strSecond.length() == 1) {
+            strSecond = "0" + strSecond;
+        }
+
+        return strHour + ":" + strMinute + ":" + strSecond;
     }
 
     public void knowToday(String input) { // 오늘 날짜
@@ -215,7 +268,6 @@ public class SleepRecordActivity extends AppCompatActivity {
 
                 InsertData task = new InsertData(); // insert쿼리 php실행
                 task.execute(currentDate, strStartTime, strEndTime, sleepTime);
-                Log.e("php", currentDate + " " + strStartTime + " " + strEndTime + " " + sleepTime);
                 getData("http://192.168.0.85/PHP_connection.php"); // 업데이트
             }
         });
@@ -230,13 +282,13 @@ public class SleepRecordActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void getNowTime(String state) { // 수면시간 계산하기
+    public void getNowTime(String state) { // 오늘날짜 수면시간 기록
         if (state.equals("sleep")) {
             knowToday("yyyy/MM/dd");
             currentDate = format.format(date);
             startTime = System.currentTimeMillis();
 
-            knowToday("hh:mm:ss");
+            knowToday("HH:mm:ss");
             strStartTime = format.format(date);
 
             Singleton.getInstance().setDate(currentDate);
@@ -247,7 +299,7 @@ public class SleepRecordActivity extends AppCompatActivity {
             startTime = Singleton.getInstance().getNow();
             endTime = System.currentTimeMillis();
 
-            knowToday("hh:mm:ss");
+            knowToday("HH:mm:ss");
             strEndTime = format.format(date);
 
             long resultTime = endTime - startTime;
@@ -255,7 +307,7 @@ public class SleepRecordActivity extends AppCompatActivity {
         }
     }
 
-    public String longTostring(long resultTime) {
+    public String longTostring(long resultTime) { // 밀리세컨드를 시간,분,초로 계산하여 스트링으로 변환
         long hour = resultTime / (1000 * 60 * 60);
         long minute = resultTime / (1000 * 60);
         long second = resultTime / 1000;

@@ -55,14 +55,14 @@
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="오늘날짜"/>
+                android:text="Date"/>
 
             <TextView
                 android:id="@+id/textToday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
                 android:text="2018"/>
@@ -74,7 +74,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="총수면"/>
+                android:text="Today Total"/>
 
             <TextView
                 android:id="@+id/textAllTime"
@@ -100,7 +100,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="수면시작"/>
+                android:text="Sleep Start"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="수면종료"/>
+                android:text="Sleep End"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -118,7 +118,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="수면시간"/>
+                android:text="Sleep Time"/>
         </LinearLayout>
 
         <ListView
