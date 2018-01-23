@@ -74,6 +74,7 @@ public class FirstGraphFragment  extends Fragment {
         des.setText(" ");
         lineChart.setDescription(des);
         lineChart.setData(data);
+        lineChart.setScaleEnabled(false);
         lineChart.invalidate(); // refresh
     }
 }

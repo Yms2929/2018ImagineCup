@@ -37,12 +37,13 @@ public class SecondGraphFragment  extends Fragment {
 
         //막대바 값
         barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(5f, 6f));
+        barEntries.add(new BarEntry(0f, 6f));
         barEntries.add(new BarEntry(1f, 12f));
         barEntries.add(new BarEntry(2f, 14f));
         barEntries.add(new BarEntry(3f, 9f));
         barEntries.add(new BarEntry(4f, 20f));
         barEntries.add(new BarEntry(5f, 2f));
+        barEntries.add(new BarEntry(6f, 10f));
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time"); //막대값 배열에 추가한 거 정립
         barDataSet.setColor(android.graphics.Color.argb(255, 195, 90, 157)); //바 색깔 정하기
 
@@ -56,6 +57,8 @@ public class SecondGraphFragment  extends Fragment {
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
         barChart.invalidate(); //refresh
         barChart.setData(data);
+        barChart.setScaleEnabled(false);
+        barChart.setFocusableInTouchMode(false);
         Description des = new Description();
         des.setText(" ");
         barChart.setDescription(des);
