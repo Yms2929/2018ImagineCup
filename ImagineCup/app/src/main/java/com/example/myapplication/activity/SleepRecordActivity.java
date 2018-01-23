@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
@@ -39,16 +40,22 @@ public class SleepRecordActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     ImageButton btnSleep;
     ListView listView;
+    TextView textToday;
+    TextView textAllTime;
     SleepRecordAdapter sleepRecordAdapter;
     boolean sleep = false;
     String currentDate;
     String sleepTime;
+    String strStartTime;
+    String strEndTime;
     long startTime;
     long endTime;
     String myJSON;
     private static final String TAG_RESULT = "result";
-    private static final String TAG_DATE = "Date";
-    private static final String TAG_TIME = "Time";
+    private static final String TAG_DATE = "date";
+    private static final String TAG_STARTTIME = "startTime";
+    private static final String TAG_ENDTIME = "endTime";
+    private static final String TAG_SLEEPTIME = "sleepTime";
     JSONArray info = null;
     long now;
     Date date;
@@ -72,6 +79,8 @@ public class SleepRecordActivity extends AppCompatActivity {
         }
 
         drawerLayout = (DrawerLayout) findViewById(R.id.sleeprecordDrawer);
+        textToday = (TextView) findViewById(R.id.textToday);
+        textAllTime = (TextView) findViewById(R.id.textAllTime);
         btnSleep = (ImageButton) findViewById(R.id.btnSleep);
 
         sleep = Singleton.getInstance().getSleep();
@@ -138,18 +147,21 @@ public class SleepRecordActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(myJSON); // json형식 객체
             info = jsonObject.getJSONArray(TAG_RESULT); // json배열
             sleepRecordAdapter = new SleepRecordAdapter();
-            knowToday();
+            knowToday("yyyy/MM/dd");
 
             for (int i = 0; i < info.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
                 JSONObject object = info.getJSONObject(i);
                 String date = object.getString(TAG_DATE);
-                String time = object.getString(TAG_TIME);
+                String startTime = object.getString(TAG_STARTTIME);
+                String endTime = object.getString(TAG_ENDTIME);
+                String sleepTime = object.getString(TAG_SLEEPTIME);
 
-                if (date.equals(currentDate)) { // 오늘 날짜만 보여줌
-                    sleepRecordAdapter.addItem(date, time); // 어댑터에 데이터 추가
-                }
+//                if (date.equals(currentDate)) { // 오늘 날짜만 보여줌
+                    sleepRecordAdapter.addItem(startTime, endTime, sleepTime); // 어댑터에 데이터 추가
+//                }
             }
 
+            textToday.setText(currentDate);
             listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
             sleepRecordAdapter.notifyDataSetChanged();
 
@@ -159,11 +171,10 @@ public class SleepRecordActivity extends AppCompatActivity {
         }
     }
 
-    public void knowToday() { // 오늘 날짜
+    public void knowToday(String input) { // 오늘 날짜
         now = System.currentTimeMillis();
         date = new Date(now);
-        format = new SimpleDateFormat("yyyy/MM/dd");
-        currentDate = format.format(date);
+        format = new SimpleDateFormat(input);
     }
 
     public void sleepDialog() { // 수면할때 다이얼로그
@@ -203,8 +214,8 @@ public class SleepRecordActivity extends AppCompatActivity {
                 getNowTime("awake");
 
                 InsertData task = new InsertData(); // insert쿼리 php실행
-                task.execute(currentDate, sleepTime);
-
+                task.execute(currentDate, strStartTime, strEndTime, sleepTime);
+                Log.e("php", currentDate + " " + strStartTime + " " + strEndTime + " " + sleepTime);
                 getData("http://192.168.0.85/PHP_connection.php"); // 업데이트
             }
         });
@@ -221,41 +232,49 @@ public class SleepRecordActivity extends AppCompatActivity {
 
     public void getNowTime(String state) { // 수면시간 계산하기
         if (state.equals("sleep")) {
-            knowToday();
-
+            knowToday("yyyy/MM/dd");
+            currentDate = format.format(date);
             startTime = System.currentTimeMillis();
+
+            knowToday("hh:mm:ss");
+            strStartTime = format.format(date);
 
             Singleton.getInstance().setDate(currentDate);
             Singleton.getInstance().setNow(startTime);
-        }
-        else if (state.equals("awake")) {
-            knowToday();
-
+        } else if (state.equals("awake")) {
+            knowToday("yyyy/MM/dd");
             currentDate = Singleton.getInstance().getDate();
             startTime = Singleton.getInstance().getNow();
             endTime = System.currentTimeMillis();
 
+            knowToday("hh:mm:ss");
+            strEndTime = format.format(date);
+
             long resultTime = endTime - startTime;
-            long hour = resultTime / (1000 * 60 * 60);
-            long minute = resultTime / (1000 * 60);
-            long second = resultTime / 1000;
-
-            String strHour = String.valueOf(hour);
-            String strMinute = String.valueOf(minute - (hour * 60));
-            String strSecond = String.valueOf(second - (minute * 60));
-
-            if (strHour.length() == 1) {
-                strHour = "0" + strHour;
-            }
-            if (strMinute.length() == 1) {
-                strMinute = "0" + strMinute;
-            }
-            if (strSecond.length() == 1) {
-                strSecond = "0" + strSecond;
-            }
-
-            sleepTime = strHour + ":" + strMinute + ":" + strSecond;
+            sleepTime = longTostring(resultTime);
         }
+    }
+
+    public String longTostring(long resultTime) {
+        long hour = resultTime / (1000 * 60 * 60);
+        long minute = resultTime / (1000 * 60);
+        long second = resultTime / 1000;
+
+        String strHour = String.valueOf(hour);
+        String strMinute = String.valueOf(minute - (hour * 60));
+        String strSecond = String.valueOf(second - (minute * 60));
+
+        if (strHour.length() == 1) {
+            strHour = "0" + strHour;
+        }
+        if (strMinute.length() == 1) {
+            strMinute = "0" + strMinute;
+        }
+        if (strSecond.length() == 1) {
+            strSecond = "0" + strSecond;
+        }
+
+        return strHour + ":" + strMinute + ":" + strSecond;
     }
 
     public class InsertData extends AsyncTask<String, Void, String> {
@@ -263,10 +282,12 @@ public class SleepRecordActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String date = (String) params[0]; // (String) 해줘야함
-            String time = (String) params[1];
+            String startTime = (String) params[1];
+            String endTime = (String) params[2];
+            String sleepTime = (String) params[3];
 
             String serverURL = "http://192.168.0.85/PHP_insert.php"; // 서버를 돌리는 pc의 ip주소
-            String postParameters = "date=" + date + "&time=" + time; // date와 time 2개를 보내야 되서 구분하는 문자 &삽입
+            String postParameters = "date=" + date + "&startTime=" + startTime + "&endTime=" + endTime + "&sleepTime=" + sleepTime; // 구분하는 문자 &삽입
 
             try {
                 URL url = new URL(serverURL);

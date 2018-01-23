@@ -6,7 +6,9 @@ package com.example.myapplication.data;
 
 public class SleepRecordListViewItem {
     private String date;
-    private String time;
+    private String startTime;
+    private String endTime;
+    private String sleepTime;
 
     public SleepRecordListViewItem() {
 
@@ -20,11 +22,27 @@ public class SleepRecordListViewItem {
         this.date = date;
     }
 
-    public String getTime() {
-        return this.time;
+    public String getStartTime() {
+        return this.startTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return this.endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getSleepTime() {
+        return this.sleepTime;
+    }
+
+    public void setSleepTime(String sleepTime) {
+        this.sleepTime = sleepTime;
     }
 }

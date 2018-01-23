@@ -43,7 +43,52 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="오늘날짜"/>
+
+            <TextView
+                android:id="@+id/textToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="2018"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="총수면"/>
+
+            <TextView
+                android:id="@+id/textAllTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="16:30:50"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -54,8 +99,8 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
-                android:textSize="18dp"
-                android:text="날짜"/>
+                android:textSize="16dp"
+                android:text="수면시작"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -63,8 +108,17 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
-                android:textSize="18dp"
-                android:text="시간"/>
+                android:textSize="16dp"
+                android:text="수면종료"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="수면시간"/>
         </LinearLayout>
 
         <ListView
