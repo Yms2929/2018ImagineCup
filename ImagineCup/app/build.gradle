@@ -34,4 +34,5 @@ dependencies {
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.roughike:bottom-bar:2.3.1'
     testCompile 'junit:junit:4.12'
+    implementation project(':rolling-banner')
 }

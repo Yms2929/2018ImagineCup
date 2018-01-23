@@ -20,34 +20,46 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="top"
             android:background="@color/md_pink_100"
-            app:titleTextColor="@color/md_black_1000"
             app:layout_collapseMode="pin"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/md_black_1000">
+
         </android.support.v7.widget.Toolbar>
+
+        <pyxis.uzuki.live.rollingbanner.RollingBanner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:enableIndicator="true"
+            app:enableRolling="true"
+            app:flingAble="true"
+            app:rollingDelay="3000"
+            app:scrollingDelay="250"
+            app:smoothScroll="true" />
 
         <GridView
             android:id="@+id/gridView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
             android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
             android:numColumns="2"
             android:stretchMode="columnWidth"
-            android:gravity="center">
-        </GridView>
+            android:verticalSpacing="10dp"></GridView>
 
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/mainNav"
-        android:layout_width="210dp"
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu"
         app:itemTextColor="@color/md_black_1000">
 
     </android.support.design.widget.NavigationView>
