@@ -1,15 +1,10 @@
 package com.example.myapplication.activity;
 
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -19,6 +14,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,18 +33,13 @@ import java.util.Arrays;
 import pyxis.uzuki.live.rollingbanner.RollingBanner;
 import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     private RollingBanner rollingBanner;
 
     DrawerLayout drawerLayout;
     GridView gridView;
     FunctionAdapter adapter;
-    SoundPool soundPool;
-    AudioManager audioManager;
     int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
-    int soundId;
-    int streamId;
-    boolean play = false;
     boolean background = false;
     Intent i;
 
@@ -97,7 +89,7 @@ public class MainActivity extends AppCompatActivity  {
                         startActivity(new Intent(getApplicationContext(), GraphActivity.class)); // 그래프 화면
                         break;
                     case 3:
-                        startActivity(new Intent(getApplicationContext(), LullabyActivity.class)); // 자장가 화면
+                        startActivity(new Intent(getApplicationContext(), DataResultActivity.class)); // 자장가 화면
                         break;
                     default:
                         break;
@@ -105,50 +97,16 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 롤리팝 이전은 단순히 생성자로 생성 롤리팝 이후에는 Builder()로 생성
-            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build();
-            soundPool = new SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(1).build(); // 동시에 재생할 수 있는 갯수
-        } else {
-            soundPool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 0);
-        }
+        startService(new Intent(getApplicationContext(), DataResultActivity.class));
 
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        soundId = soundPool.load(this, R.raw.alarm, 1);
+    }
 
-        //btnConnect = (Button) findViewById(R.id.btnConnect);
-        //btnAlarm = (Button) findViewById(R.id.btnAlarm);
-
-//        btnConnect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!background) {
-//                    startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
-//                    background = true;
-//                } else if (background) {
-//                    stopService(new Intent(getApplicationContext(), BackgroundService.class));
-//                    background = false;
-//                }
-//            }
-//        });
-
-//        btnAlarm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showNotification();
-//
-//                if (!play) {
-//                    checkSoundMode();
-//                    streamId = soundPool.play(soundId, 1.0F, 1.0F, 1, -1, 1.0F);
-//                    play = true;
-//                } else if (play) {
-//                    soundPool.stop(streamId);
-//                    play = false;
-//                }
-//            }
-//        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
     }
 
     @Override
@@ -157,24 +115,11 @@ public class MainActivity extends AppCompatActivity  {
 
         if (id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingActivity.class)); // 자장가 화면
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void checkSoundMode() { // 현재 기기 모드
-        switch (audioManager.getRingerMode()) {
-            case AudioManager.RINGER_MODE_NORMAL: // 소리모드
-                break;
-            case AudioManager.RINGER_MODE_SILENT: // 무음모드
-                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL); // 소리모드로 변경
-                break;
-            case AudioManager.RINGER_MODE_VIBRATE: // 진동모드
-                audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                break;
-            default:
-                break;
-        }
     }
 
     public void showNotification() { // 팝업 알림
@@ -229,39 +174,4 @@ public class MainActivity extends AppCompatActivity  {
 //        stopService(new Intent(getApplicationContext(), BackgroundService.class));
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
     }
-
-    //    public void showNotification() {
-//        NotificationCompat.Builder builder = createNotification();
-//        builder.setContentIntent(createPendingIntent());
-//
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(1, builder.build());
-//    }
-//
-//    private NotificationCompat.Builder createNotification() {
-//        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-//        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setLargeIcon(icon)
-//                .setContentTitle("상태바 타이틀")
-//                .setContentText("상태바 서브타이틀")
-//                .setAutoCancel(true)
-//                .setWhen(System.currentTimeMillis())
-//                .setDefaults(Notification.DEFAULT_ALL);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            builder.setCategory(String.valueOf(Notification.PRIORITY_HIGH))
-//                    .setVisibility(Notification.VISIBILITY_PUBLIC);
-//        }
-//
-//        return builder;
-//    }
-
-//    private PendingIntent createPendingIntent() {
-//        Intent intent = new Intent(this, SocketClient.class);
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-//        stackBuilder.addParentStack(SocketClient.class);
-//        stackBuilder.addNextIntent(intent);
-//
-//        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-//    }
 }

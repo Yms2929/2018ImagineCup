@@ -34,7 +34,6 @@
             app:rollingDelay="3000"
             app:scrollingDelay="250"
             app:smoothScroll="true" />
-
         <GridView
             android:id="@+id/gridView"
             android:layout_width="wrap_content"

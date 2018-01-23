@@ -47,21 +47,24 @@ public class SleepRecordAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.sleeprecordlistview_item, parent, false);
         }
 
-        TextView textDate = (TextView) convertView.findViewById(R.id.textDate);
-        TextView textTime = (TextView) convertView.findViewById(R.id.textTime);
+        TextView textStart = (TextView) convertView.findViewById(R.id.textStart);
+        TextView textEnd = (TextView) convertView.findViewById(R.id.textEnd);
+        TextView textTime = (TextView) convertView.findViewById(R.id.textSleep);
 
         SleepRecordListViewItem listViewItem = listViewItems.get(position);
-        textDate.setText(listViewItem.getDate());
-        textTime.setText(listViewItem.getTime());
+        textStart.setText(listViewItem.getStartTime());
+        textEnd.setText(listViewItem.getEndTime());
+        textTime.setText(listViewItem.getSleepTime());
 
         return convertView;
     }
 
-    public void addItem(String date, String time) {
+    public void addItem(String startTime, String endTime, String sleepTime) {
         SleepRecordListViewItem item = new SleepRecordListViewItem();
 
-        item.setDate(date);
-        item.setTime(time);
+        item.setStartTime(startTime);
+        item.setEndTime(endTime);
+        item.setSleepTime(sleepTime);
 
         listViewItems.add(item);
     }

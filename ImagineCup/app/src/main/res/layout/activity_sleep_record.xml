@@ -1,30 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sleeprecordDrawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.myapplication.activity.SleepRecordActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnSleep"
-        android:layout_marginTop="50dp"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:text="Sleep" />
-
-    <TextView
-        android:id="@+id/txtSql"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ListView
-        android:id="@+id/listview"
-        android:layout_marginTop="50dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent"
+        android:background="@color/md_white_1000"
+        android:orientation="vertical"
+        tools:context="com.example.myapplication.activity.SleepRecordActivity">
 
-</LinearLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/sleeprecordToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="top"
+            android:background="@color/md_pink_100"
+            app:titleTextColor="@color/md_black_1000"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnSleep"
+                android:layout_marginTop="30dp"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/sleep"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="Date"/>
+
+            <TextView
+                android:id="@+id/textToday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="textStart"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="2018/01/23"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="Today Total"/>
+
+            <TextView
+                android:id="@+id/textAllTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="16:30:50"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="Sleep Start"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="Sleep End"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/md_black_1000"
+                android:textSize="16dp"
+                android:text="Sleep Time"/>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/sleeprecordNav"
+        android:layout_width="210dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:itemTextColor="@color/md_black_1000">
+
+    </android.support.design.widget.NavigationView>
+
+</android.support.v4.widget.DrawerLayout>
