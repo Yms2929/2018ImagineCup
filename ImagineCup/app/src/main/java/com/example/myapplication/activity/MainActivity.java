@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -21,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -38,8 +38,7 @@ import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
     private RollingBanner rollingBanner;
-    Button btnConnect;
-    Button btnAlarm;
+
     DrawerLayout drawerLayout;
     GridView gridView;
     FunctionAdapter adapter;
@@ -50,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
     int streamId;
     boolean play = false;
     boolean background = false;
+    Intent i;
 
-    private String[] txtRes = new String[]{"Purple", "Light Blue", "Cyan", "Teal","Green",};
-    private int[] colorRes = new int[]{0xff9C27B0, 0xff03A9F4, 0xff00BCD4, 0xff009688, 0xff4CAF50};
+    private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         rollingBanner = findViewById(R.id.banner);
 
-        SampleAdapter adapterTrue = new SampleAdapter(new ArrayList<>(Arrays.asList(txtRes)));
+        bannerAdapter adapterTrue = new bannerAdapter(new ArrayList<>(Arrays.asList(txtRes)));
         rollingBanner.setAdapter(adapterTrue);
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar); // 툴바
         setSupportActionBar(toolbar);
@@ -189,22 +190,34 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(0, mBuilder.build());
     }
 
-    public class SampleAdapter extends RollingViewPagerAdapter<String> {
+    public class bannerAdapter extends RollingViewPagerAdapter<String> {
 
-        public SampleAdapter(ArrayList<String> itemList) {
+        public bannerAdapter(ArrayList<String> itemList) {
             super(itemList);
         }
 
         @Override
-        public View getView(int position) {
+        public View getView(final int position) {
             View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_main_pager, null, false);
             FrameLayout container = view.findViewById(R.id.container);
             TextView txtText = view.findViewById(R.id.txtText);
 
             String txt = getItem(position);
             int index = getItemList().indexOf(txt);
-            txtText.setText(txt);
-            container.setBackgroundColor(colorRes[index]);
+
+
+            int[] images = {R.drawable.baby, R.drawable.baby_a};
+            container.setBackgroundResource(images[index]);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 번호 나누기 다른 홈페이지
+                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
+                    startActivity(i);
+                }
+            });
+
             return view;
         }
     }
