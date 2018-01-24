@@ -22,14 +22,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.FunctionAdapter;
+import com.example.myapplication.adapter.RecyclerAdapter;
+import com.example.myapplication.data.Item;
 import com.example.myapplication.function.BackgroundService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import pyxis.uzuki.live.rollingbanner.RollingBanner;
 import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
@@ -42,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
     FunctionAdapter adapter;
     int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
     boolean background = false;
-    Intent i;
+    Intent i; // 배너 클릭 시 이동을 위한 Intent
+    final int ITEM_SIZE = 4; // 카드뷰 갯수
 
     private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
 
@@ -75,12 +78,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
 
+        List<Item> items = new ArrayList<>();
+        Item[] item = new Item[ITEM_SIZE];
+        //이하 아이템 지정. 전역 변수 final int ITEM_SIZE 와 동일한 갯수 설정
+        item[0] = new Item(R.drawable.sleep, "#sleep");
+        item[1] = new Item(R.drawable.thermometer, "#thermoeter");
+        item[2] = new Item(R.drawable.sleeprecord, "#record");
+        item[3] = new Item(R.drawable.settings, "#setting");
 
+        //Size add
+        for(int i=0; i < ITEM_SIZE; i++){
+            items.add(item[i]);
+        }
 
-//      startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
+        recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
 
-        startService(new Intent(getApplicationContext(), DataResultActivity.class));
+        //startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 
+        //startService(new Intent(getApplicationContext(), DataResultActivity.class));
     }
 
     @Override
@@ -127,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
         public View getView(final int position) {
             View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_main_pager, null, false);
             FrameLayout container = view.findViewById(R.id.container);
-            TextView txtText = view.findViewById(R.id.txtText);
 
             String txt = getItem(position);
             final int index = getItemList().indexOf(txt);
