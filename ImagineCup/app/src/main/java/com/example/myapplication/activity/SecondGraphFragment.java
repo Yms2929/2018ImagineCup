@@ -28,7 +28,7 @@ public class SecondGraphFragment  extends Fragment {
     XAxis xAxis;
     ArrayList<BarEntry> barEntries;
     //xAsix 밑에 들어갈 string 배열
-    final String[] days = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    final String[] days = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -66,5 +66,3 @@ public class SecondGraphFragment  extends Fragment {
         return view;
     }
 }
-
-

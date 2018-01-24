@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/ImagineCup.iml" filepath="$PROJECT_DIR$/ImagineCup.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/rolling-banner/rolling-banner.iml" filepath="$PROJECT_DIR$/rolling-banner/rolling-banner.iml" />
-      <module fileurl="file://C:\Android\ImagineCup\ImagineCup\rolling-banner\rolling-banner.iml" filepath="C:\Android\ImagineCup\ImagineCup\rolling-banner\rolling-banner.iml" />
     </modules>
   </component>
 </project>

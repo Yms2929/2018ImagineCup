@@ -1,4 +1,4 @@
-package com.example.myapplication.activity;
+package com.example.myapplication.function;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -32,10 +32,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by woga1 on 2018-01-02.
+ * Created by Yookmoonsu on 2018-01-24.
  */
 
-public class DataResultActivity extends Service {
+public class DataResultService extends Service {
     NotifyBabyWarningResult babyWarningResult;
     SoundPool soundPool;
     AudioManager audioManager;
@@ -153,7 +153,6 @@ public class DataResultActivity extends Service {
             Log.e("MenuLoadManger", "preexecute");
         }
 
-
         protected String doInBackground(String... params) {
             //웹서버에 요청시도
 
@@ -161,7 +160,6 @@ public class DataResultActivity extends Service {
             Log.e("AsnkTask ask", data);
             return data;
         }
-
 
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -184,8 +182,7 @@ public class DataResultActivity extends Service {
                         checkSoundMode();
                         streamId = soundPool.play(soundId, 1.0F, 1.0F, 1, -1, 1.0F);
                         play = true;
-                    }
-                    else {
+                    } else {
                         Log.e("background", "press confirm");
                     }
                 }
@@ -223,25 +220,6 @@ public class DataResultActivity extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, mBuilder.build());
     }
-
-//    public void showDialog() { // 다이알로그 창 띄우기
-//        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getContext());
-//        builder.setTitle("Baby warning");
-//        builder.setMessage("Check your baby's posture!");
-//        builder.setPositiveButton("Confirm",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        soundPool.stop(streamId); // 확인 누르면 알림음 종료
-//                    }
-//                });
-//        builder.setNegativeButton("아니오",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(getApplicationContext(), "아니오를 선택했습니다.", Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//        builder.show();
-//    }
 
     @Override
     public void onDestroy() { // 서비스가 종료될때

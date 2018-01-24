@@ -34,7 +34,7 @@
         <activity android:name=".activity.GraphActivity">
         </activity>
 
-        <service android:name=".activity.DataResultActivity" />
+        <service android:name=".function.DataResultService" />
 
         <activity android:name=".activity.SettingActivity"/>
     </application>

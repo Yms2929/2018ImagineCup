@@ -29,7 +29,7 @@ public class FirstGraphFragment  extends Fragment {
     View view;
     XAxis xAxis;
     LineChart lineChart;
-    final String[] days = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    final String[] days = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -42,15 +42,16 @@ public class FirstGraphFragment  extends Fragment {
         lineChart.getXAxis().setValueFormatter(new LabelFormatter(days));
         return view;
     }
-    private void setlineData(){
+
+    private void setlineData() {
         ArrayList<Entry> line1 = new ArrayList<>();
-        for(int i=0; i<7; i++) {
-            float val = (float) (Math.random()*10)+250;
+        for (int i = 0; i < 7; i++) {
+            float val = (float) (Math.random() * 10) + 250;
             line1.add(new Entry(i, val));
         }
         ArrayList<Entry> line2 = new ArrayList<>();
-        for(int i=0; i<7; i++) {
-            float val = (float) (Math.random()*10)+250;
+        for (int i = 0; i < 7; i++) {
+            float val = (float) (Math.random() * 10) + 250;
             line2.add(new Entry(i, val));
         }
 

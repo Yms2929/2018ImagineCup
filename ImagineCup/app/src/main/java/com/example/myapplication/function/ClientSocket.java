@@ -51,20 +51,16 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
                 response += byteArrayOutputStream.toString("UTF-8");
             }
 
+            outputStream.close();
+            byteArrayOutputStream.close();
+            inputStream.close();
+            socket.close();
         } catch (UnknownHostException e) {
             e.printStackTrace();
             response = "UnKnownHostException: " + e.toString();
         } catch (IOException e) {
             e.printStackTrace();
             response = "IOException: " + e.toString();
-        } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return null;
@@ -72,13 +68,13 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) { // 응답 받은 후 실행
+        super.onPostExecute(result);
+        Log.e("Background post", response);
+
         if (response.equals("send")) {
-            Log.e("Background", response);
             Intent intent = new Intent(context, WebViewStreaming.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
-
-        super.onPostExecute(result);
     }
 }

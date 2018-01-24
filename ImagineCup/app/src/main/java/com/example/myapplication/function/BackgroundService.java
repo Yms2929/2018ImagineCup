@@ -59,15 +59,15 @@ public class BackgroundService extends Service {
                 public void run() {
                     ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), message, getApplicationContext());
                     clientSocket.execute();
-                    Log.e("Background", message);
+                    Log.e("Background message", message);
                 }
             };
 
-            timer.schedule(timerTask, 1000, 5000);
+            timer.schedule(timerTask, 1000, 7000);
         } else if (message.equals("send")) {
             ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), message, getApplicationContext());
             clientSocket.execute();
-            Log.e("Background", message);
+            Log.e("Background message", message);
         }
     }
 
@@ -75,7 +75,7 @@ public class BackgroundService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        Log.e("Background", "cancel");
+        Log.e("Background message", "cancel");
         if (activityMessage.equals("connect") || activityMessage.equals("exit")) {
             timer.cancel();
             timerTask.cancel();

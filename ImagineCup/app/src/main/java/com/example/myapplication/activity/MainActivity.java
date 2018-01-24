@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.FunctionAdapter;
 import com.example.myapplication.function.BackgroundService;
+import com.example.myapplication.function.WebViewStreaming;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), GraphActivity.class)); // 그래프 화면
                         break;
                     case 3:
-                        startActivity(new Intent(getApplicationContext(), DataResultActivity.class)); // 자장가 화면
+                        startActivity(new Intent(getApplicationContext(), WebViewStreaming.class)); // 웹뷰 테스트용
                         break;
                     default:
                         break;
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 
-//        startService(new Intent(getApplicationContext(), DataResultActivity.class));
+//        startService(new Intent(getApplicationContext(), DataResultService.class));
     }
 
     public void startOverlayWindowService() { // API 23 이상은 Overlay 사용 가능한지 체크

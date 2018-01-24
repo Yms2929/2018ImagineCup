@@ -22,8 +22,8 @@ public class WebViewStreaming extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webviewstreaming);
-        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 
+        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
         width = dm.widthPixels;
         height = dm.heightPixels;
 
@@ -66,13 +66,16 @@ public class WebViewStreaming extends Activity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         //이건 최신 버전에서는 사용하지 않게됨
-        //webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
 
         WebSettings webSettings = webView.getSettings();
+//        webSettings.setLoadWithOverviewMode(true);
+//        webSettings.setUseWideViewPort(true);
         webSettings.setJavaScriptEnabled(true);
 
+        webView.loadUrl(url);
         //영상을 폭을 꽉 차게 하기 위해 직접 html태그로 작성함.
-        //webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='" + url + "/></div></body></html>", "text/html", "UTF-8");
+//        webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} div{overflow: hidden;} </style></head><body><div><img src='" + url + "/></div></body></html>", "text/html", "UTF-8");
 
 //        WebSettings webSettings = webView.getSettings();
 //        webSettings.setUseWideViewPort(true);
@@ -89,7 +92,7 @@ public class WebViewStreaming extends Activity {
 //        //webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 //        webView.setInitialScale(getScale());
 //
-        webView.loadUrl(url);
+
         //String imgSrcHtml = "<html><img src='" + url + "' /></html>";
         // String imgSrcHtml = url;
         //webView.loadData(imgSrcHtml, "text/html", "UTF-8");
