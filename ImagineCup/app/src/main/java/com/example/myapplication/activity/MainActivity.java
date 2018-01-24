@@ -12,13 +12,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -68,34 +69,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         drawerLayout = (DrawerLayout) findViewById(R.id.mainDrawer); // 드로어
-        gridView = (GridView) findViewById(R.id.gridView);
-        adapter = new FunctionAdapter(getApplicationContext(), functionImage);
-        gridView.setAdapter(adapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // 그리드뷰 클릭 이벤트
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "send"));
-                        break;
-                    case 1:
-                        startActivity(new Intent(getApplicationContext(), SleepRecordActivity.class)); // 수면기록 화면
-                        break;
-                    case 2:
-                        startActivity(new Intent(getApplicationContext(), GraphActivity.class)); // 그래프 화면
-                        break;
-                    case 3:
-                        startActivity(new Intent(getApplicationContext(), DataResultActivity.class)); // 자장가 화면
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
 
-//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
+
+
+//      startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 
         startService(new Intent(getApplicationContext(), DataResultActivity.class));
 
@@ -148,18 +130,27 @@ public class MainActivity extends AppCompatActivity {
             TextView txtText = view.findViewById(R.id.txtText);
 
             String txt = getItem(position);
-            int index = getItemList().indexOf(txt);
+            final int index = getItemList().indexOf(txt);
 
 
-            int[] images = {R.drawable.baby, R.drawable.baby_a, R.drawable.baby}; // 배너수정
+            final int[] images = {R.drawable.baby, R.drawable.baby_a, R.drawable.baby}; // 배너수정
             container.setBackgroundResource(images[index]);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 번호 나누기 다른 홈페이지
-                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
-                    startActivity(i);
+                    if(index == 0) {
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
+                        startActivity(i);
+                    }
+                    else if(index == 1){
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.daum.net"));
+                        startActivity(i);
+                    }
+                    else if(index == 2){
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.google.com"));
+                        startActivity(i);
+                    }
                 }
             });
 
