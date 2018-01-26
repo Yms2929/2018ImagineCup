@@ -1,18 +1,14 @@
 package com.example.myapplication.activity;
 
 import android.app.Fragment;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -22,32 +18,21 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class GraphActivity extends AppCompatActivity {
     ViewPager graphViewPager;
     LinearLayout linearLayout;
-    private static final String TAG_RESULTQUREY = "result";
-    private static final String TAG_TODAY = "today";
-    private static final String TAG_TEMPERATURE = "temperature";
-    private static final String TAG_HUMIDITY = "humidity";
-    JSONArray jsonArray = null;
-    String json;
-    DrawerLayout drawerLayout;
+//    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_tabbar);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.graphDrawer);
+//        drawerLayout = (DrawerLayout) findViewById(R.id.graphDrawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.graphToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,7 +40,7 @@ public class GraphActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            VectorDrawableCompat compat = VectorDrawableCompat.create(getResources(), R.drawable.ic_dehaze_black_24dp, getTheme()); // 이미지 벡터
+            VectorDrawableCompat compat = VectorDrawableCompat.create(getResources(), R.drawable.ic_arrow_back_black_24dp, getTheme()); // 이미지 벡터
             compat.setTint(ResourcesCompat.getColor(getResources(), R.color.md_white_1000, getTheme())); // 벡터 색깔
             actionBar.setHomeAsUpIndicator(compat);
         }
@@ -65,6 +50,13 @@ public class GraphActivity extends AppCompatActivity {
 
         TextView tab_first = (TextView) findViewById(R.id.graph1);
         TextView tab_second = (TextView) findViewById(R.id.graph2);
+        final TextView textDate = (TextView) findViewById(R.id.textDate);
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        final String currentDay = format.format(date);
+        textDate.setText(currentDay + " " + doDayOfWeek());
 
         graphViewPager.setAdapter(new pagerAdapter(getFragmentManager()));
         graphViewPager.setCurrentItem(0);
@@ -87,8 +79,10 @@ public class GraphActivity extends AppCompatActivity {
                 while (i < 2) {
                     if (position == i) {
                         linearLayout.findViewWithTag(i).setSelected(true);
+                        textDate.setText(getPreviousDay() + "~" + currentDay);
                     } else {
                         linearLayout.findViewWithTag(i).setSelected(false);
+                        textDate.setText(currentDay + " " + doDayOfWeek());
                     }
                     i++;
                 }
@@ -99,8 +93,6 @@ public class GraphActivity extends AppCompatActivity {
 
             }
         });
-
-        getData("http://192.168.0.85/PHP_atmosphere.php");
     }
 
     View.OnClickListener movePageListener = new View.OnClickListener() {
@@ -166,68 +158,51 @@ public class GraphActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            drawerLayout.openDrawer(GravityCompat.START);
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void getData(String url) {
-        class GetDataJSON extends AsyncTask<String, Void, String> {
+    public String doDayOfWeek() { // 오늘 요일 구하기
+        Calendar calendar = Calendar.getInstance();
+        String day = "";
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
 
-            @Override
-            protected String doInBackground(String... params) { // 웹서버에 요청
-
-                String uri = params[0];
-                BufferedReader bufferedReader = null;
-
-                try {
-                    URL url = new URL(uri);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                    StringBuilder stringBuilder = new StringBuilder();
-                    bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-                    String json;
-                    while ((json = bufferedReader.readLine()) != null) { // json 값을 모두 가져옴
-                        stringBuilder.append(json + "\n");
-                    }
-                    return stringBuilder.toString().trim();
-
-                } catch (Exception e) {
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String result) { // 웹서버에서 post 받으면 실행
-                json = result;
-                showList();
-            }
+        switch (week) {
+            case 1:
+                day = "Sunday";
+                break;
+            case 2:
+                day = "Monday";
+                break;
+            case 3:
+                day = "Tuesday";
+                break;
+            case 4:
+                day = "Wednesday";
+                break;
+            case 5:
+                day = "Thursday";
+                break;
+            case 6:
+                day = "Friday";
+                break;
+            case 7:
+                day = "Saturday";
+                break;
         }
-        GetDataJSON getDataJSON = new GetDataJSON();
-        getDataJSON.execute(url);
+
+        return day;
     }
 
-    public void showList() { // 리스트뷰에 나타내기
-        try {
-            JSONObject jsonObject = new JSONObject(json); // json형식 객체
-            jsonArray = jsonObject.getJSONArray(TAG_RESULTQUREY); // json배열
+    public String getPreviousDay() { // 이전 날짜 구하기
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -6);  // 오늘 날짜에서 하루를 뺌.
+        String day = sdf.format(calendar.getTime());
 
-            for (int i = 0; i < jsonArray.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
-                JSONObject object = jsonArray.getJSONObject(i);
-                String today = object.getString(TAG_TODAY);
-                String temperature = object.getString(TAG_TEMPERATURE);
-                String humidity = object.getString(TAG_HUMIDITY);
-
-                Log.e("php", today);
-                Log.e("php", temperature);
-                Log.e("php", humidity);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("php error", e.getMessage());
-        }
+        return day;
     }
 }

@@ -39,18 +39,28 @@
                 android:textColor="@drawable/tab_color_selector"
                 android:background="@drawable/tab_bg_selector"
                 android:gravity="center"
-                android:text="Temperature"/>
+                android:text="Temperature / Humidity"/>
 
             <TextView
                 android:id="@+id/graph2"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:textColor="@drawable/tab_color_selector"
                 android:background="@drawable/tab_bg_selector"
                 android:gravity="center"
                 android:text="SleepRecord"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textDate"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="2018/01/25 Thursday"
+            android:textSize="20dp"
+            android:textColor="@color/md_black_1000"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/graphPager"
@@ -58,16 +68,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/graphNav"
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        app:itemTextColor="@color/md_black_1000">
-
-    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

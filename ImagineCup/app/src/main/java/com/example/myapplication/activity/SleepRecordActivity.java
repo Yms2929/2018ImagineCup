@@ -62,6 +62,8 @@ public class SleepRecordActivity extends AppCompatActivity {
     Date date;
     SimpleDateFormat format;
     ArrayList<String> sleepList = new ArrayList<String>();
+    String phpConnectUrl = "http://192.168.0.78/PHP_connection.php";
+    String phpInsertUrl = "http://192.168.0.78/PHP_insert.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +106,7 @@ public class SleepRecordActivity extends AppCompatActivity {
         });
 
         listView = (ListView) findViewById(R.id.listview);
-        getData("http://192.168.0.85/PHP_connection.php"); // php서버 웹주소
+        getData(phpConnectUrl); // php서버 웹주소
     }
 
     public void getData(String url) {
@@ -268,7 +270,7 @@ public class SleepRecordActivity extends AppCompatActivity {
 
                 InsertData task = new InsertData(); // insert쿼리 php실행
                 task.execute(currentDate, strStartTime, strEndTime, sleepTime);
-                getData("http://192.168.0.85/PHP_connection.php"); // 업데이트
+                getData(phpConnectUrl); // 업데이트
             }
         });
 
@@ -338,7 +340,7 @@ public class SleepRecordActivity extends AppCompatActivity {
             String endTime = (String) params[2];
             String sleepTime = (String) params[3];
 
-            String serverURL = "http://192.168.0.85/PHP_insert.php"; // 서버를 돌리는 pc의 ip주소
+            String serverURL = phpInsertUrl; // 서버를 돌리는 pc의 ip주소
             String postParameters = "date=" + date + "&startTime=" + startTime + "&endTime=" + endTime + "&sleepTime=" + sleepTime; // 구분하는 문자 &삽입
 
             try {
