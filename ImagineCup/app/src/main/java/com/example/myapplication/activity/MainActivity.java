@@ -12,7 +12,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     GridView gridView;
     FunctionAdapter adapter;
-    int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
+    //int[] functionImage = {R.drawable., R.drawable.baby, R.drawable.baby, R.drawable.baby};
     boolean background = false;
     Intent i; // 배너 클릭 시 이동을 위한 Intent
     final int ITEM_SIZE = 4; // 카드뷰 갯수
@@ -74,17 +73,15 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.mainDrawer); // 드로어
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
 
         List<Item> items = new ArrayList<>();
         Item[] item = new Item[ITEM_SIZE];
         //이하 아이템 지정. 전역 변수 final int ITEM_SIZE 와 동일한 갯수 설정
-        item[0] = new Item(R.drawable.sleep, "#sleep");
-        item[1] = new Item(R.drawable.thermometer, "#thermoeter");
+        item[0] = new Item(R.drawable.livestreaming, "#sleep");
+        item[1] = new Item(R.drawable.graph2, "#thermoeter");
         item[2] = new Item(R.drawable.sleeprecord, "#record");
-        item[3] = new Item(R.drawable.settings, "#setting");
+        item[3] = new Item(R.drawable.safesleep, "#setting");
 
         //Size add
         for(int i=0; i < ITEM_SIZE; i++){
@@ -147,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             final int index = getItemList().indexOf(txt);
 
 
-            final int[] images = {R.drawable.baby, R.drawable.baby_a, R.drawable.baby}; // 배너수정
+            final int[] images = {R.drawable.baby, R.drawable.banner2, R.drawable.baby}; // 배너수정
             container.setBackgroundResource(images[index]);
 
             view.setOnClickListener(new View.OnClickListener() {

@@ -1,18 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_picture"
-            android:icon="@drawable/picture"
-            android:title="Picture"/>
-    </group>
-
-    <item android:title="Setting">
-        <menu>
-            <item
-                android:id="@+id/nav_setting"
-                android:icon="@drawable/settings"
-                android:title="Setting"></item>
-        </menu>
-    </item>
 </menu>
