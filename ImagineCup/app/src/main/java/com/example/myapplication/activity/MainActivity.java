@@ -11,25 +11,23 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.FunctionAdapter;
-import com.example.myapplication.function.BackgroundService;
-import com.example.myapplication.function.WebViewStreaming;
+import com.example.myapplication.adapter.RecyclerAdapter;
+import com.example.myapplication.data.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import pyxis.uzuki.live.rollingbanner.RollingBanner;
 import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
@@ -37,10 +35,8 @@ import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
 public class MainActivity extends AppCompatActivity {
     private RollingBanner rollingBanner;
     DrawerLayout drawerLayout;
-    GridView gridView;
-    FunctionAdapter adapter;
-    int[] functionImage = {R.drawable.main_streaming, R.drawable.main_sleep_check, R.drawable.main_heat_check, R.drawable.main_four_icon};
-    Intent i;
+    Intent i; // 배너 클릭 시 이동을 위한 Intent
+    final int ITEM_SIZE = 4; // 카드뷰 갯수
     private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
     public static int REQ_CODE_OVERLAY_PERMISSION = 5469;
 
@@ -68,35 +64,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         drawerLayout = (DrawerLayout) findViewById(R.id.mainDrawer); // 드로어
-        gridView = (GridView) findViewById(R.id.gridView);
-        adapter = new FunctionAdapter(getApplicationContext(), functionImage);
-        gridView.setAdapter(adapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // 그리드뷰 클릭 이벤트
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        stopService(new Intent(getApplicationContext(), BackgroundService.class));
-                        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "send"));
-                        break;
-                    case 1:
-                        startActivity(new Intent(getApplicationContext(), SleepRecordActivity.class)); // 수면기록 화면
-                        break;
-                    case 2:
-                        startActivity(new Intent(getApplicationContext(), GraphActivity.class)); // 그래프 화면
-                        break;
-                    case 3:
-                        startActivity(new Intent(getApplicationContext(), WebViewStreaming.class)); // 웹뷰 테스트용
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
+        recyclerView.setHasFixedSize(true);
+
+        List<Item> items = new ArrayList<>();
+        Item[] item = new Item[ITEM_SIZE];
+        //이하 아이템 지정. 전역 변수 final int ITEM_SIZE 와 동일한 갯수 설정
+        item[0] = new Item(R.drawable.livestreaming, "#sleep");
+        item[1] = new Item(R.drawable.graph2, "#thermoeter");
+        item[2] = new Item(R.drawable.sleeprecord, "#record");
+        item[3] = new Item(R.drawable.safesleep, "#setting");
+
+        //Size add
+        for(int i=0; i < ITEM_SIZE; i++){
+            items.add(item[i]);
+        }
+
+//        recyclerView.addOnItemTouchListener();
+        recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
 
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
-
 //        startService(new Intent(getApplicationContext(), DataResultService.class));
     }
 
@@ -157,21 +145,29 @@ public class MainActivity extends AppCompatActivity {
         public View getView(final int position) {
             View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_main_pager, null, false);
             FrameLayout container = view.findViewById(R.id.container);
-            TextView txtText = view.findViewById(R.id.txtText);
 
             String txt = getItem(position);
-            int index = getItemList().indexOf(txt);
+            final int index = getItemList().indexOf(txt);
 
 
-            int[] images = {R.drawable.baby, R.drawable.baby_a, R.drawable.baby}; // 배너수정
+            final int[] images = {R.drawable.baby, R.drawable.banner2, R.drawable.baby}; // 배너수정
             container.setBackgroundResource(images[index]);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 번호 나누기 다른 홈페이지
-                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
-                    startActivity(i);
+                    if(index == 0) {
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
+                        startActivity(i);
+                    }
+                    else if(index == 1){
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.daum.net"));
+                        startActivity(i);
+                    }
+                    else if(index == 2){
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.google.com"));
+                        startActivity(i);
+                    }
                 }
             });
 

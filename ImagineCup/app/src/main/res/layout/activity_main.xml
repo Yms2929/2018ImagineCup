@@ -18,18 +18,19 @@
             android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="top"
+              android:layout_gravity="top"
             android:background="@color/md_pink_100"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:titleTextColor="@color/md_black_1000">
-
         </android.support.v7.widget.Toolbar>
 
         <pyxis.uzuki.live.rollingbanner.RollingBanner
             android:id="@+id/banner"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded"
             app:enableIndicator="true"
             app:enableRolling="true"
             app:flingAble="true"
@@ -37,19 +38,15 @@
             app:scrollingDelay="250"
             app:smoothScroll="true" />
 
-        <GridView
-            android:id="@+id/gridView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="50dp"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:numColumns="2"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp"></GridView>
-
+        <android.support.v7.widget.RecyclerView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            app:layoutManager="GridLayoutManager"
+            app:spanCount="2"
+            android:id="@+id/rv">
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
@@ -61,7 +58,6 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"
         app:itemTextColor="@color/md_black_1000">
-
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
