@@ -55,9 +55,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
         app:itemTextColor="@color/md_black_1000">
+        <include layout="@layout/nav_drawer_menu" />
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

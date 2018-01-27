@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
+    <LinearLayout
+        android:id="@+id/navi_header"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="130dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="75dp"
+            android:id="@+id/circleProfilImageView"
+            android:src="@drawable/baby"
+            app:civ_border_width="5dp"
+            app:civ_border_color="@color/white"/>
+        <TextView
+            android:id="@+id/babyname"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="Parkers"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/birthNum"
+            android:text = "not Setting"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0.5dp"
+        android:background="@color/md_grey_300">
+    </LinearLayout>
+    <LinearLayout
+        android:layout_below="@+id/navi_header"
+        android:layout_marginTop="20dp"
+        android:id="@+id/layout_temperature"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/temp_icon"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/md_black_1000"
+                android:text="Temperature: " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/des_icon"/>
+            <TextView
+                android:id="@+id/textTemperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="0"
+                android:textSize="20dp"
+                android:textColor="@color/md_red_800" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  degrees Centigrade " />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0.5dp"
+        android:background="@color/md_grey_300"/>
+    <LinearLayout
+        android:layout_below="@+id/layout_temperature"
+        android:layout_marginTop="20dp"
+        android:id="@+id/layout_humidity"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/humidity_icon"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/md_black_1000"
+                android:text="Humidity:" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/des_icon"/>
+            <TextView
+                android:id="@+id/textHumidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="20dp"
+                android:text="0"
+                android:textColor="@color/md_blue_A700" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  % " />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginTop="150dp"
+        android:text="copyright@ImagineCupMenbu"
+        android:textColor="@color/md_grey_300"
+        android:textSize="15dp" />
+</LinearLayout>

@@ -1,10 +1,12 @@
 package com.example.myapplication.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import pyxis.uzuki.live.rollingbanner.RollingBanner;
 import pyxis.uzuki.live.rollingbanner.RollingViewPagerAdapter;
 
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     final int ITEM_SIZE = 4; // 카드뷰 갯수
     private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
     public static int REQ_CODE_OVERLAY_PERMISSION = 5469;
+    TextView babyName,temp_navi, humidity_navi;
+    SharedPreferences mPref;
+    CircleImageView circleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +97,27 @@ public class MainActivity extends AppCompatActivity {
 
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 //        startService(new Intent(getApplicationContext(), DataResultService.class));
+
+        //내비바
+        babyName = (TextView) findViewById(R.id.babyname);
+        temp_navi = (TextView) findViewById(R.id.textTemperature);
+        humidity_navi = (TextView) findViewById(R.id.textHumidity);
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        circleImageView = (CircleImageView) findViewById(R.id.circleProfilImageView);
+        circleImageView.setOnClickListener(new clickListener());
+
     }
+
+    class clickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(MainActivity.this, "dd", Toast.LENGTH_SHORT).show();
+        } // end onClick
+
+    } // end MyListener()
+
 
     public void startOverlayWindowService() { // API 23 이상은 Overlay 사용 가능한지 체크
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
@@ -137,6 +164,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void setNaviText(){
+        temp_navi.setText("-17");
+        humidity_navi.setText("10");
+        babyName.setText(mPref.getString("userBabyName", "Parkers"));
+
     }
 
     public class bannerAdapter extends RollingViewPagerAdapter<String> {
