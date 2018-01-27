@@ -13,6 +13,7 @@ import com.example.myapplication.etc.LabelFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -39,8 +40,7 @@ public class SecondGraphFragment  extends Fragment {
     BarChart barChart;
     XAxis xAxis;
     ArrayList<BarEntry> barEntries;
-    //xAsix 밑에 들어갈 string 배열
-    String[] days = new String[]{};
+    String[] days = new String[]{}; //xAsix 밑에 들어갈 string 배열
     private static final String TAG_RESULTCODE = "result";
     private static final String TAG_DATEDAY = "date";
     private static final String TAG_ALLSLEEPTIME = "sleepTime";
@@ -86,19 +86,19 @@ public class SecondGraphFragment  extends Fragment {
             days = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         }
 
-        float xWidth = 0f;
-        for (int i = 0; i < weekSleepTime.size(); i++) {
-            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i)));
-            xWidth = xWidth + 1f;
-        }
+//        float xWidth = 0f;
+//        for (int i = 0; i < weekSleepTime.size(); i++) {
+//            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i)));
+//            xWidth = xWidth + 1f;
+//        }
 
-//        barEntries.add(new BarEntry(0f, 6f));
-//        barEntries.add(new BarEntry(1f, 12f));
-//        barEntries.add(new BarEntry(2f, 14f));
-//        barEntries.add(new BarEntry(3f, 9f));
-//        barEntries.add(new BarEntry(4f, 20f));
-//        barEntries.add(new BarEntry(5f, 2f));
-//        barEntries.add(new BarEntry(6f, 10f));
+        barEntries.add(new BarEntry(0f, 13f));
+        barEntries.add(new BarEntry(1f, 15f));
+        barEntries.add(new BarEntry(2f, 17f));
+        barEntries.add(new BarEntry(3f, 18f));
+        barEntries.add(new BarEntry(4f, 17f));
+        barEntries.add(new BarEntry(5f, 16f));
+        barEntries.add(new BarEntry(6f, 15f));
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time"); //막대값 배열에 추가한 거 정립
         barDataSet.setColor(android.graphics.Color.argb(255, 195, 90, 157)); //바 색깔 정하기
@@ -106,6 +106,14 @@ public class SecondGraphFragment  extends Fragment {
         BarData data = new BarData(barDataSet); //막대값 정한거 막대 그래프에 적용하기 위한 데이터 확정
         data.setBarWidth(0.5f); //막대 바 두께 정하기
 
+        YAxis yLeft = barChart.getAxisLeft();
+        YAxis yRight = barChart.getAxisRight();
+        yLeft.setLabelCount(6);
+        yLeft.setAxisMaxValue(24);
+        yLeft.setAxisMinValue(0);
+        yRight.setLabelCount(6);
+        yRight.setAxisMaxValue(24);
+        yRight.setAxisMinValue(0);
         xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setValueFormatter(new LabelFormatter(days)); // 요일 삽입

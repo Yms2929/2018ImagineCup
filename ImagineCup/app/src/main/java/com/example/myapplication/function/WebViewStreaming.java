@@ -1,6 +1,8 @@
 package com.example.myapplication.function;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.webkit.WebSettings;
@@ -22,6 +24,10 @@ public class WebViewStreaming extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webviewstreaming);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.parseColor("#F48FB1"));
+        }
 
         DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
         width = dm.widthPixels;

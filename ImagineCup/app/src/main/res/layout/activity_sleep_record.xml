@@ -21,7 +21,7 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="top"
             android:background="@color/md_pink_100"
-            app:titleTextColor="@color/md_black_1000"
+            app:titleTextColor="@color/md_white_1000"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         </android.support.v7.widget.Toolbar>
@@ -46,6 +46,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/md_pink_100"
             android:orientation="horizontal">
 
             <TextView
@@ -53,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textColor="@color/md_black_1000"
+                android:textStyle="bold"
+                android:textColor="@color/md_white_1000"
                 android:textSize="16dp"
                 android:text="Date"/>
 
@@ -72,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
-                android:textColor="@color/md_black_1000"
+                android:textStyle="bold"
+                android:textColor="@color/md_white_1000"
                 android:textSize="16dp"
                 android:text="Today Total"/>
 
@@ -98,7 +101,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textColor="@color/md_black_1000"
+                android:textStyle="bold"
+                android:textColor="@color/md_red_600"
                 android:textSize="16dp"
                 android:text="Sleep Start"/>
 
@@ -107,7 +111,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textColor="@color/md_black_1000"
+                android:textStyle="bold"
+                android:textColor="@color/md_green_600"
                 android:textSize="16dp"
                 android:text="Sleep End"/>
 
@@ -116,7 +121,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textColor="@color/md_black_1000"
+                android:textStyle="bold"
+                android:textColor="@color/md_blue_600"
                 android:textSize="16dp"
                 android:text="Sleep Time"/>
         </LinearLayout>
@@ -129,16 +135,5 @@
         </ListView>
 
     </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/sleeprecordNav"
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        app:itemTextColor="@color/md_black_1000">
-
-    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -31,6 +32,10 @@ public class GraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_tabbar);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.parseColor("#F48FB1"));
+        }
 
 //        drawerLayout = (DrawerLayout) findViewById(R.id.graphDrawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.graphToolbar);
@@ -79,7 +84,7 @@ public class GraphActivity extends AppCompatActivity {
                 while (i < 2) {
                     if (position == i) {
                         linearLayout.findViewWithTag(i).setSelected(true);
-                        textDate.setText(getPreviousDay() + "~" + currentDay);
+                        textDate.setText(getPreviousDay() + " ~ " + currentDay);
                     } else {
                         linearLayout.findViewWithTag(i).setSelected(false);
                         textDate.setText(currentDay + " " + doDayOfWeek());
@@ -158,6 +163,7 @@ public class GraphActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
+//            drawerLayout.openDrawer(GravityCompat.START);
             onBackPressed();
             return true;
         }

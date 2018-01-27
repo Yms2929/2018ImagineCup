@@ -1,12 +1,12 @@
 package com.example.myapplication.activity;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class SleepRecordActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
+//    DrawerLayout drawerLayout;
     ImageButton btnSleep;
     ListView listView;
     TextView textToday;
@@ -70,6 +70,10 @@ public class SleepRecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep_record);
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.parseColor("#F48FB1"));
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.sleeprecordToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,12 +81,12 @@ public class SleepRecordActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            VectorDrawableCompat compat = VectorDrawableCompat.create(getResources(), R.drawable.ic_dehaze_black_24dp, getTheme()); // 이미지 벡터
+            VectorDrawableCompat compat = VectorDrawableCompat.create(getResources(), R.drawable.ic_arrow_back_black_24dp, getTheme()); // 이미지 벡터
             compat.setTint(ResourcesCompat.getColor(getResources(), R.color.md_white_1000, getTheme())); // 벡터 색깔
             actionBar.setHomeAsUpIndicator(compat);
         }
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.sleeprecordDrawer);
+//        drawerLayout = (DrawerLayout) findViewById(R.id.sleeprecordDrawer);
         textToday = (TextView) findViewById(R.id.textToday);
         textAllTime = (TextView) findViewById(R.id.textAllTime);
         btnSleep = (ImageButton) findViewById(R.id.btnSleep);
@@ -400,7 +404,9 @@ public class SleepRecordActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            drawerLayout.openDrawer(GravityCompat.START);
+//            drawerLayout.openDrawer(GravityCompat.START);
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

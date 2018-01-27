@@ -1,16 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.myapplication.activity.GraphActivity">
 
     <com.github.mikephil.charting.charts.LineChart
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="380dp"
         android:id="@+id/templinegraph">
     </com.github.mikephil.charting.charts.LineChart>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/md_black_1000"
+            android:textAlignment="center"
+            android:text="The current temperature is"/>
+
+        <TextView
+            android:id="@+id/textTemperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:textColor="@color/md_red_600"
+            android:text="19"/>
+
+        <TextView
+            android:id="@+id/textTemperatureStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:textColor="@color/md_red_600"
+            android:text="Low"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/md_black_1000"
+            android:textAlignment="center"
+            android:text="The current humidity is"/>
+
+        <TextView
+            android:id="@+id/textHumidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:textColor="@color/md_green_600"
+            android:text="50"/>
+
+        <TextView
+            android:id="@+id/textHumidityStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:textColor="@color/md_green_600"
+            android:text="Safe"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textCurrentStatus"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textColor="@color/md_black_1000"
+        android:text="Please raise the temperature of the room"/>
+
+</LinearLayout>

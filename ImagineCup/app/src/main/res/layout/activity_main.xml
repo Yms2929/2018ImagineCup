@@ -22,7 +22,7 @@
             android:background="@color/md_pink_100"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:titleTextColor="@color/md_black_1000">
+            app:titleTextColor="@color/md_white_1000">
         </android.support.v7.widget.Toolbar>
 
         <pyxis.uzuki.live.rollingbanner.RollingBanner

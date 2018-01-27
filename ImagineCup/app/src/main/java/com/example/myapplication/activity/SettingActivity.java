@@ -1,6 +1,8 @@
 package com.example.myapplication.activity;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -20,6 +22,10 @@ public class SettingActivity extends PreferenceActivity {
 //        setContentView(R.layout.activity_setting);
 //
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.settingtoolbar);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.parseColor("#F48FB1"));
+        }
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
 

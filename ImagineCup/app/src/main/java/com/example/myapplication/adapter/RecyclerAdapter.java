@@ -58,10 +58,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         context.startService(new Intent(context, BackgroundService.class).putExtra("message", "send").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case 1:
-                        context.startActivity(new Intent(context, SleepRecordActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 수면기록 화면
+                        context.startActivity(new Intent(context, GraphActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 그래프 화면
                         break;
                     case 2:
-                        context.startActivity(new Intent(context, GraphActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 그래프 화면
+                        context.startActivity(new Intent(context, SleepRecordActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 수면기록 화면
                         break;
                     case 3:
                         context.startActivity(new Intent(context, WebViewStreaming.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 웹뷰 테스트용

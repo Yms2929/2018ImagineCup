@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">Mental Strongness</string>
+    <string name="app_name">Protect baby</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="temperature">온도/습도</string>
     <string name="sleeplog">수면기록</string>
     <string name="action_setting">설정창</string>
+    <string name="stayCondition">Stay current condition</string>
+    <string name="raiseCondition">Please raise the temperature of the room</string>
 </resources>
