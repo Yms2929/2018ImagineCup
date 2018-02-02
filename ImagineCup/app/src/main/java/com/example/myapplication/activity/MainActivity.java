@@ -1,18 +1,24 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +35,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,9 +51,12 @@ public class MainActivity extends AppCompatActivity {
     final int ITEM_SIZE = 4; // 카드뷰 갯수
     private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
     public static int REQ_CODE_OVERLAY_PERMISSION = 5469;
+    private  static final int PICK_FROM_ALBUM = 1;
     TextView babyName,temp_navi, humidity_navi;
     SharedPreferences mPref;
     CircleImageView circleImageView;
+    private Uri mImageCaptureUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +123,37 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(MainActivity.this, "dd", Toast.LENGTH_SHORT).show();
+
+
+            DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    doTakeAlbumAction();
+                }
+            };
+
+            DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            };
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Select Upload Image")
+                    .setPositiveButton("select img in Album", albumListener)
+                    .setNegativeButton("cancel", cancelListener)
+                    .show();
         } // end onClick
 
     } // end MyListener()
 
+    public void doTakeAlbumAction() //앨범에서 이미지 가져오기
+    {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM);
+    }
 
     public void startOverlayWindowService() { // API 23 이상은 Overlay 사용 가능한지 체크
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
@@ -143,6 +179,34 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        else if(requestCode == PICK_FROM_ALBUM)
+        {
+            mImageCaptureUri = data.getData();
+            circleImageView.setImageURI(mImageCaptureUri);
+        }
+    }
+
+    public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize)
+            throws FileNotFoundException {
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);
+
+        int width_tmp = o.outWidth
+                , height_tmp = o.outHeight;
+        int scale = 1;
+
+        while(true) {
+            if(width_tmp / 2 < requiredSize || height_tmp / 2 < requiredSize)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o2);
     }
 
     @Override

@@ -7,13 +7,13 @@
     android:background="@color/md_black_1000">
 
     <WebView
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="150dp"
-        android:layout_marginLeft="50dp"
-        android:layout_width="match_parent"
+        android:id="@+id/webview"
+        android:layout_width="516dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:id="@+id/webview">
-    </WebView>
+        android:layout_marginBottom="150dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="200dp"
+        ></WebView>
 
 </LinearLayout>

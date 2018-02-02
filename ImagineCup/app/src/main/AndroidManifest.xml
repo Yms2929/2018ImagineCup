@@ -36,6 +36,7 @@
         <service android:name=".function.DataResultService" />
 
         <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".function.MjpegStreaming"/>
     </application>
 
 </manifest>
