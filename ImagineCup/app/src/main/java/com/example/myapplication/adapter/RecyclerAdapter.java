@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.data.Item;
@@ -49,7 +48,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 // 클릭 효과 나누기 - 액티비티 연결
-                Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                if(item.getTitle().equals("streaming")){
+
+                }
             }
         });
     }
