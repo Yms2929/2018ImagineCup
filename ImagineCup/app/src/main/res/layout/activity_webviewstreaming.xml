@@ -8,12 +8,10 @@
 
     <WebView
         android:id="@+id/webview"
-        android:layout_width="516dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="150dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="200dp"
-        ></WebView>
+        android:layout_marginTop="150dp"
+        android:layout_width="600dp"
+        android:layout_height="match_parent">
+
+    </WebView>
 
 </LinearLayout>

@@ -11,6 +11,7 @@
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +38,7 @@
 
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".function.MjpegStreaming"/>
+        <activity android:name=".function.RightBabySleepVideoView"/>
     </application>
 
 </manifest>

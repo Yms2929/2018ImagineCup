@@ -36,9 +36,13 @@ import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
 
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import pyxis.uzuki.live.rollingbanner.RollingBanner;
@@ -52,10 +56,13 @@ public class MainActivity extends AppCompatActivity {
     private String[] txtRes = new String[]{"1", "2", "3"}; // 3개 이미지 배너
     public static int REQ_CODE_OVERLAY_PERMISSION = 5469;
     private  static final int PICK_FROM_ALBUM = 1;
-    TextView babyName,temp_navi, humidity_navi;
+    TextView babyName,temp_navi, humidity_navi, babyBirth;
     SharedPreferences mPref;
     CircleImageView circleImageView;
     private Uri mImageCaptureUri;
+    long now;
+    Date date;
+    String getCurrentTime;
 
 
     @Override
@@ -112,8 +119,14 @@ public class MainActivity extends AppCompatActivity {
         babyName = (TextView) findViewById(R.id.babyname);
         temp_navi = (TextView) findViewById(R.id.textTemperature);
         humidity_navi = (TextView) findViewById(R.id.textHumidity);
+        babyBirth = (TextView) findViewById(R.id.birthNum);
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
-
+        //현재생년월일
+        now = System.currentTimeMillis();
+        date =new Date(now);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        getCurrentTime = simpleDateFormat.format(date);
+        //프로필이미지
         circleImageView = (CircleImageView) findViewById(R.id.circleProfilImageView);
         circleImageView.setOnClickListener(new clickListener());
 
@@ -182,7 +195,12 @@ public class MainActivity extends AppCompatActivity {
         else if(requestCode == PICK_FROM_ALBUM)
         {
             mImageCaptureUri = data.getData();
-            circleImageView.setImageURI(mImageCaptureUri);
+            //circleImageView.setImageURI(mImageCaptureUri);
+            try {
+                circleImageView.setImageBitmap(decodeUri(getApplicationContext(), mImageCaptureUri, 100));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -223,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             drawerLayout.openDrawer(GravityCompat.START);
+            setNaviText();
         } else if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class)); // 자장가 화면
         }
@@ -233,8 +252,28 @@ public class MainActivity extends AppCompatActivity {
     protected void setNaviText(){
         temp_navi.setText("-17");
         humidity_navi.setText("10");
+        babyBirth.setText(circulateBabyBirth());
         babyName.setText(mPref.getString("userBabyName", "Parkers"));
 
+    }
+    private String circulateBabyBirth()
+    {
+        String result = null;
+        String babyBirth = mPref.getString("userBabyBirth", "not Setting");
+        Pattern pattern = Pattern.compile("^[1-2]{1}[0-9]{1}(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))$");
+        Matcher matcher = pattern.matcher(babyBirth);
+        if(matcher.find())
+        {
+            int birth = Integer.parseInt(babyBirth);
+            int currentTime = Integer.parseInt(getCurrentTime);
+            int resultInt = currentTime - birth;
+            result = String.valueOf(resultInt);
+        }
+        else
+        {
+            result = "check setting once again";
+        }
+        return result;
     }
 
     public class bannerAdapter extends RollingViewPagerAdapter<String> {
