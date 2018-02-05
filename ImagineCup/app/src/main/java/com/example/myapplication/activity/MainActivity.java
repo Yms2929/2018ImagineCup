@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
         List<Item> items = new ArrayList<>();
         Item[] item = new Item[ITEM_SIZE];
         //이하 아이템 지정. 전역 변수 final int ITEM_SIZE 와 동일한 갯수 설정
-        item[0] = new Item(R.drawable.livestreaming, "#sleep");
-        item[1] = new Item(R.drawable.graph2, "#thermoeter");
-        item[2] = new Item(R.drawable.sleeprecord, "#record");
-        item[3] = new Item(R.drawable.safesleep, "#setting");
+        item[0] = new Item(R.drawable.livestreaming, "streaming");
+        item[1] = new Item(R.drawable.graph2, "graph");
+        item[2] = new Item(R.drawable.sleeprecord, "record");
+        item[3] = new Item(R.drawable.safesleep, "safesleep");
 
         //Size add
         for(int i=0; i < ITEM_SIZE; i++){
@@ -293,23 +293,22 @@ public class MainActivity extends AppCompatActivity {
             String txt = getItem(position);
             final int index = getItemList().indexOf(txt);
 
-
-            final int[] images = {R.drawable.baby, R.drawable.banner2, R.drawable.baby}; // 배너수정
+            final int[] images = {R.drawable.banner1, R.drawable.banner2, R.drawable.banner3}; // 배너수정
             container.setBackgroundResource(images[index]);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(index == 0) {
-                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://cdc.go.kr/CDC/mobile/CdcKrContentView.jsp?menuIds=HOME001-MNU1132-MNU2430-MNU2431-MNU2448&cid=67988"));// 액티비티 넘
                         startActivity(i);
                     }
                     else if(index == 1){
-                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.daum.net"));
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.e-gen.or.kr/egen/main.do#"));
                         startActivity(i);
                     }
                     else if(index == 2){
-                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.google.com"));
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.childcare.go.kr/"));
                         startActivity(i);
                     }
                 }

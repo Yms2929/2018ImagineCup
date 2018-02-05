@@ -68,6 +68,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         break;
                     default:
                         break;
+                    // 클릭 효과 나누기 - 액티비티 연결
+                    //if (item.getTitle().equals("streaming"))
                 }
             }
         });

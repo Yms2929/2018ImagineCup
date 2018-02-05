@@ -23,7 +23,9 @@
                 android:id="@+id/image"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:background="@color/md_black_1000"
+                android:scaleType="centerInside"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
