@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             mImageCaptureUri = data.getData();
             //circleImageView.setImageURI(mImageCaptureUri);
             try {
-                circleImageView.setImageBitmap(decodeUri(getApplicationContext(), mImageCaptureUri, 100));
+                circleImageView.setImageBitmap(decodeUri(getApplicationContext(), mImageCaptureUri, 1));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -243,7 +243,10 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.openDrawer(GravityCompat.START);
             setNaviText();
         } else if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(), SettingActivity.class)); // 자장가 화면
+            startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+            //Intent service = new Intent( this, ScreenFilterService.class ); 화면 알람
+            //startService( service );
+            //stopService(service);
         }
 
         return super.onOptionsItemSelected(item);
@@ -252,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
     protected void setNaviText(){
         temp_navi.setText("-17");
         humidity_navi.setText("10");
-        babyBirth.setText(circulateBabyBirth());
+        babyBirth.setText(circulateBabyBirth()+" days");
         babyName.setText(mPref.getString("userBabyName", "Parkers"));
 
     }

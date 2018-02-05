@@ -38,7 +38,11 @@
 
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".function.MjpegStreaming"/>
-        <activity android:name=".function.RightBabySleepVideoView"/>
+        <activity android:name=".function.RightBabySleepVideoView"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
+        <service android:name=".function.ScreenFilterService"/>
     </application>
 
 </manifest>

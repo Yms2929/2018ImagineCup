@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-   
     <EditTextPreference
         android:defaultValue="Pakers"
         android:key="userBabyName"
@@ -10,7 +9,7 @@
         android:summary="Set Your Baby Name"
         android:title="Edit Baby Name" />
 
-    <EditPreference
+    <EditTextPreference
         android:defaultValue="YYYYMMDD"
         android:key="userBabyBirth"
         android:selectAllOnFocus="true"
@@ -20,7 +19,7 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="alarmUpdate"
+        android:key="DisplayAlarm"
         android:summary="Set DisplayAlarm On/Off"
         android:switchTextOff="OFF"
         android:switchTextOn="ON"

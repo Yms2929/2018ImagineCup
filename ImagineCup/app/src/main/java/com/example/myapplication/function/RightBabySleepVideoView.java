@@ -1,7 +1,9 @@
 package com.example.myapplication.function;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.MediaController;
 import android.widget.VideoView;
@@ -17,11 +19,13 @@ public class RightBabySleepVideoView extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_videoview);
-
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.parseColor("#F48FB1"));
+        }
         VideoView videoView = (VideoView)findViewById(R.id.videoView);
 
         //비디오뷰 커스텀할 수 있는 미디어 컨트롤러 객체생성
-        MediaController mediaController = new MediaController(getApplicationContext());
+        MediaController mediaController = new MediaController(this);
         //비디오뷰에 연결
         mediaController.setAnchorView(videoView);
         Uri video = Uri.parse("android.resource://" + getPackageName()+"/raw/safesleep");
