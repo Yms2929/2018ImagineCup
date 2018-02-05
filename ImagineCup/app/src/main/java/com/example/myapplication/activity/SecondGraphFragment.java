@@ -92,13 +92,13 @@ public class SecondGraphFragment  extends Fragment {
 //            xWidth = xWidth + 1f;
 //        }
 
-        barEntries.add(new BarEntry(0f, 13f));
+        barEntries.add(new BarEntry(0f, 17f));
         barEntries.add(new BarEntry(1f, 15f));
-        barEntries.add(new BarEntry(2f, 17f));
+        barEntries.add(new BarEntry(2f, 16f));
         barEntries.add(new BarEntry(3f, 18f));
         barEntries.add(new BarEntry(4f, 17f));
-        barEntries.add(new BarEntry(5f, 16f));
-        barEntries.add(new BarEntry(6f, 15f));
+        barEntries.add(new BarEntry(5f, 15f));
+        barEntries.add(new BarEntry(6f, 16f));
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time"); //막대값 배열에 추가한 거 정립
         barDataSet.setColor(android.graphics.Color.argb(255, 195, 90, 157)); //바 색깔 정하기

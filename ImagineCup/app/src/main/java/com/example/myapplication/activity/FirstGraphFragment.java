@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.etc.LabelFormatter;
@@ -27,7 +28,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,15 +43,20 @@ public class FirstGraphFragment extends Fragment {
     LineChart lineChart;
     final String[] times = new String[]{"00", "03", "06", "09", "12", "15", "18", "21"};
     private static final String TAG_RESULTQUREY = "result";
-    private static final String TAG_TODAY = "today";
+    private static final String TAG_DATETODAY = "date";
     private static final String TAG_TEMPERATURE = "temperature";
     private static final String TAG_HUMIDITY = "humidity";
     JSONArray jsonArray = null;
     String json;
-    ArrayList<String> todayList = new ArrayList<>();
+    ArrayList<String> timeList = new ArrayList<>();
     ArrayList<String> temperatureList = new ArrayList<>();
     ArrayList<String> humidityList = new ArrayList<>();
-    String phpConnectUrl = "http://192.168.0.78/PHP_atmosphere.php";
+    String phpConnectUrl = "http://192.168.0.175/phptest.php";
+    TextView textTemperature;
+    TextView textTemperatureStatus;
+    TextView textHumidity;
+    TextView textHumidityStatus;
+    TextView textCurrentStatus;
 
     public FirstGraphFragment() { // 생성자
 
@@ -57,27 +65,26 @@ public class FirstGraphFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_graph_first, container, false);
         lineChart = (LineChart) view.findViewById(R.id.templinegraph);
+        textTemperature = (TextView) view.findViewById(R.id.textTemperature);
+        textTemperatureStatus = (TextView) view.findViewById(R.id.textTemperatureStatus);
+        textHumidity = (TextView) view.findViewById(R.id.textHumidity);
+        textHumidityStatus = (TextView) view.findViewById(R.id.textHumidityStatus);
+        textCurrentStatus = (TextView) view.findViewById(R.id.textCurrentStatus);
 
         getData(phpConnectUrl);
-//        setlineData();
-
-        xAxis = lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        lineChart.getXAxis().setValueFormatter(new LabelFormatter(times));
 
         return view;
     }
 
     private void setlineData() {
         ArrayList<Entry> line1 = new ArrayList<>();
-        for (int i = 0; i < temperatureList.size(); i++) {
-            float val = Float.parseFloat(temperatureList.get(i));
-            line1.add(new Entry(i, val));
-        }
         ArrayList<Entry> line2 = new ArrayList<>();
-        for (int i = 0; i < humidityList.size(); i++) {
-            float val = Float.parseFloat(humidityList.get(i));
-            line2.add(new Entry(i, val));
+
+        for (int i = 0; i < temperatureList.size(); i++) {
+            float value1 = Float.parseFloat(temperatureList.get(i));
+            float value2 = Float.parseFloat(humidityList.get(i));
+            line1.add(new Entry(i, value1));
+            line2.add(new Entry(i, value2));
         }
 
         LineDataSet set1, set2;
@@ -96,6 +103,9 @@ public class FirstGraphFragment extends Fragment {
         dataSets.add(set1);
         dataSets.add(set2);
         LineData data = new LineData(dataSets);
+        xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        lineChart.getXAxis().setValueFormatter(new LabelFormatter(times));
         Description des = new Description();
         des.setText(" ");
         lineChart.setDescription(des);
@@ -149,17 +159,37 @@ public class FirstGraphFragment extends Fragment {
 
             for (int i = 0; i < jsonArray.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
                 JSONObject object = jsonArray.getJSONObject(i);
-                String today = object.getString(TAG_TODAY);
+                String today = object.getString(TAG_DATETODAY);
                 String temperature = object.getString(TAG_TEMPERATURE);
                 String humidity = object.getString(TAG_HUMIDITY);
 
-                String[] day = today.split(" ");
-                String date = day[0];
-                today = day[1].substring(0, 2);
+                String[] days = today.split(" "); // 날짜와 시간
+                String day = days[0]; // 날짜
+                String time = days[1].substring(0, 2); // 시간
 
-                todayList.add(today);
-                temperatureList.add(temperature);
-                humidityList.add(humidity);
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+                String currentDate = format.format(date); // 오늘 날짜
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                String currentTime = simpleDateFormat.format(date);
+
+                if (day.equals(currentDate)) { // 데이터베이스의 날짜와 오늘 날짜가 같으면
+                    timeList.add(time);
+                    temperatureList.add(temperature);
+                    humidityList.add(humidity);
+
+                    if (time.equals(currentTime.substring(0, 2))) {
+                        textTemperature.setText(temperature);
+                    }
+                    if (Float.parseFloat(temperature) < 20) {
+                        textTemperatureStatus.setText("Low");
+                    } else if (Float.parseFloat(temperature) > 20 || Float.parseFloat(temperature) < 24) {
+                        textTemperatureStatus.setText("Good");
+                    } else {
+                        textTemperatureStatus.setText("High");
+                    }
+                }
             }
 
         } catch (JSONException e) {

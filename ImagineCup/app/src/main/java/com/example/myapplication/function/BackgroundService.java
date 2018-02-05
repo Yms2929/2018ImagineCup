@@ -63,7 +63,7 @@ public class BackgroundService extends Service {
                 }
             };
 
-            timer.schedule(timerTask, 1000, 7000);
+            timer.schedule(timerTask, 1000, 8000);
         } else if (message.equals("send")) {
             ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), message, getApplicationContext());
             clientSocket.execute();

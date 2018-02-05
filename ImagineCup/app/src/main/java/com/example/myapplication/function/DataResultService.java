@@ -211,7 +211,7 @@ public class DataResultService extends Service {
     public void showNotification() { // 팝업 알림
         android.support.v4.app.NotificationCompat.Builder mBuilder =
                 new android.support.v4.app.NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.baby)
+                        .setSmallIcon(R.drawable.warning)
                         .setContentTitle("Baby warning")
                         .setContentText("Check your baby's posture!")
                         .setDefaults(Notification.DEFAULT_ALL)
