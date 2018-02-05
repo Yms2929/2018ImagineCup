@@ -7,8 +7,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
@@ -31,12 +34,12 @@
         <activity android:name=".function.WebViewStreaming" />
         <activity android:name=".activity.LullabyActivity" />
         <activity android:name=".activity.SleepRecordActivity" />
-        <activity android:name=".activity.GraphActivity">
-        </activity>
+        <activity android:name=".activity.GraphActivity" />
 
         <service android:name=".activity.DataResultActivity" />
 
-        <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".etc.BannerImage" />
     </application>
 
 </manifest>

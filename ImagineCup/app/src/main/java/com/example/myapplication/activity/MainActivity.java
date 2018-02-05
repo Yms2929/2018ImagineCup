@@ -150,15 +150,15 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if(index == 0) {
-                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.naver.com"));
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://cdc.go.kr/CDC/mobile/CdcKrContentView.jsp?menuIds=HOME001-MNU1132-MNU2430-MNU2431-MNU2448&cid=67988"));// 액티비티 넘
                         startActivity(i);
                     }
                     else if(index == 1){
-                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.daum.net"));
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.e-gen.or.kr/egen/main.do#"));
                         startActivity(i);
                     }
                     else if(index == 2){
-                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.google.com"));
+                        i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://m.childcare.go.kr/"));
                         startActivity(i);
                     }
                 }
