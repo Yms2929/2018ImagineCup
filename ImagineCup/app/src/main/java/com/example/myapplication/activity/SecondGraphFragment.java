@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.etc.LabelFormatter;
@@ -55,11 +56,16 @@ public class SecondGraphFragment  extends Fragment {
     ArrayList<String> previous6day = new ArrayList<>();
     ArrayList<Integer> weekSleepTime = new ArrayList<>();
     String phpConnectUrl = "http://192.168.0.78/PHP_connection.php";
+    TextView textSleepAverage;
+    TextView textSleepStatus;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_graph_second, container, false);
         barChart = (BarChart) view.findViewById(R.id.sleepbargraph);
 
+        textSleepAverage = view.findViewById(R.id.textSleepAverage);
+        textSleepStatus = view.findViewById(R.id.textSleepStatus);
+        Log.e("phperror", "oncreate");
         getData(phpConnectUrl);
 
         return view;
@@ -92,6 +98,29 @@ public class SecondGraphFragment  extends Fragment {
 //            xWidth = xWidth + 1f;
 //        }
 
+        //        Double sleepAverage = 0.0;
+//        int count = 0;
+//
+//        for (int j = 0; j < weekSleepTime.size(); j++) {
+//            sleepAverage = sleepAverage + weekSleepTime.get(j);
+//            count++;
+//        }
+//
+//        sleepAverage = sleepAverage / count;
+//        textSleepAverage.setText(String.valueOf(sleepAverage));
+//
+//        if (sleepAverage < 16) {
+//           textSleepAverage.setTextColor(Color.parseColor("#E53935"));
+//           textSleepStatus.setText(R.string.lessSleep);
+//        }
+//        else if (sleepAverage >= 16 && sleepAverage < 20) {
+//            textSleepAverage.setTextColor(Color.parseColor("#43A047"));
+//            textSleepStatus.setText(R.string.keepSleep);
+//        } else {
+//            textSleepAverage.setTextColor(Color.parseColor("#E53935"));
+//            textSleepStatus.setText(R.string.manySleep);
+//        }
+
         barEntries.add(new BarEntry(0f, 17f));
         barEntries.add(new BarEntry(1f, 15f));
         barEntries.add(new BarEntry(2f, 16f));
@@ -118,13 +147,15 @@ public class SecondGraphFragment  extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setValueFormatter(new LabelFormatter(days)); // 요일 삽입
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
-        barChart.invalidate(); //refresh
-        barChart.setData(data);
         barChart.setScaleEnabled(false);
         barChart.setFocusableInTouchMode(false);
         Description des = new Description();
         des.setText(" ");
         barChart.setDescription(des);
+        barChart.setData(data);
+        barChart.invalidate(); //refresh
+
+        Log.e("phperror", "bar");
     }
 
     public void getData(String url) {
@@ -132,7 +163,7 @@ public class SecondGraphFragment  extends Fragment {
 
             @Override
             protected String doInBackground(String... params) { // 웹서버에 요청
-
+                Log.e("phperror", "doinback");
                 String uri = params[0];
                 BufferedReader bufferedReader = null;
 
@@ -157,6 +188,7 @@ public class SecondGraphFragment  extends Fragment {
             @Override
             protected void onPostExecute(String result) { // 웹서버에서 post 받으면 실행
                 json = result;
+                Log.e("phperror", "post");
                 showList();
                 setBarData();
             }
@@ -205,9 +237,13 @@ public class SecondGraphFragment  extends Fragment {
             weekSleepTime.add(allSleepTime(previous1day));
             weekSleepTime.add(allSleepTime(timeList)); // 총 수면 시간 구하기
 
+            for(int j=0; j<weekSleepTime.size(); j++) {
+                Log.e("phperror", String.valueOf(weekSleepTime.get(j)));
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("php error", e.getMessage());
+            Log.e("phperror", e.getMessage());
         }
     }
 

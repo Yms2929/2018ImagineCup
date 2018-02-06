@@ -3,9 +3,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="temperature">온도/습도</string>
-    <string name="sleeplog">수면기록</string>
-    <string name="action_setting">설정창</string>
-    <string name="stayCondition">Stay current condition</string>
     <string name="raiseCondition">Please raise the temperature of the room</string>
+    <string name="lowerCondition">Please lower the temperature of the room</string>
+    <string name="keepCondition">Please keep the temperature of the room</string>
+    <string name="keepSleep">"Your baby has enough sleep time"</string>
+    <string name="lessSleep">"Your baby has less sleep time"</string>
+    <string name="manySleep">"Your baby has a lot of sleep time"</string>
 </resources>

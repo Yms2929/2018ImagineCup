@@ -65,11 +65,11 @@ public class FirstGraphFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_graph_first, container, false);
         lineChart = (LineChart) view.findViewById(R.id.templinegraph);
-        textTemperature = (TextView) view.findViewById(R.id.textTemperature);
-        textTemperatureStatus = (TextView) view.findViewById(R.id.textTemperatureStatus);
-        textHumidity = (TextView) view.findViewById(R.id.textHumidity);
-        textHumidityStatus = (TextView) view.findViewById(R.id.textHumidityStatus);
-        textCurrentStatus = (TextView) view.findViewById(R.id.textCurrentStatus);
+        textTemperature = view.findViewById(R.id.textTemperature);
+        textTemperatureStatus = view.findViewById(R.id.textTemperatureStatus);
+        textHumidity = view.findViewById(R.id.textHumidity);
+        textHumidityStatus = view.findViewById(R.id.textHumidityStatus);
+        textCurrentStatus = view.findViewById(R.id.textCurrentStatus);
 
         getData(phpConnectUrl);
 
@@ -171,25 +171,51 @@ public class FirstGraphFragment extends Fragment {
                 Date date = new Date(now);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                 String currentDate = format.format(date); // 오늘 날짜
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-                String currentTime = simpleDateFormat.format(date);
+                String textMessage = "";
 
                 if (day.equals(currentDate)) { // 데이터베이스의 날짜와 오늘 날짜가 같으면
-                    timeList.add(time);
-                    temperatureList.add(temperature);
-                    humidityList.add(humidity);
+                    textTemperature.setText(temperature);
+                    textHumidity.setText(humidity);
 
-                    if (time.equals(currentTime.substring(0, 2))) {
-                        textTemperature.setText(temperature);
+                    if (time.equals("00") || time.equals("03") || time.equals("06") || time.equals("09") || time.equals("12") || time.equals("15") || time.equals("18") || time.equals("21")) {
+                        timeList.add(time);
+                        temperatureList.add(temperature);
+                        humidityList.add(humidity);
                     }
                     if (Float.parseFloat(temperature) < 20) {
+                        textTemperature.setTextColor(Color.parseColor("#E53935"));
+                        textTemperatureStatus.setTextColor(Color.parseColor("#E53935"));
                         textTemperatureStatus.setText("Low");
-                    } else if (Float.parseFloat(temperature) > 20 || Float.parseFloat(temperature) < 24) {
+                        textMessage = "Raise the temperature and";
+                    } else if (Float.parseFloat(temperature) >= 20 && Float.parseFloat(temperature) <= 23) {
+                        textTemperature.setTextColor(Color.parseColor("#43A047"));
+                        textTemperatureStatus.setTextColor(Color.parseColor("#43A047"));
                         textTemperatureStatus.setText("Good");
+                        textMessage = "Keep the temperature and";
                     } else {
+                        textTemperature.setTextColor(Color.parseColor("#E53935"));
+                        textTemperatureStatus.setTextColor(Color.parseColor("#E53935"));
                         textTemperatureStatus.setText("High");
+                        textMessage = "Lower the temperature and";
+                    }
+                    if (Float.parseFloat(humidity) < 50) {
+                        textHumidity.setTextColor(Color.parseColor("#E53935"));
+                        textHumidityStatus.setTextColor(Color.parseColor("#E53935"));
+                        textHumidityStatus.setText("Low");
+                        textMessage = textMessage + " " + "raise humidity";
+                    } else if (Float.parseFloat(humidity) >= 50 && Float.parseFloat(humidity) <= 60) {
+                        textHumidity.setTextColor(Color.parseColor("#43A047"));
+                        textHumidityStatus.setTextColor(Color.parseColor("#43A047"));
+                        textHumidityStatus.setText("Good");
+                        textMessage = textMessage + " " + "keep humidity";
+                    } else {
+                        textHumidity.setTextColor(Color.parseColor("#E53935"));
+                        textHumidityStatus.setTextColor(Color.parseColor("#E53935"));
+                        textHumidityStatus.setText("High");
+                        textMessage = textMessage + " " + "lower humidity";
                     }
                 }
+                textCurrentStatus.setText(textMessage + " " + "of the room");
             }
 
         } catch (JSONException e) {

@@ -34,7 +34,8 @@
             android:layout_weight="2"
             android:textStyle="bold"
             android:textColor="@color/md_red_600"
-            android:text="19"/>
+            android:textAlignment="center"
+            android:text=""/>
 
         <TextView
             android:id="@+id/textTemperatureStatus"
@@ -43,7 +44,8 @@
             android:layout_weight="2"
             android:textStyle="bold"
             android:textColor="@color/md_red_600"
-            android:text="Low"/>
+            android:textAlignment="center"
+            android:text=""/>
     </LinearLayout>
 
     <LinearLayout
@@ -67,7 +69,8 @@
             android:layout_weight="2"
             android:textStyle="bold"
             android:textColor="@color/md_green_600"
-            android:text="50"/>
+            android:textAlignment="center"
+            android:text=""/>
 
         <TextView
             android:id="@+id/textHumidityStatus"
@@ -76,7 +79,8 @@
             android:layout_weight="2"
             android:textStyle="bold"
             android:textColor="@color/md_green_600"
-            android:text="Safe"/>
+            android:textAlignment="center"
+            android:text=""/>
     </LinearLayout>
 
     <TextView
@@ -87,6 +91,6 @@
         android:textAlignment="center"
         android:textStyle="bold"
         android:textColor="@color/md_black_1000"
-        android:text="Please raise the temperature of the room"/>
+        android:text=""/>
 
 </LinearLayout>
