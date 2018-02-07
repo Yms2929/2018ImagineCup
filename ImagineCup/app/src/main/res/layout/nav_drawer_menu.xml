@@ -150,7 +150,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:layout_marginTop="150dp"
-        android:text="copyright@ImagineCupMenbu"
+        android:text="Copyright ⓒ 2018 by Paby All rights reserved"
         android:textColor="@color/md_grey_300"
         android:textSize="15dp" />
 </LinearLayout>

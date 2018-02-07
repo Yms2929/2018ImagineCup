@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-   
     <EditTextPreference
         android:defaultValue="Pakers"
         android:key="userBabyName"
@@ -10,19 +9,17 @@
         android:summary="Set Your Baby Name"
         android:title="Edit Baby Name" />
 
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/babyFeeling"
-        android:entryValues="@array/babyFeeling_values"
-        android:key="babyCondition"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="Select Your Baby Condition"
-        android:title="Baby Condition" />
+    <EditTextPreference
+        android:defaultValue="YYYYMMDD"
+        android:key="userBabyBirth"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Set Birth YYYYMMDD"
+        android:title="Edit Your Baby Birth" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="alarmUpdate"
+        android:key="DisplayAlarm"
         android:summary="Set DisplayAlarm On/Off"
         android:switchTextOff="OFF"
         android:switchTextOn="ON"

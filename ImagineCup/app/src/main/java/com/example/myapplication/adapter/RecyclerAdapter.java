@@ -22,7 +22,7 @@ import com.example.myapplication.activity.GraphActivity;
 import com.example.myapplication.activity.SleepRecordActivity;
 import com.example.myapplication.data.Item;
 import com.example.myapplication.function.BackgroundService;
-import com.example.myapplication.function.WebViewStreaming;
+import com.example.myapplication.function.RightBabySleepVideoView;
 
 import java.util.List;
 
@@ -64,10 +64,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         context.startActivity(new Intent(context, SleepRecordActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 수면기록 화면
                         break;
                     case 3:
-                        context.startActivity(new Intent(context, WebViewStreaming.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 웹뷰 테스트용
+                        context.startActivity(new Intent(context, RightBabySleepVideoView.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 웹뷰 테스트용
                         break;
                     default:
                         break;
+                    // 클릭 효과 나누기 - 액티비티 연결
+                    //if (item.getTitle().equals("streaming"))
                 }
             }
         });

@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/mjpegviewer_v1.0.4" />
             <option value="$PROJECT_DIR$/rolling-banner" />
           </set>
         </option>

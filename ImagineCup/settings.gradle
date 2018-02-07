@@ -1,1 +1,1 @@
-include ':app', ':rolling-banner'
+include ':app', ':rolling-banner', ':mjpegviewer_v1.0.4'
