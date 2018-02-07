@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -92,42 +93,42 @@ public class SecondGraphFragment  extends Fragment {
             days = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         }
 
-//        float xWidth = 0f;
-//        for (int i = 0; i < weekSleepTime.size(); i++) {
-//            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i)));
-//            xWidth = xWidth + 1f;
-//        }
+        float xWidth = 0f;
+        for (int i = 0; i < weekSleepTime.size(); i++) {
+            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i)));
+            xWidth = xWidth + 1f;
+        }
 
-        //        Double sleepAverage = 0.0;
-//        int count = 0;
-//
-//        for (int j = 0; j < weekSleepTime.size(); j++) {
-//            sleepAverage = sleepAverage + weekSleepTime.get(j);
-//            count++;
-//        }
-//
-//        sleepAverage = sleepAverage / count;
-//        textSleepAverage.setText(String.valueOf(sleepAverage));
-//
-//        if (sleepAverage < 16) {
-//           textSleepAverage.setTextColor(Color.parseColor("#E53935"));
-//           textSleepStatus.setText(R.string.lessSleep);
-//        }
-//        else if (sleepAverage >= 16 && sleepAverage < 20) {
-//            textSleepAverage.setTextColor(Color.parseColor("#43A047"));
-//            textSleepStatus.setText(R.string.keepSleep);
-//        } else {
-//            textSleepAverage.setTextColor(Color.parseColor("#E53935"));
-//            textSleepStatus.setText(R.string.manySleep);
-//        }
+        Double sleepAverage = 0.0;
+        int count = 0;
 
-        barEntries.add(new BarEntry(0f, 17f));
-        barEntries.add(new BarEntry(1f, 15f));
-        barEntries.add(new BarEntry(2f, 16f));
-        barEntries.add(new BarEntry(3f, 18f));
-        barEntries.add(new BarEntry(4f, 17f));
-        barEntries.add(new BarEntry(5f, 15f));
-        barEntries.add(new BarEntry(6f, 16f));
+        for (int j = 0; j < weekSleepTime.size(); j++) {
+            sleepAverage = sleepAverage + weekSleepTime.get(j);
+            count++;
+        }
+
+        sleepAverage = sleepAverage / count;
+        textSleepAverage.setText(String.valueOf(sleepAverage));
+
+        if (sleepAverage < 16) {
+           textSleepAverage.setTextColor(Color.parseColor("#E53935"));
+           textSleepStatus.setText(R.string.lessSleep);
+        }
+        else if (sleepAverage >= 16 && sleepAverage < 20) {
+            textSleepAverage.setTextColor(Color.parseColor("#43A047"));
+            textSleepStatus.setText(R.string.keepSleep);
+        } else {
+            textSleepAverage.setTextColor(Color.parseColor("#E53935"));
+            textSleepStatus.setText(R.string.manySleep);
+        }
+
+//        barEntries.add(new BarEntry(0f, 17f));
+//        barEntries.add(new BarEntry(1f, 15f));
+//        barEntries.add(new BarEntry(2f, 16f));
+//        barEntries.add(new BarEntry(3f, 18f));
+//        barEntries.add(new BarEntry(4f, 17f));
+//        barEntries.add(new BarEntry(5f, 15f));
+//        barEntries.add(new BarEntry(6f, 16f));
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time"); //막대값 배열에 추가한 거 정립
         barDataSet.setColor(android.graphics.Color.argb(255, 195, 90, 157)); //바 색깔 정하기
