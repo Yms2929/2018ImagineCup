@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -61,6 +60,7 @@ public class SleepRecordActivity extends AppCompatActivity {
     ArrayList<String> sleepList = new ArrayList<String>();
     //    String phpConnectUrl = "http://192.168.0.78/PHP_connection.php";
 //    String phpInsertUrl = "http://192.168.0.78/PHP_insert.php";
+    MobileServiceClient mobileServiceClient;
     MobileServiceTable<SleepRecord> mobileServiceTable;
 
     @Override
@@ -111,7 +111,7 @@ public class SleepRecordActivity extends AppCompatActivity {
 //        getData(phpConnectUrl); // php서버 웹주소
 
         AzureServiceAdapter.Initialize(this);
-        MobileServiceClient mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
+        mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
         mobileServiceTable = mobileServiceClient.getTable(SleepRecord.class);
         connectAzure();
     }
@@ -177,27 +177,16 @@ public class SleepRecordActivity extends AppCompatActivity {
             String sleepTime = (String) params[3];
 
             SleepRecord item = new SleepRecord();
-            item.date = date;
-            item.startTime = startTime;
-            item.endTime = endTime;
-            item.sleepTime = sleepTime;
-
-//            item.setDate(date);
-//            item.setStartTime(startTime);
-//            item.setEndTime(endTime);
-//            item.setSleepTime(sleepTime);
-
-            Log.e("azure", item.date);
-            Log.e("azure", item.startTime);
-            Log.e("azure", item.endTime);
-            Log.e("azure", item.sleepTime);
+            item.setDate(date);
+            item.setStartTime(startTime);
+            item.setEndTime(endTime);
+            item.setSleepTime(sleepTime);
 
             try {
-                mobileServiceTable.insert(item).get();
-                Log.e("azure", "insert");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                mobileServiceTable.insert(item).get(); // 데이터베이스에 삽입
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -209,7 +198,6 @@ public class SleepRecordActivity extends AppCompatActivity {
             super.onPostExecute(result);
         }
     }
-
 
 //    public void getData(String url) {
 //        class GetDataJSON extends AsyncTask<String, Void, String> {

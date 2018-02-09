@@ -13,7 +13,7 @@ public class SleepRecord {
     public String mId;
 
     @com.google.gson.annotations.SerializedName("date")
-    public String date;
+    private String date;
 
     public String getDate() {
         return date;
@@ -24,7 +24,7 @@ public class SleepRecord {
     }
 
     @com.google.gson.annotations.SerializedName("startTime")
-    public String startTime;
+    private String startTime;
 
     public String getStartTime() {
         return startTime;
@@ -35,7 +35,7 @@ public class SleepRecord {
     }
 
     @com.google.gson.annotations.SerializedName("endTime")
-    public String endTime;
+    private String endTime;
 
     public String getEndTime() {
         return endTime;
@@ -46,7 +46,7 @@ public class SleepRecord {
     }
 
     @com.google.gson.annotations.SerializedName("sleepTime")
-    public String sleepTime;
+    private String sleepTime;
 
     public String getSleepTime() {
         return sleepTime;
