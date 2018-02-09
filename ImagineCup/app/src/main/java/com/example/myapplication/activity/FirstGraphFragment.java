@@ -71,8 +71,7 @@ public class FirstGraphFragment extends Fragment {
         textHumidityStatus = view.findViewById(R.id.textHumidityStatus);
         textCurrentStatus = view.findViewById(R.id.textCurrentStatus);
 
-//        getData(phpConnectUrl);
-        setlineData();
+        getData(phpConnectUrl);
 
         return view;
     }
@@ -81,26 +80,21 @@ public class FirstGraphFragment extends Fragment {
         ArrayList<Entry> line1 = new ArrayList<>();
         ArrayList<Entry> line2 = new ArrayList<>();
 
-//        for (int i = 0; i < temperatureList.size(); i++) {
-//            float value1 = Float.parseFloat(temperatureList.get(i));
-//            float value2 = Float.parseFloat(humidityList.get(i));
-//            line1.add(new Entry(i, value1));
-//            line2.add(new Entry(i, value2));
-//        }
-
-        float value1 = Float.parseFloat("20");
-        float value2 = Float.parseFloat("21");
-        line1.add(new Entry(0, value1));
-        line2.add(new Entry(0, value2));
+        for (int i = 0; i < temperatureList.size(); i++) {
+            float value1 = Float.parseFloat(temperatureList.get(i));
+            float value2 = Float.parseFloat(humidityList.get(i));
+            line1.add(new Entry(i, value1));
+            line2.add(new Entry(i, value2));
+        }
 
         LineDataSet set1, set2;
 
-        set1 = new LineDataSet(line1, "Temperature");
+        set1 = new LineDataSet(line1, "Temperature(℃)");
         set1.setColor(Color.RED);
         set1.setCircleColor(Color.RED);
         set1.setLineWidth(2f);
 
-        set2 = new LineDataSet(line2, "Humidity");
+        set2 = new LineDataSet(line2, "Humidity(%)");
         set2.setColor(Color.BLUE);
         set2.setCircleColor(Color.BLUE);
         set2.setLineWidth(2f);

@@ -67,7 +67,7 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="2018/01/23"/>
+                android:text=""/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/md_black_1000"
                 android:textSize="16dp"
-                android:text="16:30:50"/>
+                android:text=""/>
         </LinearLayout>
 
         <LinearLayout

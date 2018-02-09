@@ -4,13 +4,14 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.AzureServiceAdapter;
+import com.example.myapplication.data.SleepRecord;
 import com.example.myapplication.etc.LabelFormatter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -19,19 +20,16 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceException;
+import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by woga1 on 2018-01-22.
@@ -43,11 +41,11 @@ public class SecondGraphFragment  extends Fragment {
     XAxis xAxis;
     ArrayList<BarEntry> barEntries;
     String[] days = new String[]{}; //xAsix 밑에 들어갈 string 배열
-    private static final String TAG_RESULTCODE = "result";
-    private static final String TAG_DATEDAY = "date";
-    private static final String TAG_ALLSLEEPTIME = "sleepTime";
-    String json;
-    JSONArray jsonArray;
+    //    private static final String TAG_RESULTCODE = "result";
+//    private static final String TAG_DATEDAY = "date";
+//    private static final String TAG_ALLSLEEPTIME = "sleepTime";
+//    String json;
+//    JSONArray jsonArray;
     ArrayList<String> timeList = new ArrayList<>();
     ArrayList<String> previous1day = new ArrayList<>();
     ArrayList<String> previous2day = new ArrayList<>();
@@ -56,9 +54,10 @@ public class SecondGraphFragment  extends Fragment {
     ArrayList<String> previous5day = new ArrayList<>();
     ArrayList<String> previous6day = new ArrayList<>();
     ArrayList<Integer> weekSleepTime = new ArrayList<>();
-    String phpConnectUrl = "http://192.168.0.78/PHP_connection.php";
+    //    String phpConnectUrl = "http://192.168.0.78/PHP_connection.php";
     TextView textSleepAverage;
     TextView textSleepStatus;
+    MobileServiceTable<SleepRecord> mobileServiceTable;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_graph_second, container, false);
@@ -66,8 +65,13 @@ public class SecondGraphFragment  extends Fragment {
 
         textSleepAverage = view.findViewById(R.id.textSleepAverage);
         textSleepStatus = view.findViewById(R.id.textSleepStatus);
-        Log.e("phperror", "oncreate");
-        getData(phpConnectUrl);
+
+        AzureServiceAdapter.Initialize(getActivity());
+        MobileServiceClient mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
+        mobileServiceTable = mobileServiceClient.getTable(SleepRecord.class);
+        connectAzure();
+
+//        getData(phpConnectUrl);
 
         return view;
     }
@@ -95,26 +99,29 @@ public class SecondGraphFragment  extends Fragment {
 
         float xWidth = 0f;
         for (int i = 0; i < weekSleepTime.size(); i++) {
-            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i)));
+            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i))); // 그래프에 데이터 삽입
             xWidth = xWidth + 1f;
         }
 
-        Double sleepAverage = 0.0;
+        double sleepAverage = 0.0;
         int count = 0;
 
         for (int j = 0; j < weekSleepTime.size(); j++) {
-            sleepAverage = sleepAverage + weekSleepTime.get(j);
-            count++;
+            sleepAverage = sleepAverage + weekSleepTime.get(j); // 평균시간 구하기
+
+            if (sleepAverage > 0) {
+                count++;
+            }
         }
 
         sleepAverage = sleepAverage / count;
+        sleepAverage = Math.round(sleepAverage * 100d) / 100d;
         textSleepAverage.setText(String.valueOf(sleepAverage));
 
         if (sleepAverage < 16) {
-           textSleepAverage.setTextColor(Color.parseColor("#E53935"));
-           textSleepStatus.setText(R.string.lessSleep);
-        }
-        else if (sleepAverage >= 16 && sleepAverage < 20) {
+            textSleepAverage.setTextColor(Color.parseColor("#E53935")); // 시간에 따른 텍스트 색상 변화
+            textSleepStatus.setText(R.string.lessSleep);
+        } else if (sleepAverage >= 16 && sleepAverage < 20) {
             textSleepAverage.setTextColor(Color.parseColor("#43A047"));
             textSleepStatus.setText(R.string.keepSleep);
         } else {
@@ -123,14 +130,14 @@ public class SecondGraphFragment  extends Fragment {
         }
 
 //        barEntries.add(new BarEntry(0f, 17f));
-//        barEntries.add(new BarEntry(1f, 15f));
-//        barEntries.add(new BarEntry(2f, 16f));
-//        barEntries.add(new BarEntry(3f, 18f));
+//        barEntries.add(new BarEntry(1f, 16f));
+//        barEntries.add(new BarEntry(2f, 18f));
+//        barEntries.add(new BarEntry(3f, 16f));
 //        barEntries.add(new BarEntry(4f, 17f));
-//        barEntries.add(new BarEntry(5f, 15f));
+//        barEntries.add(new BarEntry(5f, 18f));
 //        barEntries.add(new BarEntry(6f, 16f));
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time"); //막대값 배열에 추가한 거 정립
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time(hour)"); //막대값 배열에 추가한 거 정립
         barDataSet.setColor(android.graphics.Color.argb(255, 195, 90, 157)); //바 색깔 정하기
 
         BarData data = new BarData(barDataSet); //막대값 정한거 막대 그래프에 적용하기 위한 데이터 확정
@@ -155,98 +162,157 @@ public class SecondGraphFragment  extends Fragment {
         barChart.setDescription(des);
         barChart.setData(data);
         barChart.invalidate(); //refresh
-
-        Log.e("phperror", "bar");
     }
 
-    public void getData(String url) {
-        class GetDataJSON extends AsyncTask<String, Void, String> {
+    public void connectAzure() {
+        class GetData extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... params) { // 웹서버에 요청
-                Log.e("phperror", "doinback");
-                String uri = params[0];
-                BufferedReader bufferedReader = null;
-
                 try {
-                    URL url = new URL(uri);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    List<SleepRecord> list = mobileServiceTable.execute().get();
 
-                    StringBuilder stringBuilder = new StringBuilder();
-                    bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    long now = System.currentTimeMillis();
+                    Date date = new Date(now);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+                    String currentDate = format.format(date);
 
-                    String json;
-                    while ((json = bufferedReader.readLine()) != null) { // json 값을 모두 가져옴
-                        stringBuilder.append(json + "\n");
+                    for (int i = 0; i < list.size(); i++) { // 데이터베이스 컬럼값 모두 가져옴
+                        String dateDay = list.get(i).getDate();
+                        String sleepTime = list.get(i).getSleepTime();
+
+                        if (dateDay.equals(currentDate)) { // 오늘 날짜와 데이터베이스의 날짜가 같으면
+                            timeList.add(sleepTime);
+                        } else if (dateDay.equals(getPreviousDay(1))) { // 전날
+                            previous1day.add(sleepTime);
+                        } else if (dateDay.equals(getPreviousDay(2))) { // 2일전
+                            previous2day.add(sleepTime);
+                        } else if (dateDay.equals(getPreviousDay(3))) {
+                            previous3day.add(sleepTime);
+                        } else if (dateDay.equals(getPreviousDay(4))) {
+                            previous4day.add(sleepTime);
+                        } else if (dateDay.equals(getPreviousDay(5))) {
+                            previous5day.add(sleepTime);
+                        } else if (dateDay.equals(getPreviousDay(6))) {
+                            previous6day.add(sleepTime);
+                        }
                     }
-                    return stringBuilder.toString().trim();
 
-                } catch (Exception e) {
-                    return null;
+                    weekSleepTime.add(allSleepTime(previous6day));
+                    weekSleepTime.add(allSleepTime(previous5day));
+                    weekSleepTime.add(allSleepTime(previous4day));
+                    weekSleepTime.add(allSleepTime(previous3day));
+                    weekSleepTime.add(allSleepTime(previous2day));
+                    weekSleepTime.add(allSleepTime(previous1day));
+                    weekSleepTime.add(allSleepTime(timeList)); // 총 수면 시간 구하기
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (MobileServiceException e) {
+                    e.printStackTrace();
                 }
+
+                return null;
             }
 
             @Override
             protected void onPostExecute(String result) { // 웹서버에서 post 받으면 실행
-                json = result;
-                Log.e("phperror", "post");
-                showList();
                 setBarData();
             }
         }
-        GetDataJSON getDataJSON = new GetDataJSON();
-        getDataJSON.execute(url);
+        GetData getData = new GetData();
+        getData.execute();
     }
 
-    public void showList() { // Json 형식으로 된 데이터 배열로 가져와서 스트링으로 사용
-        try {
-            JSONObject jsonObject = new JSONObject(json); // json형식 객체
-            jsonArray = jsonObject.getJSONArray(TAG_RESULTCODE); // json배열
+//    public void getData(String url) {
+//        class GetDataJSON extends AsyncTask<String, Void, String> {
+//
+//            @Override
+//            protected String doInBackground(String... params) { // 웹서버에 요청
+//                Log.e("phperror", "doinback");
+//                String uri = params[0];
+//                BufferedReader bufferedReader = null;
+//
+//                try {
+//                    URL url = new URL(uri);
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//
+//                    String json;
+//                    while ((json = bufferedReader.readLine()) != null) { // json 값을 모두 가져옴
+//                        stringBuilder.append(json + "\n");
+//                    }
+//                    return stringBuilder.toString().trim();
+//
+//                } catch (Exception e) {
+//                    return null;
+//                }
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String result) { // 웹서버에서 post 받으면 실행
+//                json = result;
+//                showList();
+//                setBarData();
+//            }
+//        }
+//        GetDataJSON getDataJSON = new GetDataJSON();
+//        getDataJSON.execute(url);
+//    }
 
-            long now = System.currentTimeMillis();
-            Date date = new Date(now);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            String currentDate = format.format(date);
-
-            for (int i = 0; i < jsonArray.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
-                JSONObject object = jsonArray.getJSONObject(i);
-                String dateDay = object.getString(TAG_DATEDAY);
-                String sleepTime = object.getString(TAG_ALLSLEEPTIME);
-
-                if (dateDay.equals(currentDate)) { // 오늘 날짜와 데이터베이스의 날짜가 같으면
-                    timeList.add(sleepTime);
-                } else if (dateDay.equals(getPreviousDay(1))) { // 전날
-                    previous1day.add(sleepTime);
-                } else if (dateDay.equals(getPreviousDay(2))) { // 2일전
-                    previous2day.add(sleepTime);
-                } else if (dateDay.equals(getPreviousDay(3))) {
-                    previous3day.add(sleepTime);
-                } else if (dateDay.equals(getPreviousDay(4))) {
-                    previous4day.add(sleepTime);
-                } else if (dateDay.equals(getPreviousDay(5))) {
-                    previous5day.add(sleepTime);
-                } else if (dateDay.equals(getPreviousDay(6))) {
-                    previous6day.add(sleepTime);
-                }
-            }
-
-            weekSleepTime.add(allSleepTime(previous6day));
-            weekSleepTime.add(allSleepTime(previous5day));
-            weekSleepTime.add(allSleepTime(previous4day));
-            weekSleepTime.add(allSleepTime(previous3day));
-            weekSleepTime.add(allSleepTime(previous2day));
-            weekSleepTime.add(allSleepTime(previous1day));
-            weekSleepTime.add(allSleepTime(timeList)); // 총 수면 시간 구하기
-
-            for(int j=0; j<weekSleepTime.size(); j++) {
-                Log.e("phperror", String.valueOf(weekSleepTime.get(j)));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("phperror", e.getMessage());
-        }
-    }
+//    public void showList() { // Json 형식으로 된 데이터 배열로 가져와서 스트링으로 사용
+//        try {
+//            JSONObject jsonObject = new JSONObject(json); // json형식 객체
+//            jsonArray = jsonObject.getJSONArray(TAG_RESULTCODE); // json배열
+//
+//            long now = System.currentTimeMillis();
+//            Date date = new Date(now);
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+//            String currentDate = format.format(date);
+//
+//            for (int i = 0; i < jsonArray.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
+//                JSONObject object = jsonArray.getJSONObject(i);
+//                String dateDay = object.getString(TAG_DATEDAY);
+//                String sleepTime = object.getString(TAG_ALLSLEEPTIME);
+//
+//                if (dateDay.equals(currentDate)) { // 오늘 날짜와 데이터베이스의 날짜가 같으면
+//                    timeList.add(sleepTime);
+//                } else if (dateDay.equals(getPreviousDay(1))) { // 전날
+//                    previous1day.add(sleepTime);
+//                } else if (dateDay.equals(getPreviousDay(2))) { // 2일전
+//                    previous2day.add(sleepTime);
+//                } else if (dateDay.equals(getPreviousDay(3))) {
+//                    previous3day.add(sleepTime);
+//                } else if (dateDay.equals(getPreviousDay(4))) {
+//                    previous4day.add(sleepTime);
+//                } else if (dateDay.equals(getPreviousDay(5))) {
+//                    previous5day.add(sleepTime);
+//                } else if (dateDay.equals(getPreviousDay(6))) {
+//                    previous6day.add(sleepTime);
+//                }
+//            }
+//
+//            weekSleepTime.add(allSleepTime(previous6day));
+//            weekSleepTime.add(allSleepTime(previous5day));
+//            weekSleepTime.add(allSleepTime(previous4day));
+//            weekSleepTime.add(allSleepTime(previous3day));
+//            weekSleepTime.add(allSleepTime(previous2day));
+//            weekSleepTime.add(allSleepTime(previous1day));
+//            weekSleepTime.add(allSleepTime(timeList)); // 총 수면 시간 구하기
+//
+//            for(int j=0; j<weekSleepTime.size(); j++) {
+//                Log.e("phperror", String.valueOf(weekSleepTime.get(j)));
+//            }
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            Log.e("phperror", e.getMessage());
+//        }
+//    }
 
     public String getPreviousDay(int number) { // 이전 날짜 구하기
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
