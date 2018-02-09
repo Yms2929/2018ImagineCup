@@ -5,12 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:animateLayoutChanges="true">
+
     <LinearLayout
         android:id="@+id/navi_header"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/colorPrimary"
         android:orientation="vertical">
+
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="130dp"
@@ -36,25 +38,27 @@
             android:gravity="center"/>
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="0.5dp"
         android:background="@color/md_grey_300">
     </LinearLayout>
+
     <LinearLayout
         android:layout_below="@+id/navi_header"
         android:layout_marginTop="20dp"
         android:id="@+id/layout_temperature"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -71,12 +75,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:background="@drawable/des_icon"/>
             <TextView
-                android:id="@+id/textTemperature"
+                android:id="@+id/navtextTemperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -95,18 +100,21 @@
         android:layout_height="wrap_content"
         android:padding="0.5dp"
         android:background="@color/md_grey_300"/>
+
     <LinearLayout
         android:layout_below="@+id/layout_temperature"
         android:layout_marginTop="20dp"
         android:id="@+id/layout_humidity"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
@@ -124,12 +132,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:background="@drawable/des_icon"/>
             <TextView
-                android:id="@+id/textHumidity"
+                android:id="@+id/navtextHumidity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -144,13 +153,20 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="0.5dp"
+        android:background="@color/md_grey_300">
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="27dp"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:layout_marginTop="150dp"
         android:text="Copyright ⓒ 2018 by Paby All rights reserved"
         android:textColor="@color/md_grey_300"
-        android:textSize="15dp" />
+        android:textSize="13dp" />
 </LinearLayout>

@@ -40,15 +40,15 @@ public class SettingActivity extends PreferenceActivity {
 //            }
 //        });
     }
-    public static class MyPreferenceFragment extends PreferenceFragment
-    {
+
+    public static class MyPreferenceFragment extends PreferenceFragment {
         @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
+        public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.setting);
         }
     }
+
     private static int getResIdFromAttribute(final Activity activity, final int attr) {
         if (attr == 0) {
             return 0;

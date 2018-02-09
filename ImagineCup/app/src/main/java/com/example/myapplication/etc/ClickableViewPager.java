@@ -25,7 +25,7 @@ public class ClickableViewPager extends ViewPager {
     }
 
     private void setup() {
-        final GestureDetector tapGestureDetector = new    GestureDetector(getContext(), new TapGestureListener());
+        final GestureDetector tapGestureDetector = new GestureDetector(getContext(), new TapGestureListener());
 
         setOnTouchListener(new OnTouchListener() {
             @Override
@@ -48,7 +48,7 @@ public class ClickableViewPager extends ViewPager {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            if(mOnItemClickListener != null) {
+            if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(getCurrentItem());
             }
             return true;

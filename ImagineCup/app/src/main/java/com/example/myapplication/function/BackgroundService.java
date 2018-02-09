@@ -40,14 +40,10 @@ public class BackgroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // TODO Auto-generated method stub
         activityMessage = intent.getStringExtra("message");
-
-        if (activityMessage.equals("connect") || activityMessage.equals("exit")) {
-            socketMessage(activityMessage);
-        } else if (activityMessage.equals("send")) {
-            socketMessage(activityMessage);
-        }
+        socketMessage(activityMessage);
 
         startForeground(1, new Notification());
+
         return super.onStartCommand(intent, flags, startId);
     }
 

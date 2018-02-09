@@ -24,8 +24,8 @@ public class SplashActivity extends AppCompatActivity {
         hd.postDelayed(new splashhandler(), 3000);
     }
 
-    private class splashhandler implements Runnable{
-        public void run(){
+    private class splashhandler implements Runnable {
+        public void run() {
             startActivity(new Intent(getApplication(), MainActivity.class));
             SplashActivity.this.finish();
         }

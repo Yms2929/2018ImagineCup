@@ -11,6 +11,7 @@ public class Item {
     public int getImage() {
         return this.image;
     }
+
     public String getTitle() {
         return this.title;
     }

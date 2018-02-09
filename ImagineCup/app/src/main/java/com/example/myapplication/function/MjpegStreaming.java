@@ -18,7 +18,7 @@ public class MjpegStreaming extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mjpegstreaming);
-        viewer = (MjpegView)findViewById(R.id.mjpegView);
+        viewer = (MjpegView) findViewById(R.id.mjpegView);
         viewer.setMode(MjpegView.MODE_FIT_WIDTH);
         viewer.setAdjustHeight(true);
         viewer.setUrl("http://192.168.0.175:8083/?action=stream");
