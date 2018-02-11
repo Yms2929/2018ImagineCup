@@ -36,6 +36,12 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
+import com.example.myapplication.data.PositionData;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     JSONArray jsonArray = null;
     String json;
     String phpConnectUrl = "http://192.168.0.175/phptest.php";
+
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +150,33 @@ public class MainActivity extends AppCompatActivity {
         //프로필이미지
         circleImageView = (CircleImageView) findViewById(R.id.circleProfilImageView);
         circleImageView.setOnClickListener(new clickListener());
+
+        databaseReference.child("data").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //PositionData positionData = dataSnapshot.getValue(PositionData.class);
+                Toast.makeText(MainActivity.this, "성.공", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                // child 바뀌엇을때 // 내가생각했을 때 여기 추가해야댐.
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // Child 삭제 되었을 때
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 공백
+            }
+        });
     }
 
     class clickListener implements View.OnClickListener {
