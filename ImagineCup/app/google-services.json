@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "402050308959",
+    "firebase_url": "https://imaginecup2018-8b62f.firebaseio.com",
+    "project_id": "imaginecup2018-8b62f",
+    "storage_bucket": "imaginecup2018-8b62f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402050308959:android:13c3c6a65bcbec53",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402050308959-jo250mskjl85psuv23qpl4dghhp25ge0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_naaz6z2rKZPbIcZVTgYczCtnkWPwEa8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
