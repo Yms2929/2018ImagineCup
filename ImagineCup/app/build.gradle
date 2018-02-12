@@ -41,7 +41,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     testCompile 'junit:junit:4.12'
     implementation project(':rolling-banner')
-    implementation project(':mjpegviewer_v1.0.4')
     compile 'com.microsoft.azure:azure-mobile-android:3.4.0'
 }
 apply plugin: 'com.google.gms.google-services'

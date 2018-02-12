@@ -3,13 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ImagineCup.iml" filepath="$PROJECT_DIR$/ImagineCup.iml" />
-      <module fileurl="file://C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\ImagineCup.iml" filepath="C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\ImagineCup.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\app\app.iml" filepath="C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\app\app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mjpegviewer_v1.0.4/mjpegviewer_v1.0.4.iml" filepath="$PROJECT_DIR$/mjpegviewer_v1.0.4/mjpegviewer_v1.0.4.iml" />
-      <module fileurl="file://C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\mjpegviewer_v1.0.4\mjpegviewer_v1.0.4.iml" filepath="C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\mjpegviewer_v1.0.4\mjpegviewer_v1.0.4.iml" />
       <module fileurl="file://$PROJECT_DIR$/rolling-banner/rolling-banner.iml" filepath="$PROJECT_DIR$/rolling-banner/rolling-banner.iml" />
-      <module fileurl="file://C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\rolling-banner\rolling-banner.iml" filepath="C:\Users\TaegyunKim\Desktop\Develop\ImagineCup2018\ImagineCup\rolling-banner\rolling-banner.iml" />
     </modules>
   </component>
 </project>
