@@ -49,6 +49,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -273,10 +274,25 @@ public class MainActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile("^[1-2]{1}[0-9]{1}(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))$");
         Matcher matcher = pattern.matcher(babyBirth);
         if (matcher.find()) {
-            int birth = Integer.parseInt(babyBirth);
-            int currentTime = Integer.parseInt(getCurrentTime);
-            int resultInt = currentTime - birth;
-            result = String.valueOf(resultInt);
+            Calendar todaCal = Calendar.getInstance(); //오늘날자 가져오기
+            Calendar ddayCal = Calendar.getInstance(); //오늘날자를 가져와 변경시킴
+            //int birth = Integer.parseInt(babyBirth);
+            String year = babyBirth.substring(0,4);
+            String month = babyBirth.substring(4,6);
+            String day = babyBirth.substring(6,8);
+            int myear = Integer.parseInt(year);
+            int mmonth = Integer.parseInt(month);
+            int mday = Integer.parseInt(day);
+            //int currentTime = Integer.parseInt(getCurrentTime);
+            //int resultInt = currentTime - birth;
+            mmonth -= 1; // 받아온날자에서 -1을 해줘야함.
+            ddayCal.set(myear,mmonth,mday);// D-day의 날짜를 입력
+
+            long today = todaCal.getTimeInMillis()/86400000; //->(24 * 60 * 60 * 1000) 24시간 60분 60초 * (ms초->초 변환 1000)
+            long dday = ddayCal.getTimeInMillis()/86400000;
+            long count = today - dday; // 오늘 날짜에서 dday 날짜를 빼주게 됩니다.
+
+            result = String.valueOf(count);
         } else {
             result = "check setting once again";
         }

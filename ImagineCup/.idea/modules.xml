@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ImagineCup.iml" filepath="$PROJECT_DIR$/ImagineCup.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mjpegviewer_v1.0.4/mjpegviewer_v1.0.4.iml" filepath="$PROJECT_DIR$/mjpegviewer_v1.0.4/mjpegviewer_v1.0.4.iml" />
+      <module fileurl="file://C:\Users\woga1\Documents\2018ImagineCup\ImagineCup\mjpegviewer_v1.0.4\mjpegviewer_v1.0.4.iml" filepath="C:\Users\woga1\Documents\2018ImagineCup\ImagineCup\mjpegviewer_v1.0.4\mjpegviewer_v1.0.4.iml" />
       <module fileurl="file://$PROJECT_DIR$/rolling-banner/rolling-banner.iml" filepath="$PROJECT_DIR$/rolling-banner/rolling-banner.iml" />
     </modules>
   </component>
