@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 //        recyclerView.addOnItemTouchListener();
         recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
 
-//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
+        //startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
 //        startService(new Intent(getApplicationContext(), DataResultService.class));
 
         //내비바
@@ -214,7 +214,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
     public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize) throws FileNotFoundException {
+=======
+    public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize) //이미지가 클 시 사이즈 줄이기
+            throws FileNotFoundException {
+>>>>>>> feature/server
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);
@@ -253,9 +258,7 @@ public class MainActivity extends AppCompatActivity {
 //            setNaviText();
         } else if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
-            //Intent service = new Intent( this, ScreenFilterService.class ); 화면 알람
-            //startService( service );
-            //stopService(service);
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -268,12 +271,15 @@ public class MainActivity extends AppCompatActivity {
         babyName.setText(mPref.getString("userBabyName", "Parkers"));
     }
 
-    private String circulateBabyBirth() {
+    private String circulateBabyBirth()
+    {
         String result = null;
         String babyBirth = mPref.getString("userBabyBirth", "not Setting");
         Pattern pattern = Pattern.compile("^[1-2]{1}[0-9]{1}(?:[0-9]{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[1,2][0-9]|3[0,1]))$");
         Matcher matcher = pattern.matcher(babyBirth);
-        if (matcher.find()) {
+
+        if(matcher.find())
+        {
             Calendar todaCal = Calendar.getInstance(); //오늘날자 가져오기
             Calendar ddayCal = Calendar.getInstance(); //오늘날자를 가져와 변경시킴
             //int birth = Integer.parseInt(babyBirth);
@@ -293,7 +299,9 @@ public class MainActivity extends AppCompatActivity {
             long count = today - dday; // 오늘 날짜에서 dday 날짜를 빼주게 됩니다.
 
             result = String.valueOf(count);
-        } else {
+        }
+        else
+        {
             result = "check setting once again";
         }
         return result;
