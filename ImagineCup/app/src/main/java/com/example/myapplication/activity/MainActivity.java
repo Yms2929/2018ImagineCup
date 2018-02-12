@@ -36,12 +36,7 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
-import com.example.myapplication.data.PositionData;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.myapplication.function.DataResultService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,9 +77,6 @@ public class MainActivity extends AppCompatActivity {
     JSONArray jsonArray = null;
     String json;
     String phpConnectUrl = "http://192.168.0.175/phptest.php";
-
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
 
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
-//        startService(new Intent(getApplicationContext(), DataResultService.class));
+        startService(new Intent(getApplicationContext(), DataResultService.class));
 
         //내비바
         babyName = (TextView) findViewById(R.id.babyname);
@@ -150,34 +142,6 @@ public class MainActivity extends AppCompatActivity {
         //프로필이미지
         circleImageView = (CircleImageView) findViewById(R.id.circleProfilImageView);
         circleImageView.setOnClickListener(new clickListener());
-
-        databaseReference.child("data").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //PositionData positionData = dataSnapshot.getValue(PositionData.class);
-                Toast.makeText(MainActivity.this, "성.공", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                PositionData positionData = dataSnapshot.getValue(PositionData.class);
-                Log.e("TAG", "back : "+positionData.getBack() + ", front : "+positionData.getFront() + ", etc : "+positionData.getEtc());
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // Child 삭제 되었을 때
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("TAG","Failed to read value.", databaseError.toException());
-            }
-        });
     }
 
     class clickListener implements View.OnClickListener {
@@ -355,6 +319,11 @@ public class MainActivity extends AppCompatActivity {
 
             return view;
         }
+    }
+
+    @Override
+    public void onDestroy() { // 화면 종료될때
+        super.onDestroy();
     }
 
     @Override

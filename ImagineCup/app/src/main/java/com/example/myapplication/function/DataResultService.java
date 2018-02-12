@@ -9,9 +9,6 @@ import android.graphics.PixelFormat;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -20,23 +17,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.etc.LoadManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.example.myapplication.data.PositionData;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by Yookmoonsu on 2018-01-24.
  */
 
 public class DataResultService extends Service {
-    NotifyBabyWarningResult babyWarningResult;
     SoundPool soundPool;
     AudioManager audioManager;
     int soundId;
@@ -45,8 +39,8 @@ public class DataResultService extends Service {
     private WindowManager mManager;
     private WindowManager.LayoutParams mParams;
     boolean play = false;
-    Timer timer;
-    TimerTask timerTask;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     @Override
     public void onCreate() {
@@ -91,91 +85,22 @@ public class DataResultService extends Service {
 
         mView.setVisibility(View.INVISIBLE); // 뷰 안보이게 함
 
-        final Context context = this;
-        timer = new Timer();
-        timerTask = new TimerTask() {
+        databaseReference.child("data").addChildEventListener(new ChildEventListener() {
             @Override
-            public void run() {
-                if (!play) {
-                    babyWarningResult = new NotifyBabyWarningResult(context);
-                    babyWarningResult.execute("");
-                }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) { // 처음 생성했을 때 실행
+
             }
-        };
 
-        timer.schedule(timerTask, 1000, 8000); // 8초마다 반복 실행
-    }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { // 파이어베이스 값 바뀌면 실행되는 부분
+                PositionData positionData = dataSnapshot.getValue(PositionData.class);
+                Log.e("TAG", "back : " + positionData.getBack() + ", front : " + positionData.getFront() + ", etc : " + positionData.getEtc());
 
-    //웹에서 데이터를 가져오기 전에 먼저 네트워크 상태부터 확인
-    public void conntectCheck() {
+                double backValue = Double.parseDouble(positionData.getBack()); // string을 double로 형변환
+                double frontValue = Double.parseDouble(positionData.getFront());
+                double etcValue = Double.parseDouble(positionData.getEtc());
 
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-
-            // fetch data
-
-            //Toast.makeText(this,"네트워크 연결중입니다.", Toast.LENGTH_SHORT).show();
-
-            babyWarningResult = new NotifyBabyWarningResult(this);
-
-            babyWarningResult.execute("");
-
-        } else {
-
-            // display error
-
-            Toast.makeText(this, "네트워크 상태를 확인하십시오", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    private class NotifyBabyWarningResult extends AsyncTask<String, Integer, String> {
-
-        LoadManager load;
-
-        public NotifyBabyWarningResult(Context context) {
-            load = new LoadManager();
-            Log.e("MenuLoadManger", "context");
-        }
-
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-            Log.e("MenuLoadManger", "preexecute");
-        }
-
-        protected String doInBackground(String... params) {
-            //웹서버에 요청시도
-
-            String data = load.request();
-            Log.e("AsnkTask ask", data);
-            return data;
-        }
-
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.e("MenuLoadManger", "onPostexecute");
-
-            try {
-                JSONObject jObj = new JSONObject(result);
-                String back = jObj.getString("back");
-                String front = jObj.getString("front");
-                String side = jObj.getString("side");
-
-                double backValue = Double.parseDouble(back); // string을 long으로 형변환
-                double frontValue = Double.parseDouble(front);
-                double sideValue = Double.parseDouble(side);
-
-                if (backValue > frontValue && backValue > sideValue) { // 텐서플로 결과값중 back이 가장 높을 때
+                if (backValue > frontValue && backValue > etcValue) { // 텐서플로 결과값중 back이 가장 높을 때
                     if (!play) {
                         mView.setVisibility(View.VISIBLE);
                         showNotification();
@@ -186,11 +111,29 @@ public class DataResultService extends Service {
                         Log.e("background", "press confirm");
                     }
                 }
-            } catch (JSONException e) {
-                Log.e("MenuLoadManger", "postexecute error");
-                e.printStackTrace();
             }
-        }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { // Child 삭제 되었을 때
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("TAG", "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public void checkSoundMode() { // 현재 기기 모드
@@ -224,8 +167,5 @@ public class DataResultService extends Service {
     @Override
     public void onDestroy() { // 서비스가 종료될때
         super.onDestroy();
-
-//        soundPool.stop(streamId);
-//        mView.setVisibility(View.INVISIBLE);
     }
 }

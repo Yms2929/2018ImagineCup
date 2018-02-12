@@ -9,35 +9,36 @@ public class PositionData {
     private String etc;
     private String front;
 
-    public  PositionData() { }
+    public PositionData() {
+    }
 
-    public PositionData(String back, String etc, String front){
+    public PositionData(String back, String etc, String front) {
         this.back = back;
         this.etc = etc;
         this.front = front;
     }
 
-    public String getBack(){
+    public String getBack() {
         return back;
     }
 
-    public String getEtc(){
+    public String getEtc() {
         return etc;
     }
 
-    public String getFront(){
+    public String getFront() {
         return front;
     }
 
-    public void setBack(String back){
+    public void setBack(String back) {
         this.back = back;
     }
 
-    public void setEtc(String etc){
+    public void setEtc(String etc) {
         this.etc = etc;
     }
 
-    public void setFront(String front){
+    public void setFront(String front) {
         this.front = front;
     }
 }
