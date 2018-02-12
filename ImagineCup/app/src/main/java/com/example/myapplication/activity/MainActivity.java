@@ -160,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                // child 바뀌엇을때 // 내가생각했을 때 여기 추가해야댐.
+                PositionData positionData = dataSnapshot.getValue(PositionData.class);
+                Log.e("TAG", "back : "+positionData.getBack() + ", front : "+positionData.getFront() + ", etc : "+positionData.getEtc());
             }
 
             @Override
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // 공백
+                Log.e("TAG","Failed to read value.", databaseError.toException());
             }
         });
     }
