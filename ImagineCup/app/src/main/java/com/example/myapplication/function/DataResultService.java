@@ -41,7 +41,7 @@ public class DataResultService extends Service {
     boolean play = false;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    double checkBack = 0.8;
+    double checkBack = 0.62;
 
     @Override
     public void onCreate() {
