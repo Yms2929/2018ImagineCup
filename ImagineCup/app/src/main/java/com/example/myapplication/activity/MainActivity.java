@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
+import com.example.myapplication.function.ClientSocket;
 import com.example.myapplication.function.DataResultService;
 
 import org.json.JSONArray;
@@ -123,11 +125,19 @@ public class MainActivity extends AppCompatActivity {
             items.add(item[i]);
         }
 
-//        recyclerView.addOnItemTouchListener();
         recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
 
 //        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
         startService(new Intent(getApplicationContext(), DataResultService.class));
+
+        Button btnTest = (Button) findViewById(R.id.btnTest);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClientSocket clientSocket = new ClientSocket("192.168.0.175", Integer.parseInt("8888"), "connect", getApplicationContext());
+                clientSocket.execute();
+            }
+        });
 
         //내비바
         babyName = (TextView) findViewById(R.id.babyname);
@@ -252,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             getData(phpConnectUrl);
             drawerLayout.openDrawer(GravityCompat.START);
-//            setNaviText();
+            setNaviText();
         } else if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
 
@@ -262,8 +272,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void setNaviText() {
-        temp_navi.setText("-17");
-        humidity_navi.setText("10");
         babyBirth.setText(circulateBabyBirth() + " days");
         babyName.setText(mPref.getString("userBabyName", "Parkers"));
     }

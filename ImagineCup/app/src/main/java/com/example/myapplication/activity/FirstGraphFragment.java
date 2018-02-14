@@ -77,41 +77,49 @@ public class FirstGraphFragment extends Fragment {
     }
 
     private void setlineData() {
-        ArrayList<Entry> line1 = new ArrayList<>();
-        ArrayList<Entry> line2 = new ArrayList<>();
+        if (temperatureList.size() > 0) {
+            ArrayList<Entry> line1 = new ArrayList<>();
+            ArrayList<Entry> line2 = new ArrayList<>();
 
-        for (int i = 0; i < temperatureList.size(); i++) {
-            float value1 = Float.parseFloat(temperatureList.get(i));
-            float value2 = Float.parseFloat(humidityList.get(i));
-            line1.add(new Entry(i, value1));
-            line2.add(new Entry(i, value2));
+            for (int i = 0; i < temperatureList.size(); i++) {
+                float value1 = Float.parseFloat(temperatureList.get(i));
+                float value2 = Float.parseFloat(humidityList.get(i));
+                line1.add(new Entry(i, value1));
+                line2.add(new Entry(i, value2));
+            }
+
+            LineDataSet set1, set2;
+
+            set1 = new LineDataSet(line1, "Temperature(℃)");
+            set1.setColor(Color.RED);
+            set1.setCircleColor(Color.RED);
+            set1.setLineWidth(2f);
+
+            set2 = new LineDataSet(line2, "Humidity(%)");
+            set2.setColor(Color.BLUE);
+            set2.setCircleColor(Color.BLUE);
+            set2.setLineWidth(2f);
+
+            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            dataSets.add(set1);
+            dataSets.add(set2);
+            LineData data = new LineData(dataSets);
+            xAxis = lineChart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            lineChart.getXAxis().setValueFormatter(new LabelFormatter(times));
+            Description des = new Description();
+            des.setText(" ");
+            lineChart.setDescription(des);
+            lineChart.setData(data);
+            lineChart.setScaleEnabled(false);
+            lineChart.invalidate(); // refresh
+        } else {
+            textTemperature.setText("NULL");
+            textTemperatureStatus.setText("NULL");
+            textHumidity.setText("NULL");
+            textHumidityStatus.setText("NULL");
+            textCurrentStatus.setText("database not exist data");
         }
-
-        LineDataSet set1, set2;
-
-        set1 = new LineDataSet(line1, "Temperature(℃)");
-        set1.setColor(Color.RED);
-        set1.setCircleColor(Color.RED);
-        set1.setLineWidth(2f);
-
-        set2 = new LineDataSet(line2, "Humidity(%)");
-        set2.setColor(Color.BLUE);
-        set2.setCircleColor(Color.BLUE);
-        set2.setLineWidth(2f);
-
-        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(set1);
-        dataSets.add(set2);
-        LineData data = new LineData(dataSets);
-        xAxis = lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        lineChart.getXAxis().setValueFormatter(new LabelFormatter(times));
-        Description des = new Description();
-        des.setText(" ");
-        lineChart.setDescription(des);
-        lineChart.setData(data);
-        lineChart.setScaleEnabled(false);
-        lineChart.invalidate(); // refresh
     }
 
     public void getData(String url) {
@@ -156,6 +164,7 @@ public class FirstGraphFragment extends Fragment {
         try {
             JSONObject jsonObject = new JSONObject(json); // json형식 객체
             jsonArray = jsonObject.getJSONArray(TAG_RESULTQUREY); // json배열
+            String textMessage = "";
 
             for (int i = 0; i < jsonArray.length(); i++) { // 데이터베이스 컬럼값 모두 가져옴
                 JSONObject object = jsonArray.getJSONObject(i);
@@ -171,7 +180,6 @@ public class FirstGraphFragment extends Fragment {
                 Date date = new Date(now);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
                 String currentDate = format.format(date); // 오늘 날짜
-                String textMessage = "";
 
                 if (day.equals(currentDate)) { // 데이터베이스의 날짜와 오늘 날짜가 같으면
                     textTemperature.setText(temperature);
@@ -215,8 +223,8 @@ public class FirstGraphFragment extends Fragment {
                         textMessage = textMessage + " " + "lower humidity";
                     }
                 }
-                textCurrentStatus.setText(textMessage + " " + "of the room");
             }
+            textCurrentStatus.setText(textMessage + " " + "of the room");
 
         } catch (JSONException e) {
             e.printStackTrace();

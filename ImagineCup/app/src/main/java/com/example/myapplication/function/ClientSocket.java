@@ -23,7 +23,7 @@ public class ClientSocket extends AsyncTask<Void, Void, Void> {
     String response = "";
     Context context;
 
-    ClientSocket(String address, int port, String message, Context context) {
+    public ClientSocket(String address, int port, String message, Context context) {
         this.destAddress = address;
         this.destPort = port;
         this.myMessage = message;

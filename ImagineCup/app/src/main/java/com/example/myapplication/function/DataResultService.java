@@ -101,8 +101,7 @@ public class DataResultService extends Service {
                 double frontValue = Double.parseDouble(positionData.getFront());
                 double etcValue = Double.parseDouble(positionData.getEtc());
 
-
-                if(checkBack < backValue) { // back 80 이상만 알람.
+                if (checkBack < backValue) { // back 80 이상만 알람.
                     if (backValue > frontValue && backValue > etcValue) { // 텐서플로 결과값중 back이 가장 높을 때
                         if (!play) {
                             mView.setVisibility(View.VISIBLE);
