@@ -21,6 +21,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.activity.GraphActivity;
 import com.example.myapplication.activity.SleepRecordActivity;
 import com.example.myapplication.data.Item;
+import com.example.myapplication.etc.Singleton;
 import com.example.myapplication.function.BackgroundService;
 import com.example.myapplication.function.RightBabySleepVideoView;
 
@@ -54,6 +55,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onClick(View v) {
                 switch (position) {
                     case 0:
+                        Singleton.getInstance().setStreaming(true);
                         context.stopService(new Intent(context, BackgroundService.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         context.startService(new Intent(context, BackgroundService.class).putExtra("message", "send").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;

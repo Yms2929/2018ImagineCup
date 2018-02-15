@@ -20,6 +20,7 @@ public class BackgroundService extends Service {
     Timer timer;
     TimerTask timerTask;
     String activityMessage;
+    String msg;
 
     public BackgroundService() {
 
@@ -47,23 +48,25 @@ public class BackgroundService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public void socketMessage(final String message) { // 서버에 메시지 보내기
+    public void socketMessage(String message) { // 서버에 메시지 보내기
         if (message.equals("connect") || message.equals("exit")) {
+            msg = message;
             timer = new Timer();
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), message, getApplicationContext());
+                    ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), msg, getApplicationContext());
                     clientSocket.execute();
-                    Log.e("Background message", message);
+                    msg = "connect";
+                    Log.e("Background", msg);
                 }
             };
 
-            timer.schedule(timerTask, 1000, 8000);
+            timer.schedule(timerTask, 1000, 10000);
         } else if (message.equals("send")) {
             ClientSocket clientSocket = new ClientSocket(ip, Integer.parseInt(port), message, getApplicationContext());
             clientSocket.execute();
-            Log.e("Background message", message);
+            Log.e("Background", message);
         }
     }
 
@@ -71,7 +74,7 @@ public class BackgroundService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        Log.e("Background message", "cancel");
+        Log.e("Background", "cancel");
         if (activityMessage.equals("connect") || activityMessage.equals("exit")) {
             timer.cancel();
             timerTask.cancel();

@@ -9,6 +9,7 @@ public class Singleton {
     private boolean sleep = false;
     private String date;
     private long time;
+    private boolean streaming = false;
 
     public static synchronized Singleton getInstance() {
         if (instance == null) {
@@ -39,5 +40,13 @@ public class Singleton {
 
     public void setNow(long time) {
         this.time = time;
+    }
+
+    public boolean getStreaming() {
+        return this.streaming;
+    }
+
+    public void setStreaming(boolean streaming) {
+        this.streaming = streaming;
     }
 }

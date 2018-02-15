@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +36,8 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
-import com.example.myapplication.function.ClientSocket;
+import com.example.myapplication.etc.Singleton;
+import com.example.myapplication.function.BackgroundService;
 import com.example.myapplication.function.DataResultService;
 
 import org.json.JSONArray;
@@ -127,17 +127,17 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(new RecyclerAdapter(getApplicationContext(), items, R.layout.activity_main));
 
-//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect"));
-        startService(new Intent(getApplicationContext(), DataResultService.class));
+//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "connect")); // 백그라운드 사진 촬영
+        startService(new Intent(getApplicationContext(), DataResultService.class)); // 백그라운드 데이터 받아서 알람
 
-        Button btnTest = (Button) findViewById(R.id.btnTest);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClientSocket clientSocket = new ClientSocket("192.168.0.175", Integer.parseInt("8888"), "connect", getApplicationContext());
-                clientSocket.execute();
-            }
-        });
+//        Button btnTest = (Button) findViewById(R.id.btnTest);
+//        btnTest.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ClientSocket clientSocket = new ClientSocket("192.168.0.175", Integer.parseInt("8888"), "connect", getApplicationContext());
+//                clientSocket.execute();
+//            }
+//        });
 
         //내비바
         babyName = (TextView) findViewById(R.id.babyname);
@@ -159,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-
-
             DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -265,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
             setNaviText();
         } else if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -354,8 +351,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() { // 화면 재시작
         super.onRestart();
 
-//        stopService(new Intent(getApplicationContext(), BackgroundService.class));
-//        startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit"));
+        if (Singleton.getInstance().getStreaming() == true) {
+            stopService(new Intent(getApplicationContext(), BackgroundService.class));
+            startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit")); // 스트리밍 종료 후 촬영 재시작
+            Singleton.getInstance().setStreaming(false);
+        }
     }
 
     public void getData(String url) {
@@ -363,7 +363,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(String... params) { // 웹서버에 요청
-
                 String uri = params[0];
                 BufferedReader bufferedReader = null;
 

@@ -52,11 +52,11 @@
             android:id="@+id/rv">
         </android.support.v7.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/btnTest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test" />
+        <!--<Button-->
+            <!--android:id="@+id/btnTest"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Test" />-->
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
