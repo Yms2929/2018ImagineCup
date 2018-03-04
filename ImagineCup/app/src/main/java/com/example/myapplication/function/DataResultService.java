@@ -41,7 +41,6 @@ public class DataResultService extends Service {
     boolean play = false;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    double checkBack = 0.8;
 
     @Override
     public void onCreate() {
@@ -101,7 +100,7 @@ public class DataResultService extends Service {
                 double frontValue = Double.parseDouble(positionData.getFront());
                 double etcValue = Double.parseDouble(positionData.getEtc());
 
-                if (checkBack < backValue) { // back 80 이상만 알람.
+                if (backValue > 0.5) {
                     if (backValue > frontValue && backValue > etcValue) { // 텐서플로 결과값중 back이 가장 높을 때
                         if (!play) {
                             mView.setVisibility(View.VISIBLE);

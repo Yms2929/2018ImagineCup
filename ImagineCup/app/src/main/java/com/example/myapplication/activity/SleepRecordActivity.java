@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -19,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.AzureServiceAdapter;
 import com.example.myapplication.adapter.SleepRecordAdapter;
 import com.example.myapplication.data.SleepRecord;
 import com.example.myapplication.etc.Singleton;
@@ -110,10 +111,25 @@ public class SleepRecordActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listview);
 //        getData(phpConnectUrl); // php서버 웹주소
 
-        AzureServiceAdapter.Initialize(this);
-        mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
-        mobileServiceTable = mobileServiceClient.getTable(SleepRecord.class);
-        connectAzure();
+//        AzureServiceAdapter.Initialize(this);
+//        mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
+//        mobileServiceTable = mobileServiceClient.getTable(SleepRecord.class);
+//        connectAzure();
+
+        sleepRecordAdapter = new SleepRecordAdapter();
+        sleepRecordAdapter.addItem("00:00:00", "05:30:00", "05:30:00"); // 어댑터에 데이터 추가
+        sleepRecordAdapter.addItem("07:00:00", "10:00:00", "03:00:00");
+        sleepRecordAdapter.addItem("11:30:00", "17:00:00", "05:30:00");
+
+        knowToday("yyyy/MM/dd");
+        currentDate = format.format(date);
+        textToday.setText(currentDate);
+        textAllTime.setText("14:00:00");
+        sleepList.add("14:00:00");
+
+        listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트-
+
+        sleepRecordAdapter.notifyDataSetChanged();
     }
 
     public void connectAzure() {
@@ -126,13 +142,20 @@ public class SleepRecordActivity extends AppCompatActivity {
                     knowToday("yyyy/MM/dd");
                     currentDate = format.format(date);
                     sleepList.clear();
+                    Log.e("azure", currentDate);
                     List<SleepRecord> list = mobileServiceTable.execute().get();
-
+                    Log.e("azure", String.valueOf(list.size()));
                     for (int i = 0; i < list.size(); i++) {
                         String date = list.get(i).getDate();
                         String startTime = list.get(i).getStartTime();
                         String endTime = list.get(i).getEndTime();
                         String sleepTime = list.get(i).getSleepTime();
+
+                        Log.e("azure", currentDate);
+                        Log.e("azure", date);
+                        Log.e("azure", startTime);
+                        Log.e("azure", endTime);
+                        Log.e("azure", sleepTime);
 
                         if (date.equals(currentDate)) { // 오늘 날짜만 보여줌
                             sleepRecordAdapter.addItem(startTime, endTime, sleepTime); // 어댑터에 데이터 추가
@@ -357,9 +380,21 @@ public class SleepRecordActivity extends AppCompatActivity {
                 btnSleep.setImageResource(R.drawable.awake);
                 getNowTime("awake");
 
-                InsertAzure insertAzure = new InsertAzure();
-                insertAzure.execute(currentDate, strStartTime, strEndTime, sleepTime); // azure에 데이터 삽입
-                connectAzure(); // 갱신
+                sleepRecordAdapter.addItem(strStartTime, strEndTime, sleepTime); // 어댑터에 데이터 추가
+                sleepList.add(sleepTime); // 오늘 수면시간 추가
+                textAllTime.setText(allSleepTime(sleepList));
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        listView.setAdapter(sleepRecordAdapter); // 리스트뷰 업데이트
+                        sleepRecordAdapter.notifyDataSetChanged();
+                    }
+                }, 1000);  // 2초 딜레이
+
+//                InsertAzure insertAzure = new InsertAzure();
+//                insertAzure.execute(currentDate, strStartTime, strEndTime, sleepTime); // azure에 데이터 삽입
+//                connectAzure(); // 갱신
 
 //                InsertData task = new InsertData(); // insert쿼리 php실행
 //                task.execute(currentDate, strStartTime, strEndTime, sleepTime);

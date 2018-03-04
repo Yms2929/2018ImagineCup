@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.AzureServiceAdapter;
 import com.example.myapplication.data.SleepRecord;
 import com.example.myapplication.etc.LabelFormatter;
 import com.github.mikephil.charting.charts.BarChart;
@@ -20,7 +19,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
@@ -35,11 +33,12 @@ import java.util.concurrent.ExecutionException;
  * Created by woga1 on 2018-01-22.
  */
 
-public class SecondGraphFragment  extends Fragment {
+public class SecondGraphFragment extends Fragment {
     View view;
     BarChart barChart;
     XAxis xAxis;
     ArrayList<BarEntry> barEntries;
+    final String[] days_test = new String[]{"Wed", "Thu", "Fri", "Sat", "Sun","Mon","Tue"};
     String[] days = new String[]{}; //xAsix 밑에 들어갈 string 배열
     //    private static final String TAG_RESULTCODE = "result";
 //    private static final String TAG_DATEDAY = "date";
@@ -66,10 +65,11 @@ public class SecondGraphFragment  extends Fragment {
         textSleepAverage = view.findViewById(R.id.textSleepAverage);
         textSleepStatus = view.findViewById(R.id.textSleepStatus);
 
-        AzureServiceAdapter.Initialize(getActivity());
-        MobileServiceClient mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
-        mobileServiceTable = mobileServiceClient.getTable(SleepRecord.class);
-        connectAzure();
+//        AzureServiceAdapter.Initialize(getActivity());
+//        MobileServiceClient mobileServiceClient = AzureServiceAdapter.getInstance().getClient();
+//        mobileServiceTable = mobileServiceClient.getTable(SleepRecord.class);
+//        connectAzure();
+        setBarData();
 
 //        getData(phpConnectUrl);
 
@@ -97,45 +97,48 @@ public class SecondGraphFragment  extends Fragment {
             days = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         }
 
-        float xWidth = 0f;
-        for (int i = 0; i < weekSleepTime.size(); i++) {
-            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i))); // 그래프에 데이터 삽입
-            xWidth = xWidth + 1f;
-        }
+//        float xWidth = 0f;
+//        for (int i = 0; i < weekSleepTime.size(); i++) {
+//            barEntries.add(new BarEntry(xWidth, weekSleepTime.get(i))); // 그래프에 데이터 삽입
+//            xWidth = xWidth + 1f;
+//        }
+//
+//        double sleepAverage = 0.0;
+//        int count = 0;
+//
+//        for (int j = 0; j < weekSleepTime.size(); j++) {
+//            sleepAverage = sleepAverage + weekSleepTime.get(j); // 평균시간 구하기
+//
+//            if (sleepAverage > 0) {
+//                count++;
+//            }
+//        }
 
-        double sleepAverage = 0.0;
-        int count = 0;
+//        sleepAverage = sleepAverage / count;
+//        sleepAverage = Math.round(sleepAverage * 100d) / 100d;
+//        textSleepAverage.setText(String.valueOf(sleepAverage));
+//
+//        if (sleepAverage < 16) {
+//            textSleepAverage.setTextColor(Color.parseColor("#E53935")); // 시간에 따른 텍스트 색상 변화
+//            textSleepStatus.setText(R.string.lessSleep);
+//        } else if (sleepAverage >= 16 && sleepAverage < 20) {
+//            textSleepAverage.setTextColor(Color.parseColor("#43A047"));
+//            textSleepStatus.setText(R.string.keepSleep);
+//        } else {
+//            textSleepAverage.setTextColor(Color.parseColor("#E53935"));
+//            textSleepStatus.setText(R.string.manySleep);
+//        }
 
-        for (int j = 0; j < weekSleepTime.size(); j++) {
-            sleepAverage = sleepAverage + weekSleepTime.get(j); // 평균시간 구하기
-
-            if (sleepAverage > 0) {
-                count++;
-            }
-        }
-
-        sleepAverage = sleepAverage / count;
-        sleepAverage = Math.round(sleepAverage * 100d) / 100d;
-        textSleepAverage.setText(String.valueOf(sleepAverage));
-
-        if (sleepAverage < 16) {
-            textSleepAverage.setTextColor(Color.parseColor("#E53935")); // 시간에 따른 텍스트 색상 변화
-            textSleepStatus.setText(R.string.lessSleep);
-        } else if (sleepAverage >= 16 && sleepAverage < 20) {
-            textSleepAverage.setTextColor(Color.parseColor("#43A047"));
-            textSleepStatus.setText(R.string.keepSleep);
-        } else {
-            textSleepAverage.setTextColor(Color.parseColor("#E53935"));
-            textSleepStatus.setText(R.string.manySleep);
-        }
-
-//        barEntries.add(new BarEntry(0f, 17f));
-//        barEntries.add(new BarEntry(1f, 16f));
-//        barEntries.add(new BarEntry(2f, 18f));
-//        barEntries.add(new BarEntry(3f, 16f));
-//        barEntries.add(new BarEntry(4f, 17f));
-//        barEntries.add(new BarEntry(5f, 18f));
-//        barEntries.add(new BarEntry(6f, 16f));
+        barEntries.add(new BarEntry(0f, 17f));
+        barEntries.add(new BarEntry(1f, 16f));
+        barEntries.add(new BarEntry(2f, 18f));
+        barEntries.add(new BarEntry(3f, 16f));
+        barEntries.add(new BarEntry(4f, 17f));
+        barEntries.add(new BarEntry(5f, 18f));
+        barEntries.add(new BarEntry(6f, 17f));
+        textSleepAverage.setTextColor(Color.parseColor("#43A047"));
+        textSleepAverage.setText("17");
+        textSleepStatus.setText(R.string.keepSleep);
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Time(hour)"); //막대값 배열에 추가한 거 정립
         barDataSet.setColor(android.graphics.Color.argb(255, 195, 90, 157)); //바 색깔 정하기
@@ -153,7 +156,7 @@ public class SecondGraphFragment  extends Fragment {
         yRight.setAxisMinValue(0);
         xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        barChart.getXAxis().setValueFormatter(new LabelFormatter(days)); // 요일 삽입
+        barChart.getXAxis().setValueFormatter(new LabelFormatter(days_test)); // 요일 삽입
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
         barChart.setScaleEnabled(false);
         barChart.setFocusableInTouchMode(false);

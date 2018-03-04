@@ -71,55 +71,118 @@ public class FirstGraphFragment extends Fragment {
         textHumidityStatus = view.findViewById(R.id.textHumidityStatus);
         textCurrentStatus = view.findViewById(R.id.textCurrentStatus);
 
-        getData(phpConnectUrl);
+//        getData(phpConnectUrl);
+        setlineData();
 
         return view;
     }
 
     private void setlineData() {
-        if (temperatureList.size() > 0) {
-            ArrayList<Entry> line1 = new ArrayList<>();
-            ArrayList<Entry> line2 = new ArrayList<>();
+        ArrayList<Entry> line1 = new ArrayList<>();
+        ArrayList<Entry> line2 = new ArrayList<>();
 
-            for (int i = 0; i < temperatureList.size(); i++) {
-                float value1 = Float.parseFloat(temperatureList.get(i));
-                float value2 = Float.parseFloat(humidityList.get(i));
-                line1.add(new Entry(i, value1));
-                line2.add(new Entry(i, value2));
-            }
+        temperatureList.add("22");
+        temperatureList.add("22");
+        temperatureList.add("23");
+        temperatureList.add("22");
+        temperatureList.add("23");
+        temperatureList.add("23");
+        temperatureList.add("22");
+        temperatureList.add("22");
+        humidityList.add("8");
+        humidityList.add("7");
+        humidityList.add("6");
+        humidityList.add("8");
+        humidityList.add("8");
+        humidityList.add("7");
+        humidityList.add("8");
+        humidityList.add("9");
 
-            LineDataSet set1, set2;
+        textTemperature.setText("22");
+        textHumidity.setText("8");
+        textTemperature.setTextColor(Color.parseColor("#43A047"));
+        textTemperatureStatus.setText("Good");
+        textTemperatureStatus.setTextColor(Color.parseColor("#43A047"));
+        textHumidity.setTextColor(Color.parseColor("#E53935"));
+        textHumidityStatus.setTextColor(Color.parseColor("#E53935"));
+        textHumidityStatus.setText("Low");
+        textCurrentStatus.setText("Keep the temperature and" + " " + "raise humidity" + " " + "of the room");
 
-            set1 = new LineDataSet(line1, "Temperature(℃)");
-            set1.setColor(Color.RED);
-            set1.setCircleColor(Color.RED);
-            set1.setLineWidth(2f);
-
-            set2 = new LineDataSet(line2, "Humidity(%)");
-            set2.setColor(Color.BLUE);
-            set2.setCircleColor(Color.BLUE);
-            set2.setLineWidth(2f);
-
-            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-            dataSets.add(set1);
-            dataSets.add(set2);
-            LineData data = new LineData(dataSets);
-            xAxis = lineChart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            lineChart.getXAxis().setValueFormatter(new LabelFormatter(times));
-            Description des = new Description();
-            des.setText(" ");
-            lineChart.setDescription(des);
-            lineChart.setData(data);
-            lineChart.setScaleEnabled(false);
-            lineChart.invalidate(); // refresh
-        } else {
-            textTemperature.setText("NULL");
-            textTemperatureStatus.setText("NULL");
-            textHumidity.setText("NULL");
-            textHumidityStatus.setText("NULL");
-            textCurrentStatus.setText("database not exist data");
+        for (int i = 0; i < temperatureList.size(); i++) {
+            float value1 = Float.parseFloat(temperatureList.get(i));
+            float value2 = Float.parseFloat(humidityList.get(i));
+            line1.add(new Entry(i, value1));
+            line2.add(new Entry(i, value2));
         }
+
+        LineDataSet set1, set2;
+        set1 = new LineDataSet(line1, "Temperature(℃)");
+        set1.setColor(Color.RED);
+        set1.setCircleColor(Color.RED);
+        set1.setLineWidth(2f);
+
+        set2 = new LineDataSet(line2, "Humidity(%)");
+        set2.setColor(Color.BLUE);
+        set2.setCircleColor(Color.BLUE);
+        set2.setLineWidth(2f);
+
+        List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+        dataSets.add(set1);
+        dataSets.add(set2);
+        LineData data = new LineData(dataSets);
+        xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new LabelFormatter(times));
+        Description des = new Description();
+        des.setText(" ");
+        lineChart.setDescription(des);
+        lineChart.setData(data);
+        lineChart.setScaleEnabled(false);
+        lineChart.invalidate(); // refresh
+
+//        if (temperatureList.size() > 0) {
+//            ArrayList<Entry> line1 = new ArrayList<>();
+//            ArrayList<Entry> line2 = new ArrayList<>();
+//
+//            for (int i = 0; i < temperatureList.size(); i++) {
+//                float value1 = Float.parseFloat(temperatureList.get(i));
+//                float value2 = Float.parseFloat(humidityList.get(i));
+//                line1.add(new Entry(i, value1));
+//                line2.add(new Entry(i, value2));
+//            }
+//
+//            LineDataSet set1, set2;
+//
+//            set1 = new LineDataSet(line1, "Temperature(℃)");
+//            set1.setColor(Color.RED);
+//            set1.setCircleColor(Color.RED);
+//            set1.setLineWidth(2f);
+//
+//            set2 = new LineDataSet(line2, "Humidity(%)");
+//            set2.setColor(Color.BLUE);
+//            set2.setCircleColor(Color.BLUE);
+//            set2.setLineWidth(2f);
+//
+//            List<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+//            dataSets.add(set1);
+//            dataSets.add(set2);
+//            LineData data = new LineData(dataSets);
+//            xAxis = lineChart.getXAxis();
+//            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+//            lineChart.getXAxis().setValueFormatter(new LabelFormatter(times));
+//            Description des = new Description();
+//            des.setText(" ");
+//            lineChart.setDescription(des);
+//            lineChart.setData(data);
+//            lineChart.setScaleEnabled(false);
+//            lineChart.invalidate(); // refresh
+//        } else {
+//            textTemperature.setText("NULL");
+//            textTemperatureStatus.setText("NULL");
+//            textHumidity.setText("NULL");
+//            textHumidityStatus.setText("NULL");
+//            textCurrentStatus.setText("database not exist data");
+//        }
     }
 
     public void getData(String url) {

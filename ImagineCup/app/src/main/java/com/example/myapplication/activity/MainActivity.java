@@ -36,8 +36,6 @@ import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.RecyclerAdapter;
 import com.example.myapplication.data.Item;
-import com.example.myapplication.etc.Singleton;
-import com.example.myapplication.function.BackgroundService;
 import com.example.myapplication.function.DataResultService;
 
 import org.json.JSONArray;
@@ -351,11 +349,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() { // 화면 재시작
         super.onRestart();
 
-        if (Singleton.getInstance().getStreaming() == true) {
-            stopService(new Intent(getApplicationContext(), BackgroundService.class));
-            startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit")); // 스트리밍 종료 후 촬영 재시작
-            Singleton.getInstance().setStreaming(false);
-        }
+//        if (Singleton.getInstance().getStreaming() == true) {
+//            stopService(new Intent(getApplicationContext(), BackgroundService.class));
+//            startService(new Intent(getApplicationContext(), BackgroundService.class).putExtra("message", "exit")); // 스트리밍 종료 후 촬영 재시작
+//            Singleton.getInstance().setStreaming(false);
+//        }
     }
 
     public void getData(String url) {

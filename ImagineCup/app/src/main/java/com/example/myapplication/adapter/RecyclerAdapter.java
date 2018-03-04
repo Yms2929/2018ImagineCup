@@ -8,6 +8,7 @@ package com.example.myapplication.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +22,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.activity.GraphActivity;
 import com.example.myapplication.activity.SleepRecordActivity;
 import com.example.myapplication.data.Item;
-import com.example.myapplication.etc.Singleton;
-import com.example.myapplication.function.BackgroundService;
 import com.example.myapplication.function.RightBabySleepVideoView;
+import com.example.myapplication.function.WebViewStreaming;
 
 import java.util.List;
 
@@ -49,15 +49,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         final Item item = items.get(position);
         Drawable drawable = ContextCompat.getDrawable(context, item.getImage());
         holder.image.setBackground(drawable);
-        //holder.title.setText(item.getTitle());
+
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (position) {
                     case 0:
-                        Singleton.getInstance().setStreaming(true);
-                        context.stopService(new Intent(context, BackgroundService.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        context.startService(new Intent(context, BackgroundService.class).putExtra("message", "send").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                context.startActivity(new Intent(context, WebViewStreaming.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            }
+                        }, 2000);  // 2초 딜레이
+//                        Singleton.getInstance().setStreaming(true);
+//                        context.stopService(new Intent(context, BackgroundService.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                        context.startService(new Intent(context, BackgroundService.class).putExtra("message", "send").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case 1:
                         context.startActivity(new Intent(context, GraphActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); // 그래프 화면
@@ -70,8 +76,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         break;
                     default:
                         break;
-                    // 클릭 효과 나누기 - 액티비티 연결
-                    //if (item.getTitle().equals("streaming"))
                 }
             }
         });
